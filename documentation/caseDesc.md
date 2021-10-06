@@ -38,3 +38,15 @@ feat:
             
 * Friend function:
  <!-- - Able to choose a friend and follow them (Server side work....) -->
+
+
+
+
+
+
+
+https://codingstatus.com/express-mvc-structure/
+
+https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
+
+https://stackoverflow.com/questions/13198131/how-to-save-an-html5-canvas-as-an-image-on-a-server
