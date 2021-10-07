@@ -13,6 +13,7 @@ const wss = new WebSocketServer({
     port: 8081
 });
 
+// TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
 
