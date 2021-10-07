@@ -11,7 +11,7 @@ function validateTypeOfIncomingMessage(data) {
             return parsedData;
         case "botMsg":
             return parsedData;
-        case "imageChatMsg":
+        case "imageMsg":
         case "status":
             return parsedData;
         default:
@@ -31,8 +31,10 @@ function validateTypeOfOutgoingMessage(data) {
         case "botMsg":
             console.log("it's a bot SERVER! Do something with it", data);
             return stringifyJson(data);
-        case "imageChatMsg":
-            console.log("it's an image! Do something with it", data);
+        case "imageMsg":
+            // DON'T SEND THIS BACK! base64 nonono! Parse it into a real image and save it to database which is then gotten and sent back to client..!
+            console.log("it's an image message! Do something with it", data);
+            return stringifyJson(data);
         case "status":
             console.log("it's a status SERVER! Do something with it", data);
             return stringifyJson(data);
@@ -42,8 +44,6 @@ function validateTypeOfOutgoingMessage(data) {
             return {err: "error....!"}
     }
 }
-
-
 
 export {
     validateTypeOfOutgoingMessage,

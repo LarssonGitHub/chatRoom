@@ -39,8 +39,8 @@
             height: 300px;
             overflow: scroll;
             border: 1px solid black;
-           display: flex; 
-           flex-direction: column;
+            display: flex;
+            flex-direction: column;
         }
 
         .botChatContainer {
@@ -49,6 +49,15 @@
 
         .clientChatContainer {
             background-color: lightgreen;
+        }
+
+        #msgImgInputRemove {
+            text-align: end;
+            color: red;
+        }
+        #msgImgInputRemove:hover {
+            cursor: pointer;
+            color: black;
         }
     </style>
 </head>
@@ -67,10 +76,15 @@
         <button id="enterChatBtn">Enter chat</button>
 
 
-        <section id="chatWindow" class="hidden">
+        <section id="typingContainer" class="hidden">
             <h3>Type something....</h3>
+            <!-- TODO, replace chattextarea with msgChatInput -->
             <textarea id="chatTextarea" name="chatTextarea" rows="4" cols="50"
                 placeholder="Type and press Enter"></textarea>
+            <div id="imgImgContainer" class="hidden">
+                <div id="msgImgInputRemove">X</div>
+                <img id="msgImgInput" width="200">
+            </div>
         </section>
     </section>
 
@@ -99,6 +113,7 @@
         <section class="chatTemplateContainer">
             <b class="clientName"></b>
             <p class="clientMsg"></p>
+            <img class="clientImg hidden">
         </section>
     </template>
 

@@ -7,18 +7,19 @@ function sortTypeOfReceivedMessage(data) {
         // TODO Find better names
         case "chatMsg":
             console.log("it's a chat! Do something with it", data);
-            displayClientChatMsg(data)
+            displayClientChatMsg(data);
             break;
         case "botMsg":
             console.log("it's a botMsg! Do something with it", data);
-            displayBotChatMsg(data)
+            displayBotChatMsg(data);
             break;
-        case "imageChatMsg":
+        case "imageMsg":
             console.log("it's an image! Do something with it", data);
+            displayImageMsg(data);
             break;
         case "status":
             console.log("it's a client note...! Do something with it", data);
-            displayNumberOfClientsOnline(data)
+            displayNumberOfClientsOnline(data);
             break;
         default:
             break;

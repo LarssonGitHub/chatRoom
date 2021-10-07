@@ -1,5 +1,6 @@
 "use strict";
 
+const CanvasContainer = document.getElementById("CanvasContainer")
 const canvas = document.getElementById('myCanvas');
 const canvasColorPicker = document.getElementById('canvasColorPicker');
 const canvasStrokeSize = document.getElementById('canvasStrokeSize');
@@ -10,8 +11,7 @@ const canvasUpload = document.getElementById("canvasUpload");
 
 // TODO Remove this button and event and create something else
 document.getElementById("toggleCanvas").addEventListener("click", (e) => {
-    e.target.classList.toggle("active")
-    document.getElementById("CanvasContainer").classList.toggle("hidden")});
+    CanvasContainer.classList.toggle("hidden")});
 
 let canvasValues = {
     color: canvasColorPicker.value,
@@ -26,6 +26,8 @@ let canvasOffsetForClient = {
     offsetX: null,
     offsetY: null
 }
+
+let binaryCanvasValue = null;
 
 function setCanvasValues(e) {
     if (!e) {
@@ -113,9 +115,11 @@ function downloadCanvasImg() {
 
 // TODO... Remember to NOT save this and post it as toDataURL.. Save it to server
 function uploadCanvasImg() {
-    if (confirm("do you want to upload this pic?")) {
-        // dataURL = canvas.toDataURL();
-        alert("uploaded!");
+    if (confirm("Do you want to upload this pic?")) {
+        checkIfTypingImgShouldHidden()
+        binaryCanvasValue = canvas.toDataURL();
+        // TODO validation on client side.....
+        appendToTypingContainer(binaryCanvasValue);
     }
     return;
 }
