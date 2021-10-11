@@ -5,6 +5,8 @@
   "main": "server.js",
   "type": "module",
   "dependencies": {
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
     "ws": "^8.2.3"
   },
   "scripts": {

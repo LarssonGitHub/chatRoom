@@ -1,4 +1,4 @@
-const websocket = new WebSocket("ws://localhost:8081");
+const websocket = new WebSocket("ws://localhost:8999");
         
 function sortTypeOfReceivedMessage(data) {
     const msgType = data.type

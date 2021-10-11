@@ -1,17 +1,26 @@
 "use strict"
 
+
+
 import WebSocket, {
     WebSocketServer
 } from 'ws';
+
+import express from 'express';
+import http from 'http';
 
 import {
     validateTypeOfOutgoingMessage,
     validateTypeOfIncomingMessage,
 } from './controller/controller.js';
 
-const wss = new WebSocketServer({
-    port: 8081
-});
+const app = express();
+const server = http.createServer(app);
+
+// const wss = new WebSocketServer({noServer: true});
+const wss = new WebSocketServer({server});
+
+app.use(express.static("public"));
 
 // TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
@@ -73,3 +82,7 @@ function broadcast(data) {
         }
     })
 }
+
+server.listen(process.env.PORT || 8999, () => {
+    console.log(`Server started on port :)`);
+});
