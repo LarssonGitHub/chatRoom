@@ -12,6 +12,7 @@ function validateTypeOfIncomingMessage(data) {
         case "botMsg":
             return parsedData;
         case "imageMsg":
+            return parsedData;
         case "status":
             return parsedData;
         default:
