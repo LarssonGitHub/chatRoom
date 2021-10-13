@@ -8,22 +8,28 @@ import WebSocket, {
 
 import express from 'express';
 import http from 'http';
+import session from 'express-session';
 
 import {
     validateTypeOfOutgoingMessage,
     validateTypeOfIncomingMessage,
-} from './controller/controller.js';
+} from './utilities/messages.js';
 
 const app = express();
 const server = http.createServer(app);
 
 // const wss = new WebSocketServer({noServer: true});
 const wss = new WebSocketServer({server});
+app.use(session({
+    secret: "foryoureyesonly%tXl!p",
+    resave: false,
+    saveUninitialized: true
+}));
 
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
-app.locals.clientsOnline = 0;
+let clientsOnline = 0;
 
 
 // TODO on connection: set a unique id on client
@@ -82,10 +88,17 @@ function broadcast(data) {
     })
 }
 
+// Ask about this...:! ClientsOnline.
 app.get("/", (req, res) => {
     res.render('pages/index', {clientsOnline});
 })
 
+// TODO.... use render and shit I think... With session to see if user is okay or not then use this for the bot to show username of whoever joins
+// , then ue the session as the one which validates the users input, and if it is, display the render.. Or something. If not, terminate the connection
+// app.get("/login", (req, res) => {
+
+// })
+// Or save
 server.listen(process.env.PORT || 8999, () => {
     console.log(`Server started`);
 });
