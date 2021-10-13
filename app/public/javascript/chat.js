@@ -6,6 +6,7 @@ const typingContainer = document.getElementById("typingContainer");
 const chatTextarea = document.getElementById("chatTextarea");
 const imgImgContainer = document.getElementById("imgImgContainer");
 const msgImgInputRemove = document.getElementById("msgImgInputRemove")
+
 function displayNumberOfClientsOnline(object) {
     const {
         type,
@@ -67,7 +68,7 @@ function displayBotChatMsg(chatObject) {
 }
 
 function displayImageMsg(chatObject) {
-    console.log("this should fucking work,"  ,chatObject);
+    console.log("this should fucking work,", chatObject);
     // TODO add an alt tag..!
     const {
         type,
@@ -103,13 +104,13 @@ function constructMsgObject(type, user, chatData, binaryCanvasValue) {
     // TODO Make into a switch?
     if (type) {
         msgTemplate.type = type;
-    } 
+    }
     if (user) {
         msgTemplate.user = user;
-    } 
+    }
     if (chatData) {
         msgTemplate.data = chatData;
-    } 
+    }
     if (binaryCanvasValue) {
         msgTemplate.imageMsg = binaryCanvasValue;
     }
@@ -128,7 +129,7 @@ function sendChatMsgToServer(e) {
             binaryCanvasValue = "";
             checkIfTypingImgShouldHidden();
         } else {
-            constructedMsg = constructMsgObject("chatMsg", clientUserName, chatValue); 
+            constructedMsg = constructMsgObject("chatMsg", clientUserName, chatValue);
             displayClientChatMsg(constructedMsg);
         }
         sendMsgToWebsocket(constructedMsg);

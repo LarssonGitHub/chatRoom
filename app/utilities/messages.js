@@ -8,17 +8,17 @@ function formatMessage(type, user, data) {
     const msgTemplate = {}
     if (type) {
         msgTemplate.type = type;
-    } 
+    }
     if (user) {
         msgTemplate.user = user;
-    } 
+    }
     if (data) {
         msgTemplate.data = data;
-    } 
+    }
     return msgTemplate;
-  }
+}
 
-  
+
 function validateTypeOfIncomingMessage(data) {
     const parsedData = parseJson(data)
     const msgType = parsedData.type
@@ -33,8 +33,11 @@ function validateTypeOfIncomingMessage(data) {
         default:
             // Remember to send back to client that their message and type wasn't approved.....
             console.log("error... Something went horrible wrong when handling incoming...!");
-            return {err: "error....!"}
-}}
+            return {
+                err: "error....!"
+            }
+    }
+}
 
 
 function validateTypeOfOutgoingMessage(data) {
@@ -57,7 +60,9 @@ function validateTypeOfOutgoingMessage(data) {
         default:
             // Remember to send back to client that their message and type wasn't approved.....
             console.log("error... Something went horrible wrong here...!");
-            return {err: "error....!"}
+            return {
+                err: "error....!"
+            }
     }
 }
 

@@ -1,5 +1,5 @@
 const websocket = new WebSocket("ws://localhost:8999");
-        
+
 function sortTypeOfReceivedMessage(data) {
     const msgType = data.type
     console.log(msgType);
@@ -29,7 +29,7 @@ function sortTypeOfReceivedMessage(data) {
 function parseJson(data) {
     try {
         return JSON.parse(data)
-    } catch(err) {
+    } catch (err) {
         // TODO: error handling.. Send back the err
         console.log("Something went wrong..", err);
         return
@@ -39,7 +39,7 @@ function parseJson(data) {
 function stringifyJson(data) {
     try {
         return JSON.stringify(data)
-    } catch(err) {
+    } catch (err) {
         // TODO: error handling.. Send back the err
         console.log("Something went wrong..", err);
         return
@@ -57,5 +57,5 @@ websocket.addEventListener("message", (event) => {
 })
 
 websocket.addEventListener('close', (event) => {
-  console.log('Server down...', event);
+    console.log('Server down...', event);
 });

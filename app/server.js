@@ -20,7 +20,9 @@ const app = express();
 const server = http.createServer(app);
 
 // const wss = new WebSocketServer({noServer: true});
-const wss = new WebSocketServer({server});
+const wss = new WebSocketServer({
+    server
+});
 app.use(session({
     secret: "foryoureyesonly%tXl!p",
     resave: false,
@@ -38,15 +40,15 @@ wss.on('connection', (ws, req) => {
     let ClientSizeMsg = formatMessage("status", "", wss.clients.size)
     broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
 
-        // TODO replace req.username with the user who logs in
-            let BotWelcomeMsg = formatMessage("botMsg", "Mr Bot", "req.user.name... has joined!")
-            broadcast(validateTypeOfOutgoingMessage(BotWelcomeMsg));
+    // TODO replace req.username with the user who logs in
+    let BotWelcomeMsg = formatMessage("botMsg", "Mr Bot", "req.user.name... has joined!")
+    broadcast(validateTypeOfOutgoingMessage(BotWelcomeMsg));
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
     ws.on("close", () => {
-        let BotGoodbyeMsg = formatMessage("botMsg","Mr Bot", "req.user.name... left the the chat!")
+        let BotGoodbyeMsg = formatMessage("botMsg", "Mr Bot", "req.user.name... left the the chat!")
         broadcast(validateTypeOfOutgoingMessage(BotGoodbyeMsg));
-      
+
         let ClientSizeMsg = formatMessage("status", "", wss.clients.size)
         broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
     });

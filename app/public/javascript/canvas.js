@@ -11,7 +11,8 @@ const canvasUpload = document.getElementById("canvasUpload");
 
 // TODO Remove this button and event and create something else
 document.getElementById("toggleCanvas").addEventListener("click", (e) => {
-    CanvasContainer.classList.toggle("hidden")});
+    CanvasContainer.classList.toggle("hidden")
+});
 
 let canvasValues = {
     color: canvasColorPicker.value,
