@@ -3,8 +3,21 @@ import {
     stringifyJson
 } from './functions.js'
 
+function formatToStatusObj(type, target, data) {
+    const statusTemplate = {}
+    if (type) {
+        statusTemplate.type = type;
+    }
+    if (target) {
+        statusTemplate.target = target;
+    }
+    if (data) {
+        statusTemplate.data = data;
+    }
+    return statusTemplate;
+}
 
-function formatMessage(type, user, data) {
+function formatToChatObj(type, user, data) {
     const msgTemplate = {}
     if (type) {
         msgTemplate.type = type;
@@ -69,5 +82,6 @@ function validateTypeOfOutgoingMessage(data) {
 export {
     validateTypeOfOutgoingMessage,
     validateTypeOfIncomingMessage,
-    formatMessage
+    formatToChatObj,
+    formatToStatusObj
 }

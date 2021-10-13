@@ -13,7 +13,8 @@ import session from 'express-session';
 import {
     validateTypeOfOutgoingMessage,
     validateTypeOfIncomingMessage,
-    formatMessage
+    formatToChatObj,
+    formatToStatusObj
 } from './utilities/messages.js';
 
 const app = express();
@@ -37,19 +38,19 @@ wss.on('connection', (ws, req) => {
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
     console.log(wss.clients.size);
 
-    let ClientSizeMsg = formatMessage("status", "", wss.clients.size)
+    let ClientSizeMsg = formatToStatusObj("status", "clientInteger", wss.clients.size)
     broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
 
     // TODO replace req.username with the user who logs in
-    let BotWelcomeMsg = formatMessage("botMsg", "Mr Bot", "req.user.name... has joined!")
+    let BotWelcomeMsg = formatToChatObj("botMsg", "Mr Bot", "req.user.name... has joined!")
     broadcast(validateTypeOfOutgoingMessage(BotWelcomeMsg));
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
     ws.on("close", () => {
-        let BotGoodbyeMsg = formatMessage("botMsg", "Mr Bot", "req.user.name... left the the chat!")
+        let BotGoodbyeMsg = formatToChatObj("botMsg", "Mr Bot", "req.user.name... left the the chat!")
         broadcast(validateTypeOfOutgoingMessage(BotGoodbyeMsg));
 
-        let ClientSizeMsg = formatMessage("status", "", wss.clients.size)
+        let ClientSizeMsg = formatToStatusObj(("status", "clientInteger", wss.clients.size));
         broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
     });
 
