@@ -6,12 +6,18 @@ const typingContainer = document.getElementById("typingContainer");
 const chatTextarea = document.getElementById("chatTextarea");
 const imgImgContainer = document.getElementById("imgImgContainer");
 const msgImgInputRemove = document.getElementById("msgImgInputRemove")
+const ListOfClients = document.getElementById("ListOfClients");
 
-function displayNumberOfClientsOnline(object) {
-    const {
-        type,
-        data
-    } = object
+function displayListOfClientsNamesOnline({data}) {
+    ListOfClients.innerHTML = '';
+    data.forEach(client => {
+    const li = document.createElement('li');
+    li.innerText = client;
+    ListOfClients.appendChild(li);
+    });
+}
+
+function displayNumberOfClientsOnline({data}) {
     clientsOnline.textContent = data
 }
 
@@ -88,6 +94,7 @@ function validateNewUser() {
         userName.setAttribute("disabled", "disabled");
         enterChatBtn.classList.toggle("hidden");
         userName.classList.toggle("hidden");
+        // TODO.. Store this in a database..!
         clientUserName = userName.value;
         typingContainer.classList.toggle("hidden");
         chatTextarea.focus();

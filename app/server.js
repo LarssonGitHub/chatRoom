@@ -33,13 +33,20 @@ app.use(session({
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
+// TODO Just a temp, this will be taken from list of users, either database or the session itself!
+let clientsArray = []
+
 // TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
-    console.log(wss.clients.size);
+    clientsArray.push(wss.clients.size);
 
-    let ClientSizeMsg = formatToStatusObj("status", "clientInteger", wss.clients.size)
-    broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
+    let clientSize = formatToStatusObj("status", "clientInteger", wss.clients.size)
+    broadcast(validateTypeOfOutgoingMessage(clientSize));
+
+    // TODO Just a temp..!
+    let clientsOnline = formatToStatusObj("status", "clientArray", clientsArray)
+    broadcast(validateTypeOfOutgoingMessage(clientsOnline));
 
     // TODO replace req.username with the user who logs in
     let BotWelcomeMsg = formatToChatObj("botMsg", "Mr Bot", "req.user.name... has joined!")
@@ -47,11 +54,16 @@ wss.on('connection', (ws, req) => {
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
     ws.on("close", () => {
+
+        let ClientSizeMsg = formatToStatusObj("status", "clientInteger", wss.clients.size);
+        broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
+
+        clientsArray.pop();
+        let clientsOnline = formatToStatusObj("status", "clientArray", clientsArray)
+        broadcast(validateTypeOfOutgoingMessage(clientsOnline));
+
         let BotGoodbyeMsg = formatToChatObj("botMsg", "Mr Bot", "req.user.name... left the the chat!")
         broadcast(validateTypeOfOutgoingMessage(BotGoodbyeMsg));
-
-        let ClientSizeMsg = formatToStatusObj(("status", "clientInteger", wss.clients.size));
-        broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
     });
 
     ws.on("message", (data) => {

@@ -54,6 +54,7 @@ function validateTypeOfIncomingMessage(data) {
 
 
 function validateTypeOfOutgoingMessage(data) {
+    console.log(data);
     const msgType = data.type
     switch (msgType) {
         // TODO Find better names

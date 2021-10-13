@@ -21,6 +21,9 @@ function sortTypeOfReceivedMessage(msg) {
                 case "clientInteger":
                     displayNumberOfClientsOnline(msg);
                     break;
+                case "clientArray":
+                    displayListOfClientsNamesOnline(msg);
+                    break;
                 default:
                     break;
             }
