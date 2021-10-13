@@ -1,46 +1,35 @@
-"use strict"
-
-
-
 import WebSocket, {
     WebSocketServer
 } from 'ws';
-
-import express from 'express';
-import http from 'http';
 
 import {
     validateTypeOfOutgoingMessage,
     validateTypeOfIncomingMessage,
 } from './controller/controller.js';
 
-const app = express();
-const server = http.createServer(app);
+const wss = new WebSocketServer({
+    port: 8081,
+});
 
-// const wss = new WebSocketServer({noServer: true});
-const wss = new WebSocketServer({server});
-
-app.use(express.static("public"));
-app.set('view engine', 'ejs');
-
-app.locals.clientsOnline = 0;
-
-
-// TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
-    console.log(wss.clients.size);
-    clientsOnline = wss.clients.size
-                  
+    people.push("hi")
+    // broadcast how many clients online
+    let objClientSizeMsg = {
+        type: "status",
+        data: wss.clients.size
+    };
+    let validatedClientSizeMsg = validateTypeOfOutgoingMessage(objClientSizeMsg);
+    broadcast(validatedClientSizeMsg);
 
-            // Bot welcome message, msg > validate > send
-            let objBotWelcomeMsg = {
-                type: "botMsg",
-                user: "Mr Bot",
-                data: "req.user.name... has joined!"
-            };
-            let validatedBotWelcomeMsg = validateTypeOfOutgoingMessage(objBotWelcomeMsg);
-            broadcast(validatedBotWelcomeMsg);
+    // Bot welcome message, msg > validate > send
+    let objBotWelcomeMsg = {
+        type: "botMsg",
+        user: "Mr Bot",
+        data: "req.user.name... has joined!"
+    };
+    let validatedBotWelcomeMsg = validateTypeOfOutgoingMessage(objBotWelcomeMsg);
+    broadcast(validatedBotWelcomeMsg);
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
     ws.on("close", () => {
@@ -51,7 +40,7 @@ wss.on('connection', (ws, req) => {
         };
         let validatedBotCloseMsg = validateTypeOfOutgoingMessage(objBotCloseMsg);
         broadcast(validatedBotCloseMsg);
-        
+
         objClientSizeMsg.data = wss.clients.size
         let validatedClientSizeMsg = validateTypeOfOutgoingMessage(objClientSizeMsg);
         broadcast(validatedClientSizeMsg);
@@ -62,7 +51,9 @@ wss.on('connection', (ws, req) => {
         let validatedOutgoingMsg = validateTypeOfOutgoingMessage(validatedIncomingMsg);
         broadcastButExclude(validatedOutgoingMsg, ws)
     })
+    console.log("from web..", people);
 });
+console.log("from serv..", people);
 
 function broadcastButExclude(data, someClient) {
     wss.clients.forEach(function each(client) {
@@ -81,11 +72,3 @@ function broadcast(data) {
         }
     })
 }
-
-app.get("/", (req, res) => {
-    res.render('pages/index', {clientsOnline});
-})
-
-server.listen(process.env.PORT || 8999, () => {
-    console.log(`Server started`);
-});
