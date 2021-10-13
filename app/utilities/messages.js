@@ -5,13 +5,20 @@ import {
 
 
 function formatMessage(type, user, data) {
-    return {
-        type: type,
-        user: user,
-        data: data
-    };
+    const msgTemplate = {}
+    if (type) {
+        msgTemplate.type = type;
+    } 
+    if (user) {
+        msgTemplate.user = user;
+    } 
+    if (data) {
+        msgTemplate.data = data;
+    } 
+    return msgTemplate;
   }
 
+  
 function validateTypeOfIncomingMessage(data) {
     const parsedData = parseJson(data)
     const msgType = parsedData.type

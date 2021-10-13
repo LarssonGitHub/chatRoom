@@ -30,16 +30,13 @@ app.use(session({
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
-let clientsOnline = 0;
-
-
-
 // TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
     console.log(wss.clients.size);
-    clientsOnline = wss.clients.size
-                  
+
+    let ClientSizeMsg = formatMessage("status", "", wss.clients.size)
+    broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
 
         // TODO replace req.username with the user who logs in
             let BotWelcomeMsg = formatMessage("botMsg", "Mr Bot", "req.user.name... has joined!")
@@ -50,9 +47,8 @@ wss.on('connection', (ws, req) => {
         let BotGoodbyeMsg = formatMessage("botMsg","Mr Bot", "req.user.name... left the the chat!")
         broadcast(validateTypeOfOutgoingMessage(BotGoodbyeMsg));
       
-        objClientSizeMsg.data = wss.clients.size
-        let validatedClientSizeMsg = validateTypeOfOutgoingMessage(objClientSizeMsg);
-        broadcast(validatedClientSizeMsg);
+        let ClientSizeMsg = formatMessage("status", "", wss.clients.size)
+        broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
     });
 
     ws.on("message", (data) => {
@@ -82,7 +78,7 @@ function broadcast(data) {
 
 // Ask about this...:! ClientsOnline.
 app.get("/", (req, res) => {
-    res.render('pages/index', {clientsOnline});
+    res.render('pages/index');
 })
 
 // TODO.... use render and shit I think... With session to see if user is okay or not then use this for the bot to show username of whoever joins
