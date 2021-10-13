@@ -3,6 +3,15 @@ import {
     stringifyJson
 } from './functions.js'
 
+
+function formatMessage(type, user, data) {
+    return {
+        type: type,
+        user: user,
+        data: data
+    };
+  }
+
 function validateTypeOfIncomingMessage(data) {
     const parsedData = parseJson(data)
     const msgType = parsedData.type
@@ -47,5 +56,6 @@ function validateTypeOfOutgoingMessage(data) {
 
 export {
     validateTypeOfOutgoingMessage,
-    validateTypeOfIncomingMessage
+    validateTypeOfIncomingMessage,
+    formatMessage
 }

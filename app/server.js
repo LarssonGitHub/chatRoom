@@ -13,6 +13,7 @@ import session from 'express-session';
 import {
     validateTypeOfOutgoingMessage,
     validateTypeOfIncomingMessage,
+    formatMessage
 } from './utilities/messages.js';
 
 const app = express();
@@ -32,6 +33,7 @@ app.set('view engine', 'ejs');
 let clientsOnline = 0;
 
 
+
 // TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
@@ -39,25 +41,15 @@ wss.on('connection', (ws, req) => {
     clientsOnline = wss.clients.size
                   
 
-            // Bot welcome message, msg > validate > send
-            let objBotWelcomeMsg = {
-                type: "botMsg",
-                user: "Mr Bot",
-                data: "req.user.name... has joined!"
-            };
-            let validatedBotWelcomeMsg = validateTypeOfOutgoingMessage(objBotWelcomeMsg);
-            broadcast(validatedBotWelcomeMsg);
+        // TODO replace req.username with the user who logs in
+            let BotWelcomeMsg = formatMessage("botMsg", "Mr Bot", "req.user.name... has joined!")
+            broadcast(validateTypeOfOutgoingMessage(BotWelcomeMsg));
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
     ws.on("close", () => {
-        let objBotCloseMsg = {
-            type: "botMsg",
-            user: "Mr Bot",
-            data: "req.user.name... left the the chat!"
-        };
-        let validatedBotCloseMsg = validateTypeOfOutgoingMessage(objBotCloseMsg);
-        broadcast(validatedBotCloseMsg);
-        
+        let BotGoodbyeMsg = formatMessage("botMsg","Mr Bot", "req.user.name... left the the chat!")
+        broadcast(validateTypeOfOutgoingMessage(BotGoodbyeMsg));
+      
         objClientSizeMsg.data = wss.clients.size
         let validatedClientSizeMsg = validateTypeOfOutgoingMessage(objClientSizeMsg);
         broadcast(validatedClientSizeMsg);
