@@ -3,7 +3,8 @@ import {
 } from "../models/gallerySchema.js"
 
 async function saveImgToDatabase(obj) {
-    console.log("this is an object", obj)
+    // https://www.youtube.com/watch?v=WDrU305J1yw&ab_channel=Academind
+    // Debate how to error handling, like this guy!
     try {
         // TODO this is dangerous, fix and do something else with base64!
         const galleryObj = new Gallery({
@@ -22,6 +23,20 @@ async function saveImgToDatabase(obj) {
     }
 }
 
+async function getCollectionOfGallery() {
+    try {
+        const listOfImages = await Gallery.find({});
+        if (!listOfImages || listOfImages.length === 0) {
+            throw "There sadly isn't any pictures posted online yet D:";           
+        }
+        return listOfImages;
+    } catch (err) {
+        return err
+        }
+    }
+
+
 export {
-    saveImgToDatabase
+    saveImgToDatabase,
+    getCollectionOfGallery
 }

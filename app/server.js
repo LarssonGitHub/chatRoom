@@ -17,7 +17,7 @@ import {
     formatToChatObj,
     formatToStatusObj
 } from './utilities/messages.js';
-
+import {getCollectionOfGallery} from "./controller/controller.js"
 dotenv.config();
 const {
     PORT,
@@ -28,10 +28,10 @@ mongoose.connect(connectionStream, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
-  console.log('Connection to DB chat Successfully!');
-}) .catch (err => {
-  console.log('Connection to DB Failed', err);
-  process.exit()
+    console.log('Connection to DB chat Successfully!');
+}).catch(err => {
+    console.log('Connection to DB Failed', err);
+    process.exit()
 })
 
 const app = express();
@@ -57,6 +57,7 @@ let clientsArray = []
 wss.on('connection', (ws, req) => {
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
     clientsArray.push(wss.clients.size);
+
 
     let clientSize = formatToStatusObj("status", "clientInteger", wss.clients.size)
     broadcast(validateTypeOfOutgoingMessage(clientSize));
@@ -111,6 +112,13 @@ function broadcast(data) {
 // Ask about this...:! ClientsOnline.
 app.get("/", (req, res) => {
     res.render('pages/index');
+})
+
+app.get("/gallery/", async (req, res) => {
+    const collection = await getCollectionOfGallery();
+    console.log(collection);
+    // TODO put it into an object and error handle!
+    res.json(collection);
 })
 
 // TODO.... use render and shit I think... With session to see if user is okay or not then use this for the bot to show username of whoever joins

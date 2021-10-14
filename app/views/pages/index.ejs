@@ -127,10 +127,28 @@
         <img src="" alt="canvas_Image" width="200px">
     </template> -->
 
+    <hr>
+    <!-- TODO make this into a module and display the images in a separate window -->
+    <!-- Hidden! -->
+    <section>
+        <h3>Gallery!</h3>
+        <ul id="galleryContainer">
+        </ul>
+    </section>
+    <button id="fetchGalleryBtn">Fetch all images!</button>
+
+    <template id="galleryTemplate">
+        <li>
+            <img class="galleryImg" width="200">
+            <p class="galleryUsername"></p>
+        </li>
+    </template>
+
     <!-- <script src="javascript/websocket.js"></script> -->
     <script src="javascript/canvas.js"></script>
     <script src="javascript/chat.js"></script>
     <script src="javascript/websocket.js"></script>
+    <script src="javascript/gallery.js"></script>
 
 </body>
 
