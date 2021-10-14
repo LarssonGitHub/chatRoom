@@ -20,10 +20,19 @@ import {
 
 dotenv.config();
 const {
-    PORT
+    PORT,
+    connectionStream
 } = process.env;
 
-
+mongoose.connect(connectionStream, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+  console.log('Connection to DB chat Successfully!');
+}) .catch (err => {
+  console.log('Connection to DB Failed', err);
+  process.exit()
+})
 
 const app = express();
 const server = http.createServer(app);
