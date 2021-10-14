@@ -2,6 +2,9 @@ import {
     parseJson,
     stringifyJson
 } from './functions.js'
+import {
+    saveImgToDatabase
+} from "../controller/controller.js"
 
 function formatToStatusObj(type, target, data) {
     const statusTemplate = {}
@@ -41,6 +44,8 @@ function validateTypeOfIncomingMessage(data) {
         case "botMsg":
             return parsedData;
         case "imageMsg":
+            // TODO Validate img and values before writing to database
+            saveImgToDatabase(parsedData);
         case "status":
             return parsedData;
         default:
