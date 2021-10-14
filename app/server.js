@@ -9,13 +9,21 @@ import WebSocket, {
 import express from 'express';
 import http from 'http';
 import session from 'express-session';
-
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 import {
     validateTypeOfOutgoingMessage,
     validateTypeOfIncomingMessage,
     formatToChatObj,
     formatToStatusObj
 } from './utilities/messages.js';
+
+dotenv.config();
+const {
+    PORT
+} = process.env;
+
+
 
 const app = express();
 const server = http.createServer(app);
@@ -102,6 +110,6 @@ app.get("/", (req, res) => {
 
 // })
 // Or save
-server.listen(process.env.PORT || 8999, () => {
+server.listen(process.env.PORT || PORT, () => {
     console.log(`Server started`);
 });
