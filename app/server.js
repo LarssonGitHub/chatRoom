@@ -11,6 +11,8 @@ import http from 'http';
 import session from 'express-session';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+
 import {
     validateTypeOfOutgoingMessage,
     validateTypeOfIncomingMessage,
@@ -51,6 +53,7 @@ const wss = new WebSocketServer({
     server
 });
 
+app.use(bodyParser.json());
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
@@ -128,8 +131,16 @@ app.get("/login/", (req, res) => {
 })
 
 app.post("/login/", async (req, res) => {
-    const user = await loginUser();
-    res.json(user);
+    const {
+        userName,
+        userPassword
+    } = req.body;
+    const user = await loginUser(userName, userPassword);
+    if (user === "success") {
+        res.json("User exist and you logged in!");
+        return;
+    }
+    res.json("There ain't no user here :<");
 })
 
 app.get("/register/", (req, res) => {
@@ -137,8 +148,17 @@ app.get("/register/", (req, res) => {
 })
 
 app.post("/register/", async (req, res) => {
-    const newUser = await registerNewUser();
-    res.json(newUser);
+    const {
+        userName,
+        userPassword
+    } = req.body;
+    const newUser = await registerNewUser(userName, userPassword);
+    console.log(newUser);
+    if (newUser === "success") {
+        res.json("new user added, log in!");
+        return;
+    }
+    res.json("New user did not add :<");
 })
 
 app.get("/gallery/", async (req, res) => {

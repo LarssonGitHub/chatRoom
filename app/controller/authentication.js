@@ -1,9 +1,31 @@
-function registerNewUser() {
-    return "new user register!";
+import {
+    addNewUser,
+    checkForUser
+} from "./database.js"
+
+async function registerNewUser(userName, userPassword) {
+    try {
+        const newUser = await addNewUser(userName, userPassword);
+        if (newUser === "success") {
+            return "success";
+        }
+    } catch (err) {
+        console.log(err);
+        return "failure"
+    }
 }
 
-function loginUser() {
-    return "Welcome bitch!";
+async function loginUser(userName, userPassword) {
+    try {
+        const user = await checkForUser(userName, userPassword);
+        if (user === "success") {
+            return "success";
+        }
+    } catch (err) {
+        console.log(err);
+        return "failure"
+    }
+  
 }
 
 export {
