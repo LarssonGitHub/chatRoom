@@ -114,6 +114,22 @@ app.get("/", (req, res) => {
     res.render('pages/index');
 })
 
+app.get("/login/", (req,res) => {
+    res.render('pages/login');
+})
+
+app.post("/login/", (req,res) => {
+    res.render('pages/index');
+})
+
+app.get("/register/", (req,res) => {
+    res.render('pages/register');
+})
+
+app.post("/register/", (req,res) => {
+    res.render('pages/index');
+})
+
 app.get("/gallery/", async (req, res) => {
     const collection = await getCollectionOfGallery();
     console.log(collection);
