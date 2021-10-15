@@ -8,7 +8,9 @@ import WebSocket, {
 
 import express from 'express';
 import http from 'http';
-import session from 'express-session';
+import session, {
+    MemoryStore
+} from 'express-session';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
@@ -27,12 +29,16 @@ import {
     loginUser
 } from "./controller/authentication.js"
 import {
-    checkAccession
+    checkUserAccess
 } from "./middleware/accession.js"
 dotenv.config();
 const {
     PORT,
-    connectionStream
+    connectionStream,
+    SESSION_LIFETIME,
+    NODE_ENV,
+    SESSION_NAME,
+    SESSION_SECRET,
 } = process.env;
 
 mongoose.connect(connectionStream, {
@@ -117,13 +123,33 @@ function broadcast(data) {
 }
 
 app.use(session({
-    secret: "foryoureyesonly%tXl!p",
+    name: SESSION_NAME,
+    secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false,
+    store: new MemoryStore(),
+    cookie: {
+        maxAge: Number(SESSION_LIFETIME),
+        sameSite: 'strict',
+        secure: NODE_ENV === 'production',
+    },
 }));
 
-app.get("/", checkAccession, (req, res) => {
+app.get("/", checkUserAccess, (req, res) => {
     res.render('pages/index');
+})
+
+app.get('/logout', checkUserAccess, (req,res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.log(err);
+            res.redirect('/')
+            return
+        }
+        res.clearCookie(SESSION_NAME);
+        console.log('cookie destroyed');
+        res.redirect('/')
+    });
 })
 
 app.get("/login/", (req, res) => {
@@ -137,6 +163,7 @@ app.post("/login/", async (req, res) => {
     } = req.body;
     const user = await loginUser(userName, userPassword);
     if (user === "success") {
+        req.session.userHasAccess = true;
         res.json("User exist and you logged in!");
         return;
     }
@@ -168,5 +195,5 @@ app.get("/gallery/", async (req, res) => {
 })
 
 server.listen(process.env.PORT || PORT, () => {
-    console.log(`Server started`);
+    console.log(`Server started on`, PORT);
 });
