@@ -17,7 +17,16 @@ import {
     formatToChatObj,
     formatToStatusObj
 } from './utilities/messages.js';
-import {getCollectionOfGallery} from "./controller/controller.js"
+import {
+    getCollectionOfGallery
+} from "./controller/database.js"
+import {
+    registerNewUser,
+    loginUser
+} from "./controller/authentication.js"
+import {
+    checkAccession
+} from "./middleware/accession.js"
 dotenv.config();
 const {
     PORT,
@@ -41,11 +50,6 @@ const server = http.createServer(app);
 const wss = new WebSocketServer({
     server
 });
-app.use(session({
-    secret: "foryoureyesonly%tXl!p",
-    resave: false,
-    saveUninitialized: true
-}));
 
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
@@ -109,40 +113,40 @@ function broadcast(data) {
     })
 }
 
-// Ask about this...:! ClientsOnline.
-app.get("/", (req, res) => {
+app.use(session({
+    secret: "foryoureyesonly%tXl!p",
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.get("/", checkAccession, (req, res) => {
     res.render('pages/index');
 })
 
-app.get("/login/", (req,res) => {
+app.get("/login/", (req, res) => {
     res.render('pages/login');
 })
 
-app.post("/login/", (req,res) => {
-    res.render('pages/index');
+app.post("/login/", async (req, res) => {
+    const user = await loginUser();
+    res.json(user);
 })
 
-app.get("/register/", (req,res) => {
+app.get("/register/", (req, res) => {
     res.render('pages/register');
 })
 
-app.post("/register/", (req,res) => {
-    res.render('pages/index');
+app.post("/register/", async (req, res) => {
+    const newUser = await registerNewUser();
+    res.json(newUser);
 })
 
 app.get("/gallery/", async (req, res) => {
     const collection = await getCollectionOfGallery();
-    console.log(collection);
     // TODO put it into an object and error handle!
     res.json(collection);
 })
 
-// TODO.... use render and shit I think... With session to see if user is okay or not then use this for the bot to show username of whoever joins
-// , then ue the session as the one which validates the users input, and if it is, display the render.. Or something. If not, terminate the connection
-// app.get("/login", (req, res) => {
-
-// })
-// Or save
 server.listen(process.env.PORT || PORT, () => {
     console.log(`Server started`);
 });
