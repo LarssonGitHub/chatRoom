@@ -1,8 +1,3 @@
-const registerForm = document.getElementById("registerForm");
-const loginForm = document.getElementById("loginForm");
-
-// How do I solve this?!?!? One script two different dom elements.. one not existing in the other?!
-
 function ObjectifyEntriesAndStringify(data) {
     const formData = new FormData(data);
     return JSON.stringify(Object.fromEntries(formData))
@@ -43,7 +38,3 @@ function submitLoginForm(e) {
             console.log(err);
         });
 }
-
-
-loginForm.addEventListener("submit", submitLoginForm);
-registerForm.addEventListener("submit", submitRegisterForm);
