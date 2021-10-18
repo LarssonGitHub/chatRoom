@@ -33,10 +33,11 @@ async function checkForUser(userName, userPassword) {
         if (!userExist) {
             throw "No user like that exist D:";
         }
-        return "success"
+        return userExist;
     } catch (err) {
-        console.log("user didn't save!");
+        console.log("use doesn't exist!");
         console.log(err);
+        return "failure"
     }
 }
 

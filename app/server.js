@@ -31,6 +31,10 @@ import {
 import {
     checkUserAccess
 } from "./middleware/accession.js"
+
+const app = express();
+const server = http.createServer(app);
+
 dotenv.config();
 const {
     PORT,
@@ -51,12 +55,22 @@ mongoose.connect(connectionStream, {
     process.exit()
 })
 
-const app = express();
-const server = http.createServer(app);
+app.use(session({
+    name: SESSION_NAME,
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: new MemoryStore(),
+    cookie: {
+        maxAge: Number(SESSION_LIFETIME),
+        sameSite: 'strict',
+        secure: NODE_ENV === 'production',
+    },
+}));
 
 // const wss = new WebSocketServer({noServer: true});
 const wss = new WebSocketServer({
-    server
+    servern 
 });
 
 app.use(bodyParser.json());
@@ -69,8 +83,11 @@ let clientsArray = []
 // TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
-    clientsArray.push(wss.clients.size);
-
+    // clientsArray.push(wss.clients.size);
+    // session(req.upgradeReq, {}, function(){
+    //     console.log(req.session);
+    //     // do stuff with the session here
+    // });
 
     let clientSize = formatToStatusObj("status", "clientInteger", wss.clients.size)
     broadcast(validateTypeOfOutgoingMessage(clientSize));
@@ -80,7 +97,7 @@ wss.on('connection', (ws, req) => {
     broadcast(validateTypeOfOutgoingMessage(clientsOnline));
 
     // TODO replace req.username with the user who logs in
-    let BotWelcomeMsg = formatToChatObj("botMsg", "Mr Bot", "req.user.name... has joined!")
+    let BotWelcomeMsg = formatToChatObj("botMsg", "Mr Bot", `${req.session}... has joined!`)
     broadcast(validateTypeOfOutgoingMessage(BotWelcomeMsg));
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
@@ -122,19 +139,6 @@ function broadcast(data) {
     })
 }
 
-app.use(session({
-    name: SESSION_NAME,
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: new MemoryStore(),
-    cookie: {
-        maxAge: Number(SESSION_LIFETIME),
-        sameSite: 'strict',
-        secure: NODE_ENV === 'production',
-    },
-}));
-
 app.get("/", checkUserAccess, (req, res) => {
     res.render('pages/index');
 })
@@ -162,13 +166,19 @@ app.post("/login/", async (req, res) => {
         userPassword
     } = req.body;
     const user = await loginUser(userName, userPassword);
-    if (user === "success") {
-        req.session.userHasAccess = true;
-        res.json("User exist and you logged in!");
-        return;
+console.log(user);
+console.log(user.userName);
+    if (!user === "failure") {
+        // console.log("fffaaaaailll");
+        res.json("There ain't no user here :<");
     }
-    res.json("There ain't no user here :<");
+    req.session.userHasAccess = true;
+    req.session.user = user.userName;
+    // req.session.userId = user.id;
+    console.log(req.session.user)
+    res.json({ redirectTo: '/', message: "user exist and logging in!"})
 })
+
 
 app.get("/register/", (req, res) => {
     res.render('pages/register');
@@ -182,7 +192,7 @@ app.post("/register/", async (req, res) => {
     const newUser = await registerNewUser(userName, userPassword);
     console.log(newUser);
     if (newUser === "success") {
-        res.json("new user added, log in!");
+        res.json({ redirectTo: '/login', message: "new user added, log in!" })
         return;
     }
     res.json("New user did not add :<");

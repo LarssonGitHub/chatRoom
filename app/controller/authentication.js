@@ -15,17 +15,9 @@ async function registerNewUser(userName, userPassword) {
     }
 }
 
+// TODO This is stupid! 
 async function loginUser(userName, userPassword) {
-    try {
-        const user = await checkForUser(userName, userPassword);
-        if (user === "success") {
-            return "success";
-        }
-    } catch (err) {
-        console.log(err);
-        return "failure"
-    }
-  
+        return await checkForUser(userName, userPassword);
 }
 
 export {

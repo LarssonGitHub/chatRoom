@@ -21,6 +21,9 @@ function submitRegisterForm(e) {
         .then(resp => resp.json())
         .then(data => {
             console.log(data);
+            if (data.redirectTo) {
+                location.assign(data.redirectTo)
+              }
         }).catch(err => {
             console.log(err);
         });
@@ -34,6 +37,9 @@ function submitLoginForm(e) {
         .then(resp => resp.json())
         .then(data => {
             console.log(data);
+            if (data.redirectTo) {
+                location.assign(data.redirectTo)
+              }
         }).catch(err => {
             console.log(err);
         });
