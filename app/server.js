@@ -22,12 +22,17 @@ import {
     formatToStatusObj
 } from './utilities/messages.js';
 import {
-    getCollectionOfGallery
+    getCollectionOfGallery,
+    setIdAndStatusForWebsocket
 } from "./controller/database.js"
 import {
     registerNewUser,
     loginUser
 } from "./controller/authentication.js"
+import {
+    userJoin,
+} from "./controller/websocketUsers.js"
+
 import {
     checkUserAccess
 } from "./middleware/accession.js"
@@ -82,12 +87,12 @@ let clientsArray = []
 
 // TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
+
+    const socket = userJoin()
+    const websocketUserID = ws.id;
+
+    console.log(ws.id);
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
-    // clientsArray.push(wss.clients.size);
-    // session(req.upgradeReq, {}, function(){
-    //     console.log(req.session);
-    //     // do stuff with the session here
-    // });
 
     let clientSize = formatToStatusObj("status", "clientInteger", wss.clients.size)
     broadcast(validateTypeOfOutgoingMessage(clientSize));
@@ -101,7 +106,7 @@ wss.on('connection', (ws, req) => {
     broadcast(validateTypeOfOutgoingMessage(BotWelcomeMsg));
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
-    ws.on("close", (ws) => {
+    ws.on("close", () => {
 
         let ClientSizeMsg = formatToStatusObj("status", "clientInteger", wss.clients.size);
         broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
@@ -115,6 +120,7 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on("message", (data) => {
+        console.log(ws.id, "fuck");
         let validatedIncomingMsg = validateTypeOfIncomingMessage(data);
         let validatedOutgoingMsg = validateTypeOfOutgoingMessage(validatedIncomingMsg);
         broadcastButExclude(validatedOutgoingMsg, ws)
@@ -143,7 +149,7 @@ app.get("/", checkUserAccess, (req, res) => {
     res.render('pages/index');
 })
 
-app.get('/logout', checkUserAccess, (req,res) => {
+app.get('/logout', checkUserAccess, (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             console.log(err);
@@ -160,23 +166,28 @@ app.get("/login/", (req, res) => {
     res.render('pages/login');
 })
 
+
+
 app.post("/login/", async (req, res) => {
     const {
         userName,
         userPassword
     } = req.body;
     const user = await loginUser(userName, userPassword);
-console.log(user);
-console.log(user.userName);
-    if (!user === "failure") {
-        // console.log("fffaaaaailll");
+    if (user === "failure") {
         res.json("There ain't no user here :<");
+        return;
     }
     req.session.userHasAccess = true;
-    req.session.user = user.userName;
-    // req.session.userId = user.id;
-    console.log(req.session.user)
-    res.json({ redirectTo: '/', message: "user exist and logging in!"})
+    const updatedUser = await setIdAndStatusForWebsocket(user);
+    if (updatedUser === "failure") {
+        res.json("Couldn't set new stats");
+        return;
+    }
+    res.json({
+        redirectTo: '/',
+        message: "user exist and logging in!"
+    })
 })
 
 
@@ -192,7 +203,10 @@ app.post("/register/", async (req, res) => {
     const newUser = await registerNewUser(userName, userPassword);
     console.log(newUser);
     if (newUser === "success") {
-        res.json({ redirectTo: '/login', message: "new user added, log in!" })
+        res.json({
+            redirectTo: '/login',
+            message: "new user added, log in!"
+        })
         return;
     }
     res.json("New user did not add :<");

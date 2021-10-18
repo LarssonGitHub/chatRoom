@@ -1,8 +1,20 @@
-function userJoin(id, username, room) {
+import {getUserName} from "./database.js"
+
+function userJoin(id) {
+
+
+
     //  SET temp socket id... on user on the database
 }
 
-function getCurrentUser(id) {
+// https://github.com/websockets/ws/issues/859
+// add date lib https://www.skypack.dev/view/dayjs
+// 
+
+async function getCurrentUser(wsId) {
+    const bullshit = await getUserName(wsId);
+    console.log(bullshit);
+    
     // get user id and post it with attached name and ms..! (remove client side temp and display on client side.....! Only let the user know if it didn't post..!)
 }
 
@@ -26,6 +38,6 @@ export {
     userJoin,
     getCurrentUser,
     userLeave,
-    getRoomUserNames,
-    getRoomUserInteger
+    getRoomUserInteger,
+    getUserName
 }
