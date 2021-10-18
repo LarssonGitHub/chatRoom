@@ -70,7 +70,7 @@ app.use(session({
 
 // const wss = new WebSocketServer({noServer: true});
 const wss = new WebSocketServer({
-    servern 
+    server
 });
 
 app.use(bodyParser.json());
@@ -101,7 +101,7 @@ wss.on('connection', (ws, req) => {
     broadcast(validateTypeOfOutgoingMessage(BotWelcomeMsg));
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
-    ws.on("close", () => {
+    ws.on("close", (ws) => {
 
         let ClientSizeMsg = formatToStatusObj("status", "clientInteger", wss.clients.size);
         broadcast(validateTypeOfOutgoingMessage(ClientSizeMsg));
