@@ -1,0 +1,28 @@
+<p>People online: <span id="clientsOnline">0</span></p>
+
+<section>
+    <h2>Chat window!</h2>
+    <div id="chatContainer"></div>
+
+
+    <input type="text" id="userName" name="userName" maxlength="10" placeholder="Your name (3-10 characters)">
+    <button id="enterChatBtn">Enter chat</button>
+
+
+    <section id="typingContainer">
+        <h3>Type something....</h3>
+        <!-- TODO, replace chattextarea with msgChatInput -->
+        <textarea id="chatTextarea" name="chatTextarea" rows="4" cols="50"
+            placeholder="Type and press Enter"></textarea>
+        <div id="imgImgContainer" class="hidden">
+            <div id="msgImgInputRemove">X</div>
+            <img id="msgImgInput" width="200">
+        </div>
+    </section>
+</section>
+
+<section>
+    <h3>People online now!</h3>
+    <ul id="ListOfClients">
+    </ul>
+</section>

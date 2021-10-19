@@ -119,7 +119,7 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on("message", (data) => {
-        console.log(ws.id, "fuck");
+        console.log(ws.id, "this is the ws id!");
         let validatedIncomingMsg = validateTypeOfIncomingMessage(data);
         let validatedOutgoingMsg = validateTypeOfOutgoingMessage(validatedIncomingMsg);
         broadcastButExclude(validatedOutgoingMsg, ws)

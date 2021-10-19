@@ -74,7 +74,7 @@ function displayBotChatMsg(chatObject) {
 }
 
 function displayImageMsg(chatObject) {
-    console.log("this should fucking work,", chatObject);
+    console.log("this should work,", chatObject);
     // TODO add an alt tag..!
     const {
         type,

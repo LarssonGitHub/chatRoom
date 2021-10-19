@@ -64,88 +64,21 @@
 </head>
 
 <body>
-    <button id="toggleCanvas">Toggle/remove canvas canvas!</button>
-    <a href="/logout">Logout</a>
+    <%- include('../partials/header.ejs') %>
+
+    <%- include('../partials/chat.ejs') %>
+
     <h1>A chat app</h1>
-    <p>People online: <span id="clientsOnline">0</span></p>
-
-    <section>
-        <h2>Chat window!</h2>
-        <div id="chatContainer"></div>
-
-
-        <input type="text" id="userName" name="userName" maxlength="10" placeholder="Your name (3-10 characters)">
-        <button id="enterChatBtn">Enter chat</button>
-
-
-        <section id="typingContainer" class="hidden">
-            <h3>Type something....</h3>
-            <!-- TODO, replace chattextarea with msgChatInput -->
-            <textarea id="chatTextarea" name="chatTextarea" rows="4" cols="50"
-                placeholder="Type and press Enter"></textarea>
-            <div id="imgImgContainer" class="hidden">
-                <div id="msgImgInputRemove">X</div>
-                <img id="msgImgInput" width="200">
-            </div>
-        </section>
-    </section>
-
-    <section>
-        <h3>People online now!</h3>
-        <ul id="ListOfClients">
-        </ul>
-    </section>
+   
     <hr>
 
-    <section id="CanvasContainer" class="hidden">
-        <h2>Draw window</h2>
-        <canvas id="myCanvas"></canvas>
-        <div id="canvasToolBar">
-            <input type="color" name="canvasColorPicker" id="canvasColorPicker">
-            <input type="range" min="1" max="30" value="5" name="canvasStrokeSize" id="canvasStrokeSize">
-            <select name="canvasFigure" id="canvasFigure">
-                <option value="square" selected>Square</option>
-                <option value="round">Circle</option>
-                <option value="butt">Brush</option>
-            </select>
-            <button id="canvasErase">Erase!</button>
-            <button id="canvasDownload">Download!</button>
-            <button id="canvasUpload">Upload!</button>
-        </div>
-    </section>
+    <%- include('../partials/canvas.ejs') %>
 
-    <!-- TODO Fix another template structure -->
-    <template id="chatTemplate">
-        <section class="chatTemplateContainer">
-            <b class="clientName"></b>
-            <p class="clientMsg"></p>
-            <img class="clientImg hidden">
-        </section>
-    </template>
 
-    <!-- TODO, change this and server how it handles... Doesn't want it as base64 -->
-    <!-- <template id="imgTemplate">
-        <img src="" alt="canvas_Image" width="200px">
-    </template> -->
+    <%- include('../partials/gallery.ejs') %>
 
-    <hr>
-    <!-- TODO make this into a module and display the images in a separate window -->
-    <!-- Hidden! -->
-    <section>
-        <h3>Gallery!</h3>
-        <ul id="galleryContainer">
-        </ul>
-    </section>
-    <button id="fetchGalleryBtn">Fetch all images!</button>
+    <%- include('../partials/templates.ejs') %>
 
-    <template id="galleryTemplate">
-        <li>
-            <img class="galleryImg" width="200">
-            <p class="galleryUsername"></p>
-        </li>
-    </template>
-
-    <!-- <script src="javascript/websocket.js"></script> -->
     <script src="javascript/utilityFunctions.js"></script>
     <script src="javascript/canvas.js"></script>
     <script src="javascript/chat.js"></script>
