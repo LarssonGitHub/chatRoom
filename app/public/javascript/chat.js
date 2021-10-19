@@ -87,27 +87,6 @@ function displayImageMsg(chatObject) {
 // TODO This should be sent to server.. By session or cookies and stuff....
 let clientUserName = "No nickname Given"
 
-function constructMsgObject(type, user, chatData, binaryCanvasValue) {
-    // console.log(type, user, chatData, binaryCanvasValue);
-    // Validate here..... Try catch? .....
-    msgTemplate = {}
-
-    // TODO Make into a switch?
-    if (type) {
-        msgTemplate.type = type;
-    }
-    if (user) {
-        msgTemplate.user = user;
-    }
-    if (chatData) {
-        msgTemplate.data = chatData;
-    }
-    if (binaryCanvasValue) {
-        msgTemplate.imageMsg = binaryCanvasValue;
-    }
-    return msgTemplate;
-}
-
 function sendChatMsgToServer(e) {
     let chatValue = chatTextarea.value
     if ((e.code === "Enter" && !e.shiftKey) && chatValue.length > 0) {
@@ -115,13 +94,11 @@ function sendChatMsgToServer(e) {
         let constructedMsg
         if (binaryCanvasValue) {
             constructedMsg = constructMsgObject("imageMsg", clientUserName, chatValue, binaryCanvasValue);
-            displayImageMsg(constructedMsg)
             chatTextarea.value = "";
             binaryCanvasValue = "";
             checkIfTypingImgShouldHidden();
         } else {
             constructedMsg = constructMsgObject("chatMsg", clientUserName, chatValue);
-            displayClientChatMsg(constructedMsg);
         }
         sendMsgToWebsocket(constructedMsg);
         // TODO Fix so textarea doesn't start on a new line.. When clearing...

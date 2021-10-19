@@ -122,7 +122,12 @@ wss.on('connection', (ws, req) => {
         console.log(ws.id, "this is the ws id!");
         let validatedIncomingMsg = validateTypeOfIncomingMessage(data);
         let validatedOutgoingMsg = validateTypeOfOutgoingMessage(validatedIncomingMsg);
-        broadcastButExclude(validatedOutgoingMsg, ws)
+
+        // TODO unfinished error fucntion
+        // if (validatedOutgoingMsg === "error") {
+        //     // TODO Broadcast to user only that their message didn't og through!
+        // }
+        broadcast(validatedOutgoingMsg, ws);
     })
 });
 
