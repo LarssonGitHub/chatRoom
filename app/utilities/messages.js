@@ -1,7 +1,39 @@
 import {
     parseJson,
     stringifyJson
-} from '../library/functions.js'
+} from './functions.js'
+import {
+    saveImgToDatabase
+} from "../controller/database.js"
+
+function formatToStatusObj(type, target, data) {
+    const statusTemplate = {}
+    if (type) {
+        statusTemplate.type = type;
+    }
+    if (target) {
+        statusTemplate.target = target;
+    }
+    if (data) {
+        statusTemplate.data = data;
+    }
+    return statusTemplate;
+}
+
+function formatToChatObj(type, user, data) {
+    const msgTemplate = {}
+    if (type) {
+        msgTemplate.type = type;
+    }
+    if (user) {
+        msgTemplate.user = user;
+    }
+    if (data) {
+        msgTemplate.data = data;
+    }
+    return msgTemplate;
+}
+
 
 function validateTypeOfIncomingMessage(data) {
     const parsedData = parseJson(data)
@@ -12,17 +44,22 @@ function validateTypeOfIncomingMessage(data) {
         case "botMsg":
             return parsedData;
         case "imageMsg":
-            return parsedData;
+            // TODO Validate img and values before writing to database
+            saveImgToDatabase(parsedData);
         case "status":
             return parsedData;
         default:
             // Remember to send back to client that their message and type wasn't approved.....
             console.log("error... Something went horrible wrong when handling incoming...!");
-            return {err: "error....!"}
-}}
+            return {
+                err: "error....!"
+            }
+    }
+}
 
 
 function validateTypeOfOutgoingMessage(data) {
+    console.log(data);
     const msgType = data.type
     switch (msgType) {
         // TODO Find better names
@@ -42,11 +79,15 @@ function validateTypeOfOutgoingMessage(data) {
         default:
             // Remember to send back to client that their message and type wasn't approved.....
             console.log("error... Something went horrible wrong here...!");
-            return {err: "error....!"}
+            return {
+                err: "error....!"
+            }
     }
 }
 
 export {
     validateTypeOfOutgoingMessage,
-    validateTypeOfIncomingMessage
+    validateTypeOfIncomingMessage,
+    formatToChatObj,
+    formatToStatusObj
 }

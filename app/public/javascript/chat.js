@@ -1,16 +1,22 @@
 const clientsOnline = document.getElementById('clientsOnline');
 const chatContainer = document.getElementById('chatContainer');
 const chatTemplate = document.getElementById('chatTemplate');
-const enterChatBtn = document.getElementById("enterChatBtn");
 const typingContainer = document.getElementById("typingContainer");
 const chatTextarea = document.getElementById("chatTextarea");
 const imgImgContainer = document.getElementById("imgImgContainer");
 const msgImgInputRemove = document.getElementById("msgImgInputRemove")
-function displayNumberOfClientsOnline(object) {
-    const {
-        type,
-        data
-    } = object
+const ListOfClients = document.getElementById("ListOfClients");
+
+function displayListOfClientsNamesOnline({data}) {
+    ListOfClients.innerHTML = '';
+    data.forEach(client => {
+    const li = document.createElement('li');
+    li.innerText = client;
+    ListOfClients.appendChild(li);
+    });
+}
+
+function displayNumberOfClientsOnline({data}) {
     clientsOnline.textContent = data
 }
 
@@ -67,7 +73,7 @@ function displayBotChatMsg(chatObject) {
 }
 
 function displayImageMsg(chatObject) {
-    console.log("this should fucking work,"  ,chatObject);
+    console.log("this should work,", chatObject);
     // TODO add an alt tag..!
     const {
         type,
@@ -81,41 +87,6 @@ function displayImageMsg(chatObject) {
 // TODO This should be sent to server.. By session or cookies and stuff....
 let clientUserName = "No nickname Given"
 
-function validateNewUser() {
-    const userName = document.getElementById("userName");
-    if (userName.value.length > 2) {
-        userName.setAttribute("disabled", "disabled");
-        enterChatBtn.classList.toggle("hidden");
-        userName.classList.toggle("hidden");
-        clientUserName = userName.value;
-        typingContainer.classList.toggle("hidden");
-        chatTextarea.focus();
-        return;
-    }
-    alert("You didn't validate :(")
-}
-
-function constructMsgObject(type, user, chatData, binaryCanvasValue) {
-    // console.log(type, user, chatData, binaryCanvasValue);
-    // Validate here..... Try catch? .....
-    msgTemplate = {}
-
-    // TODO Make into a switch?
-    if (type) {
-        msgTemplate.type = type;
-    } 
-    if (user) {
-        msgTemplate.user = user;
-    } 
-    if (chatData) {
-        msgTemplate.data = chatData;
-    } 
-    if (binaryCanvasValue) {
-        msgTemplate.imageMsg = binaryCanvasValue;
-    }
-    return msgTemplate;
-}
-
 function sendChatMsgToServer(e) {
     let chatValue = chatTextarea.value
     if ((e.code === "Enter" && !e.shiftKey) && chatValue.length > 0) {
@@ -123,13 +94,11 @@ function sendChatMsgToServer(e) {
         let constructedMsg
         if (binaryCanvasValue) {
             constructedMsg = constructMsgObject("imageMsg", clientUserName, chatValue, binaryCanvasValue);
-            displayImageMsg(constructedMsg)
             chatTextarea.value = "";
             binaryCanvasValue = "";
             checkIfTypingImgShouldHidden();
         } else {
-            constructedMsg = constructMsgObject("chatMsg", clientUserName, chatValue); 
-            displayClientChatMsg(constructedMsg);
+            constructedMsg = constructMsgObject("chatMsg", clientUserName, chatValue);
         }
         sendMsgToWebsocket(constructedMsg);
         // TODO Fix so textarea doesn't start on a new line.. When clearing...
@@ -137,6 +106,5 @@ function sendChatMsgToServer(e) {
     }
 }
 
-enterChatBtn.addEventListener("click", validateNewUser);
 typingContainer.addEventListener("keydown", sendChatMsgToServer);
 msgImgInputRemove.addEventListener("click", removeImgFromTypingContainer)

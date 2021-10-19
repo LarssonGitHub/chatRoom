@@ -11,7 +11,8 @@ const canvasUpload = document.getElementById("canvasUpload");
 
 // TODO Remove this button and event and create something else
 document.getElementById("toggleCanvas").addEventListener("click", (e) => {
-    CanvasContainer.classList.toggle("hidden")});
+    CanvasContainer.classList.toggle("hidden")
+});
 
 let canvasValues = {
     color: canvasColorPicker.value,
@@ -60,11 +61,6 @@ function setCanvasValues(e) {
     }
 }
 
-function sendToServer() {
-    // TODO Need to rewrite much of the code for multiplayer...
-    console.log('This is going to be sent.. And updated..!', canvasValues);
-}
-
 // Set height... TODO... Borrow Henry...
 // const heightRatio = 1.5;
 // canvas.height = canvas.width * heightRatio;
@@ -72,7 +68,6 @@ function sendToServer() {
 
 // TODO use classes instead?
 function setCanvasOffSet() {
-    console.log("yo");
     const getBounding = canvas.getBoundingClientRect();
     canvasOffsetForClient.offsetX = getBounding.left;
     canvasOffsetForClient.offsetY = getBounding.top;
@@ -97,7 +92,6 @@ const paint = (e) => {
     // TODO.. Maybe needed later?
     // ctx.moveTo(e.clientX, e.clientY);
     setCanvasValues(e)
-    sendToServer()
 }
 
 // Fix this confirm....
@@ -140,9 +134,3 @@ window.addEventListener("click", setCanvasOffSet, false)
 window.addEventListener("resize", setCanvasOffSet, false)
 window.addEventListener("scroll", setCanvasOffSet, false)
 window.addEventListener("load", setCanvasOffSet, false)
-
-
-// Idea to decrease event listeners? 
-// ['click','ontouchstart'].forEach( evt => 
-//     element.addEventListener(evt, dosomething, false)
-// );
