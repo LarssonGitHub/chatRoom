@@ -1,7 +1,6 @@
 const clientsOnline = document.getElementById('clientsOnline');
 const chatContainer = document.getElementById('chatContainer');
 const chatTemplate = document.getElementById('chatTemplate');
-const enterChatBtn = document.getElementById("enterChatBtn");
 const typingContainer = document.getElementById("typingContainer");
 const chatTextarea = document.getElementById("chatTextarea");
 const imgImgContainer = document.getElementById("imgImgContainer");
@@ -88,21 +87,6 @@ function displayImageMsg(chatObject) {
 // TODO This should be sent to server.. By session or cookies and stuff....
 let clientUserName = "No nickname Given"
 
-function validateNewUser() {
-    const userName = document.getElementById("userName");
-    if (userName.value.length > 2) {
-        userName.setAttribute("disabled", "disabled");
-        enterChatBtn.classList.toggle("hidden");
-        userName.classList.toggle("hidden");
-        // TODO.. Store this in a database..!
-        clientUserName = userName.value;
-        typingContainer.classList.toggle("hidden");
-        chatTextarea.focus();
-        return;
-    }
-    alert("You didn't validate :(")
-}
-
 function constructMsgObject(type, user, chatData, binaryCanvasValue) {
     // console.log(type, user, chatData, binaryCanvasValue);
     // Validate here..... Try catch? .....
@@ -145,6 +129,5 @@ function sendChatMsgToServer(e) {
     }
 }
 
-enterChatBtn.addEventListener("click", validateNewUser);
 typingContainer.addEventListener("keydown", sendChatMsgToServer);
 msgImgInputRemove.addEventListener("click", removeImgFromTypingContainer)
