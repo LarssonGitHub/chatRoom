@@ -1,9 +1,9 @@
 import {getUserName} from "./database.js"
 
 async function getCurrentUser(wsId) {
-    const userName = await getUserName(wsId);
-    console.log(userName);
-    return userName;
+    const userObj = await getUserName(wsId);
+    console.log("hello from current user", userObj);
+    return userObj.userName;
    
 //    console.log("Why won't you work!!", userName);
     // console.log("WORK DAMNIT!!!!", userName.userName);

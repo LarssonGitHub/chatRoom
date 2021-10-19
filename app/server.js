@@ -89,12 +89,13 @@ app.set('view engine', 'ejs');
 let clientsArray = []
 
 // TODO on connection: set a unique id on client
-wss.on('connection', (ws, req) => {
+wss.on('connection', async (ws, req) => {
     ws.id = tempIdBecauseSessionHatesWebsockets;
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
    
-    console.log("hello from server websocket", botWelcomeMessage(ws.id));
-    // broadcast(botWelcomeMessage(botWelcomeMessage(ws.id));
+    // console.log("hello from server websocket", await botWelcomeMessage(ws.id));
+  
+    broadcast(await botWelcomeMessage(ws.id));
 
     let clientSize = formatToStatusObj("status", "clientInteger", wss.clients.size)
     broadcast(validateTypeOfOutgoingMessage(clientSize));
@@ -123,7 +124,7 @@ wss.on('connection', (ws, req) => {
         let validatedIncomingMsg = validateTypeOfIncomingMessage(data);
         let validatedOutgoingMsg = validateTypeOfOutgoingMessage(validatedIncomingMsg);
 
-        // TODO unfinished error fucntion
+        // TODO unfinished error function
         // if (validatedOutgoingMsg === "error") {
         //     // TODO Broadcast to user only that their message didn't og through!
         // }
@@ -139,6 +140,10 @@ function broadcastButExclude(data, someClient) {
             }
         }
     });
+}
+
+function broadcastToSingleClient() {
+    
 }
 
 function broadcast(data) {

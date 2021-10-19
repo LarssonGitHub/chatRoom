@@ -45,7 +45,6 @@ async function checkForUser(userName, userPassword) {
 
 async function getUserName(wsID) {
     try {
-      
         const userObject = await Users.findById(wsID);
         return userObject;  
     } catch (err) {
