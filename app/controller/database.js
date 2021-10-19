@@ -4,9 +4,6 @@ import {
 import {
     Users,
 } from "../models/usersSchema.js"
-import {
-    v4 as uuidv4
-} from 'uuid';
 
 async function addNewUser(userName, userPassword) {
     try {
@@ -28,13 +25,13 @@ async function addNewUser(userName, userPassword) {
 }
 
 async function checkForUser(userName, userPassword) {
+
     try {
         const userExist = await Users.findOne({
             userName: userName,
             userPassword: userPassword,
-            userStatus: "offline",
-            tempWebsocketId: false
         });
+        console.log(userExist);
         if (!userExist) {
             throw "No user like that exist D:";
         }
@@ -47,10 +44,17 @@ async function checkForUser(userName, userPassword) {
 }
 
 async function getUserName(wsID) {
-    return await Users.findById(wsID)
+    try {
+        const userObject = await Users.findById(wsID);
+        return userObject;  
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-async function setIdAndStatusForWebsocket({_id}) {
+async function setIdAndStatusForWebsocket({
+    _id
+}) {
     try {
         const updateUser = await Users.findByIdAndUpdate(_id, {
             userStatus: "online",
@@ -58,7 +62,7 @@ async function setIdAndStatusForWebsocket({_id}) {
         }, {
             new: true
         });
-        
+
         if (!updateUser) {
             throw "Something went wrong";
         }

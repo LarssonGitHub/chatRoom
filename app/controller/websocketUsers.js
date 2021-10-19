@@ -1,9 +1,18 @@
 import {getUserName} from "./database.js"
 
-function userJoin(id) {
+async function getCurrentUser(wsId) {
+    const userName = await getUserName(wsId);
+    console.log(userName);
+    return userName;
+   
+//    console.log("Why won't you work!!", userName);
+    // console.log("WORK DAMNIT!!!!", userName.userName);
+    // get user id and post it with attached name and ms..! (remove client side temp and display on client side.....! Only let the user know if it didn't post..!)
+}
 
-
-
+function userJoin(wsId) {
+    const currentUser = getCurrentUser(wsId);
+    return currentUser.userName;
     //  SET temp socket id... on user on the database
 }
 
@@ -11,12 +20,6 @@ function userJoin(id) {
 // add date lib https://www.skypack.dev/view/dayjs
 // 
 
-async function getCurrentUser(wsId) {
-    const bullshit = await getUserName(wsId);
-    console.log(bullshit);
-    
-    // get user id and post it with attached name and ms..! (remove client side temp and display on client side.....! Only let the user know if it didn't post..!)
-}
 
 function userLeave() {
     //   DELETE temp socket id on when this user disconnects, and update database 

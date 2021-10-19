@@ -1,6 +1,6 @@
 "use strict"
 
-
+let tempIdBecauseSessionHatesWebsockets = 0;
 
 import WebSocket, {
     WebSocketServer
@@ -21,6 +21,9 @@ import {
     formatToChatObj,
     formatToStatusObj
 } from './utilities/messages.js';
+import {
+  botWelcomeMessage
+} from './utilities/botmessages.js';
 import {
     getCollectionOfGallery,
     setIdAndStatusForWebsocket
@@ -87,23 +90,19 @@ let clientsArray = []
 
 // TODO on connection: set a unique id on client
 wss.on('connection', (ws, req) => {
-
-    const socket = userJoin()
-    const websocketUserID = ws.id;
-
-    console.log(ws.id);
+    ws.id = tempIdBecauseSessionHatesWebsockets;
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
+   
+    console.log("hello from server websocket", botWelcomeMessage(ws.id));
+    // broadcast(botWelcomeMessage(botWelcomeMessage(ws.id));
 
     let clientSize = formatToStatusObj("status", "clientInteger", wss.clients.size)
     broadcast(validateTypeOfOutgoingMessage(clientSize));
 
+
     // TODO Just a temp..!
     let clientsOnline = formatToStatusObj("status", "clientArray", clientsArray)
     broadcast(validateTypeOfOutgoingMessage(clientsOnline));
-
-    // TODO replace req.username with the user who logs in
-    let BotWelcomeMsg = formatToChatObj("botMsg", "Mr Bot", `${req.session}... has joined!`)
-    broadcast(validateTypeOfOutgoingMessage(BotWelcomeMsg));
 
     // Bot close event msg > validate > send goodbye message > broadcast how many clients online
     ws.on("close", () => {
@@ -166,9 +165,8 @@ app.get("/login/", (req, res) => {
     res.render('pages/login');
 })
 
-
-
 app.post("/login/", async (req, res) => {
+    console.log(req.body);
     const {
         userName,
         userPassword
@@ -184,6 +182,7 @@ app.post("/login/", async (req, res) => {
         res.json("Couldn't set new stats");
         return;
     }
+    tempIdBecauseSessionHatesWebsockets = updatedUser.tempWebsocketId;
     res.json({
         redirectTo: '/',
         message: "user exist and logging in!"
