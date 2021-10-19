@@ -3,7 +3,7 @@ function ObjectifyEntriesAndStringify(data) {
     return JSON.stringify(Object.fromEntries(formData))
 }
 
-function setFetchOptions(formEntries) {
+function setFetchPostOptions(formEntries) {
     return {
         method: 'POST',
         headers: {
@@ -16,24 +16,8 @@ function setFetchOptions(formEntries) {
 function submitRegisterForm(e) {
     e.preventDefault();
     const formEntries = ObjectifyEntriesAndStringify(e.target)
-    const options = setFetchOptions(formEntries)
+    const options = setFetchPostOptions(formEntries)
     fetch('/register', options)
-        .then(resp => resp.json())
-        .then(data => {
-            console.log(data);
-            if (data.redirectTo) {
-                location.assign(data.redirectTo)
-              }
-        }).catch(err => {
-            console.log(err);
-        });
-}
-
-function submitLoginForm(e) {
-    e.preventDefault();
-    const formEntries = ObjectifyEntriesAndStringify(e.target)
-    const options = setFetchOptions(formEntries)
-    fetch('/login', options)
         .then(resp => resp.json())
         .then(data => {
             console.log(data);
