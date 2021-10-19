@@ -9,7 +9,7 @@ function submitRegisterForm(e) {
         .then(data => {
             console.log(data);
             if (data.redirectTo) {
-                // location.assign(data.redirectTo)
+                location.assign(data.redirectTo)
               }
         }).catch(err => {
             console.log(err);
