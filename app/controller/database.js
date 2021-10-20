@@ -5,6 +5,42 @@ import {
     Users,
 } from "../models/usersSchema.js"
 
+async function resetDatabaseStatus() {
+    try {
+        const updateUsers = await Users.updateMany({}, {
+            userStatus: "offline",
+            tempWebsocketId: false
+        })
+        if (!updateUsers) {
+            throw "No users exist";
+        }
+        return updateUsers;
+    } catch (err) {
+        return Promise.reject(err);
+    }
+
+}
+async function resetDatabaseUsers() {
+    try {
+        await resetDatabaseStatus()
+        console.log("All users rested!");
+    } catch (err) {
+        console.log(err);
+        console.log("Something Went wrong when resetting database!");
+    }
+}
+
+async function getAllUsers() {
+    try {
+        const arrayOfAllUsers = await Users.find({});
+        if (!arrayOfAllUsers || arrayOfAllUsers.length === 0) {
+            throw "No users exist";
+        }
+        return arrayOfAllUsers;
+    } catch (err) {
+        return Promise.reject(err);
+    }
+}
 async function addNewUser(userName, userPassword) {
     try {
         const newUser = new Users({
@@ -137,6 +173,7 @@ async function getUsersOnline() {
 }
 
 export {
+    resetDatabaseUsers,
     addNewUser,
     checkForUser,
     getUserName,

@@ -36,6 +36,7 @@ import {
     clientList
 } from "./utilities/statusMessages.js"
 import {
+    resetDatabaseUsers,
     getCollectionOfGallery,
     setIdAndStatusForWebsocket,
     removeIdAndStatusForWebsocket
@@ -51,6 +52,9 @@ import {
 import {
     checkUserAccess
 } from "./middleware/accession.js"
+
+// Safe measure if server crashes and restarts!
+resetDatabaseUsers();
 
 const app = express();
 const server = http.createServer(app);
@@ -112,6 +116,7 @@ wss.on('connection', async (ws, req) => {
         broadcast(await clientSize());
         broadcast(await clientList());
         broadcast(await botGoodbyeMessage(ws.id));
+        console.log("YOOOOOOOOOOOOOOOO");
     });
 
     ws.on("message", async (data) => {
