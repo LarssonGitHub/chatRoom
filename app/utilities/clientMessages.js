@@ -6,10 +6,20 @@ import {
     formatToStatusObj
 } from './messages.js';
 
-function handleIncomingData(validatedIncomingMsg) {
-    return validateTypeOfIncomingMessage(validatedIncomingMsg);
+import {getCurrentUser} from "../controller/websocketUsers.js"
+
+function handleIncomingData(incomingData) {
+    return validateTypeOfIncomingMessage(incomingData);
+}
+
+async function handleOutgoingData(validatedData, wsId) {
+    console.log("hello from valdiated...,", validatedData);
+    const userObj = await getCurrentUser(wsId);
+    validatedData.user = userObj;
+    return validateTypeOfOutgoingMessage(validatedData);
 }
 
 export {
-    handleIncomingData
+    handleIncomingData,
+    handleOutgoingData
 }

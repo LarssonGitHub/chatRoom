@@ -45,8 +45,9 @@ function validateTypeOfIncomingMessage(data) {
         case "botMsg":
             return parsedData;
         case "imageMsg":
+            // TODO...! Make this an if else to save or not!
             saveImgToDatabase(parsedData);
-        break
+            return parsedData;
         default:
             throw "ERROR"
     }

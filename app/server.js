@@ -27,7 +27,8 @@ import {
     botErrorMessage
 } from './utilities/botmessages.js';
 import {
-    handleIncomingData
+    handleIncomingData,
+    handleOutgoingData
 } from './utilities/clientMessages.js';
 
 import {
@@ -114,17 +115,17 @@ wss.on('connection', async (ws, req) => {
     });
 
     ws.on("message", async (data) => {
-        let handledData = await handleIncomingData(data);
-        if (handledData === "ERROR, don't mess with my javascript client!") {
-             broadcastToSingleClient(await botErrorMessage(ws.id, handledData), ws.id);
+        let validatedData = await handleIncomingData(data);
+        if (validatedData === "ERROR, don't mess with my javascript client!") {
+             broadcastToSingleClient(await botErrorMessage(ws.id, validatedData), ws.id);
         }
-        broadcast(await handledData);
+        let handledOutgoingData = await handleOutgoingData(validatedData, ws.id);
+        broadcast(handledOutgoingData);
     })
 });
 
 function broadcastButExclude(data, someClient) {
     wss.clients.forEach(function each(client) {
-        console.log("hello", client);
         if (client.readyState === WebSocket.OPEN) {
             if (client !== someClient) {
                 client.send(data);

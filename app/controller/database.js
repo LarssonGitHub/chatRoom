@@ -101,7 +101,6 @@ async function saveImgToDatabase(obj) {
         let success = await galleryObj.save();
 
         if (success) {
-            // TODO fix this by letting user know if it was saved or not!
             console.log("img saved!");
         }
     } catch (err) {

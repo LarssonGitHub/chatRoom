@@ -85,7 +85,7 @@ function displayImageMsg(chatObject) {
 }
 
 // TODO This should be sent to server.. By session or cookies and stuff....
-let clientUserName = "No nickname Given"
+let clientUserName = "tempNickname"
 
 function sendChatMsgToServer(e) {
     let chatValue = chatTextarea.value
