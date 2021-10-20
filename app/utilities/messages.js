@@ -36,6 +36,7 @@ function formatToChatObj(type, user, data) {
 
 
 function validateTypeOfIncomingMessage(data) {
+    try {
     const parsedData = parseJson(data)
     const msgType = parsedData.type
     switch (msgType) {
@@ -44,16 +45,14 @@ function validateTypeOfIncomingMessage(data) {
         case "botMsg":
             return parsedData;
         case "imageMsg":
-            // TODO Validate img and values before writing to database
             saveImgToDatabase(parsedData);
-        case "status":
-            return parsedData;
+        break
         default:
-            // Remember to send back to client that their message and type wasn't approved.....
-            console.log("error... Something went horrible wrong when handling incoming...!");
-            return {
-                err: "error....!"
-            }
+            throw "ERROR"
+    }
+    } catch (err) {
+        console.log("hello from incoming...:", err);
+        return "ERROR, don't mess with my javascript client!"
     }
 }
 

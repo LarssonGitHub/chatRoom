@@ -25,7 +25,6 @@ async function addNewUser(userName, userPassword) {
 }
 
 async function checkForUser(userName, userPassword) {
-
     try {
         const userExist = await Users.findOne({
             userName: userName,
@@ -46,7 +45,7 @@ async function checkForUser(userName, userPassword) {
 async function getUserName(wsID) {
     try {
         const userObject = await Users.findById(wsID);
-        return userObject;  
+        return userObject;
     } catch (err) {
         console.log(err);
     }
@@ -74,25 +73,21 @@ async function setIdAndStatusForWebsocket({
     }
 }
 
-async function removeIdAndStatusForWebsocket() {
+async function removeIdAndStatusForWebsocket(wsId) {
     try {
-        const updateUser = await Users.updateOne({
-            userName: userName,
-            userPassword: userPassword,
+        const updateUser = await Users.findByIdAndUpdate(wsId, {
             userStatus: "offline",
             tempWebsocketId: false
-        });
+        })
         if (!updateUser) {
             throw "Something went wrong";
         }
-        return userExist;
+        console.log("userStats changed");
     } catch (err) {
         console.log("user doesn't exist!");
         console.log(err);
-        return "failure"
     }
 }
-
 
 async function saveImgToDatabase(obj) {
     // https://www.youtube.com/watch?v=WDrU305J1yw&ab_channel=Academind
@@ -127,6 +122,21 @@ async function getCollectionOfGallery() {
     }
 }
 
+async function getUsersOnline() {
+    try {
+        const arrayOfUsersOnline = await Users.find({
+            userStatus: "online"
+        });
+        if (!arrayOfUsersOnline) {
+            throw "Something went wrong";
+        }
+        return arrayOfUsersOnline;
+    } catch (err) {
+        console.log("user doesn't exist!");
+        console.log(err);
+    }
+}
+
 export {
     addNewUser,
     checkForUser,
@@ -134,5 +144,6 @@ export {
     setIdAndStatusForWebsocket,
     removeIdAndStatusForWebsocket,
     saveImgToDatabase,
-    getCollectionOfGallery
+    getCollectionOfGallery,
+    getUsersOnline
 }

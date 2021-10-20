@@ -25,9 +25,11 @@ function userLeave() {
     //   DELETE temp socket id on when this user disconnects, and update database 
 }
 
-function getUsersOnline() {
-    //   Get all the users with status online
-}
+// async function getUsersOnline() {
+//     const arrayOfusersOnline = await Users.find({userStatus:"online"});
+//     console.log(arrayOfusersOnline);
+
+// }
 
 function getUsersOffline() {
     //   Get all users, no matter if online or not.
