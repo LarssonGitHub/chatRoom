@@ -1,4 +1,4 @@
-import {getUserName} from "./database.js"
+import {getUserName} from "../models/userModel.js"
 
 async function getCurrentUser(wsId) {
     const userObj = await getUserName(wsId);

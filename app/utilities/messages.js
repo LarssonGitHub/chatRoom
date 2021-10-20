@@ -4,7 +4,7 @@ import {
 } from './functions.js'
 import {
     saveImgToDatabase
-} from "../controller/database.js"
+} from "../models/userModel.js"
 
 function formatToStatusObj(type, target, data) {
     const statusTemplate = {}

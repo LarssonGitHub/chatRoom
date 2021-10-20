@@ -37,15 +37,15 @@ async function getAllUsers() {
     }
 }
 
-// async function resetDatabaseUsers() {
-//     try {
-//         await resetDatabaseStatus()
-//         console.log("All users rested!");
-//     } catch (err) {
-//         console.log(err);
-//         console.log("Something Went wrong when resetting database!");
-//     }
-// }
+async function resetDatabaseUsers() {
+    try {
+        await resetDatabaseStatus()
+        console.log("All users rested!");
+    } catch (err) {
+        console.log(err);
+        console.log("Something Went wrong when resetting database!");
+    }
+}
 
 // Put this in controller...!
 // async function checkIfUserAlreadyExist(newUsername) {
@@ -84,11 +84,10 @@ async function checkForUser(userName, userPassword) {
             userPassword: userPassword,
         });
         if (!userExist) {
-            throw "No user like that exist D:";
+            throw "Your password or username is incorrect";
         }
         return userExist;
     } catch (err) {
-        console.log("use doesn't exist!");
         console.log(err);
         return Promise.reject(err);
     }
@@ -189,6 +188,7 @@ async function getUsersOnline() {
 }
 
 export {
+    resetDatabaseUsers,
     getAllUsers,
     addNewUser,
     checkForUser,

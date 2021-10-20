@@ -6,7 +6,7 @@ import {
     formatToStatusObj
 } from './messages.js';
 
-import {getUsersOnline} from "../controller/database.js"
+import {getUsersOnline} from "../models/userModel.js"
 
 function mapUsernames(arrayOfUsers) {
     console.log(arrayOfUsers);

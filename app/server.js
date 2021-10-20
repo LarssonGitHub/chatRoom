@@ -40,7 +40,7 @@ import {
     getCollectionOfGallery,
     setIdAndStatusForWebsocket,
     removeIdAndStatusForWebsocket
-} from "./controller/database.js"
+} from "./models/userModel.js"
 import {
     registerNewUser,
     loginUser
@@ -122,7 +122,7 @@ wss.on('connection', async (ws, req) => {
     ws.on("message", async (data) => {
         let validatedData = await handleIncomingData(data);
         if (validatedData === "ERROR, don't mess with my javascript client!") {
-             broadcastToSingleClient(await botErrorMessage(ws.id, validatedData), ws.id);
+            broadcastToSingleClient(await botErrorMessage(ws.id, validatedData), ws.id);
         }
         let handledOutgoingData = await handleOutgoingData(validatedData, ws.id);
         broadcast(handledOutgoingData);
@@ -179,27 +179,30 @@ app.get("/login/", (req, res) => {
 })
 
 app.post("/login/", async (req, res) => {
-    console.log(req.body);
-    const {
-        userName,
-        userPassword
-    } = req.body;
-    const user = await loginUser(userName, userPassword);
-    if (user === "failure") {
-        res.json("There ain't no user here :<");
-        return;
+    try {
+        const {
+            userName,
+            userPassword
+        } = req.body;
+        const userIsValidated = await loginUser(userName, userPassword);
+        if (userIsValidated) {
+            req.session.userHasAccess = true;
+            const UserStatsSuccess = await setIdAndStatusForWebsocket(userIsValidated);
+            if (!UserStatsSuccess) {
+                throw "couldn't set new stats"
+            }
+            tempIdBecauseSessionHatesWebsockets = UserStatsSuccess.tempWebsocketId;
+            res.json({
+                redirectTo: '/',
+                message: "user exist and is validated, logging in!"
+            })
+        }
+        throw "Something went... Kind of wrong, not sure what but it did!"
+    } catch (err) {
+        res.json({
+            err: err,
+        })
     }
-    req.session.userHasAccess = true;
-    const updatedUser = await setIdAndStatusForWebsocket(user);
-    if (updatedUser === "failure") {
-        res.json("Couldn't set new stats");
-        return;
-    }
-    tempIdBecauseSessionHatesWebsockets = updatedUser.tempWebsocketId;
-    res.json({
-        redirectTo: '/',
-        message: "user exist and logging in!"
-    })
 })
 
 
@@ -209,21 +212,21 @@ app.get("/register/", (req, res) => {
 
 app.post("/register/", async (req, res) => {
     try {
-    const {
-        userName,
-        userPassword
-    } = req.body;
-    const userWasRegister = await registerNewUser(userName, userPassword);
-    if (userWasRegister) {
-        res.json({
-            redirectTo: '/login',
-            message: "new user added, log in!"
-        })
-        return;
+        const {
+            userName,
+            userPassword
+        } = req.body;
+        const userWasRegister = await registerNewUser(userName, userPassword);
+        if (userWasRegister) {
+            res.json({
+                redirectTo: '/login',
+                message: "new user added, log in!"
+            })
+            return;
+        }
+    } catch (err) {
+        res.json(err);
     }
-} catch (err) {
-    res.json(err);
-}
 })
 
 app.get("/gallery/", async (req, res) => {

@@ -31,9 +31,18 @@ async function registerNewUser(userName, userPassword) {
     }
 }
 
-// TODO This is stupid! 
 async function loginUser(userName, userPassword) {
-        return await checkForUser(userName, userPassword);
+    try {
+        const userExist = await checkForUser(userName, userPassword);
+        if (userExist) {
+            return userExist;
+        }
+        throw "something went wrong on our end when checking for users"
+    } catch (err) {
+        console.log(err);
+        return Promise.reject(err);
+    }
+
 }
 
 export {
