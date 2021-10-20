@@ -1,19 +1,18 @@
 "use strict"
-
-let tempIdBecauseSessionHatesWebsockets = 0;
-
 import WebSocket, {
     WebSocketServer
 } from 'ws';
 
 import express from 'express';
 import http from 'http';
-import session, {
-    MemoryStore
-} from 'express-session';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+
+import {router} from './routes/routes.js';
+import {
+    tempIdBecauseSessionHatesWebsockets,
+} from "./controller/routeController.js"
 
 import {
     validateTypeOfOutgoingMessage,
@@ -21,6 +20,7 @@ import {
     formatToChatObj,
     formatToStatusObj
 } from './utilities/messages.js';
+
 import {
     botWelcomeMessage,
     botGoodbyeMessage,
@@ -41,21 +41,6 @@ import {
     removeIdAndStatusForWebsocket
 } from "./models/userModel.js";
 
-import {
-    getCollectionOfGallery,
-} from "./models/galleryModel.js"
-
-import {
-    registerNewUser,
-    loginUser
-} from "./controller/authentication.js";
-import {
-    userJoin,
-} from "./controller/websocketUsers.js";
-
-import {
-    checkUserAccess
-} from "./middleware/accession.js";
 
 // Safe measure if server crashes and restarts!
 resetDatabaseUsers();
@@ -83,19 +68,6 @@ mongoose.connect(connectionStream, {
     process.exit()
 })
 
-app.use(session({
-    name: SESSION_NAME,
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: new MemoryStore(),
-    cookie: {
-        maxAge: Number(SESSION_LIFETIME),
-        sameSite: 'strict',
-        secure: NODE_ENV === 'production',
-    },
-}));
-
 // const wss = new WebSocketServer({noServer: true});
 const wss = new WebSocketServer({
     server
@@ -103,6 +75,7 @@ const wss = new WebSocketServer({
 
 app.use(bodyParser.json());
 app.use(express.static("public"));
+app.use(router);
 app.set('view engine', 'ejs');
 
 
@@ -159,93 +132,6 @@ function broadcast(data) {
         }
     })
 }
-
-app.get("/", checkUserAccess, (req, res) => {
-    res.render('pages/index');
-})
-
-app.get('/logout', checkUserAccess, async (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.log(err);
-            res.redirect('/')
-            return
-        }
-        res.clearCookie(SESSION_NAME);
-        console.log('cookie destroyed');
-        res.redirect('/')
-    });
-})
-
-app.get("/login/", (req, res) => {
-    res.render('pages/login');
-})
-
-app.post("/login/", async (req, res) => {
-    try {
-        const {
-            userName,
-            userPassword
-        } = req.body;
-        const userIsValidated = await loginUser(userName, userPassword);
-        if (userIsValidated) {
-            req.session.userHasAccess = true;
-            const UserStatsSuccess = await setIdAndStatusForWebsocket(userIsValidated);
-            if (!UserStatsSuccess) {
-                throw "couldn't set new stats"
-            }
-            tempIdBecauseSessionHatesWebsockets = UserStatsSuccess.tempWebsocketId;
-            res.json({
-                redirectTo: '/',
-                message: "user exist and is validated, logging in!"
-            })
-            return;
-        }
-        throw "Something went... Kind of wrong, not sure what but it did!"
-    } catch (err) {
-        res.json({
-            err: err,
-        })
-    }
-})
-
-
-app.get("/register/", (req, res) => {
-    res.render('pages/register');
-})
-
-app.post("/register/", async (req, res) => {
-    try {
-        const {
-            userName,
-            userPassword
-        } = req.body;
-        const userWasRegister = await registerNewUser(userName, userPassword);
-        if (userWasRegister) {
-            res.json({
-                redirectTo: '/login',
-                message: "new user added, log in!"
-            })
-            return;
-        }
-        throw "Something went wrong on our end when registering a new user";
-    } catch (err) {
-        res.json(err);
-    }
-})
-
-app.get("/gallery/", async (req, res) => {
-    try {
-        const collectionExist = await getCollectionOfGallery();
-        if (collectionExist || collectionExist.length > 0) {
-            res.json(collectionExist);
-            return;
-        }
-        throw "Something went wrong on our end when fetching for gallery";
-    } catch (err) {
-        res.json(err);
-    }
-})
 
 server.listen(process.env.PORT || PORT, () => {
     console.log(`Server started on`, PORT);
