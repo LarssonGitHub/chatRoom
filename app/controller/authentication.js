@@ -1,17 +1,33 @@
 import {
     addNewUser,
-    checkForUser
-} from "./database.js"
+    checkForUser,
+    getAllUsers
+} from "../models/userModel.js";
+
+
+async function checkIfUserAlreadyExist(newUsername) {
+    const users = await getAllUsers();
+    const checkUsername = users.filter(user => user.userName === newUsername);
+    if (checkUsername.length > 0) {
+        return true
+    }
+    return false
+}
 
 async function registerNewUser(userName, userPassword) {
     try {
-        const newUser = await addNewUser(userName, userPassword);
-        if (newUser === "success") {
-            return "success";
+        const userAlreadyExist = await checkIfUserAlreadyExist(userName);
+        if (userAlreadyExist) {
+            throw "Sorry, user already exist. Pick another name"
         }
+        const userCanBeAdded = await addNewUser(userName, userPassword);
+        if (!userCanBeAdded) {
+            throw "Something went wrong in registering process"
+        }
+        return true;
     } catch (err) {
         console.log(err);
-        return "failure"
+        return Promise.reject(err);
     }
 }
 
@@ -22,5 +38,5 @@ async function loginUser(userName, userPassword) {
 
 export {
     registerNewUser,
-    loginUser
+    loginUser,
 }

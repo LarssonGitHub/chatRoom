@@ -208,20 +208,22 @@ app.get("/register/", (req, res) => {
 })
 
 app.post("/register/", async (req, res) => {
+    try {
     const {
         userName,
         userPassword
     } = req.body;
-    const newUser = await registerNewUser(userName, userPassword);
-    console.log(newUser);
-    if (newUser === "success") {
+    const userWasRegister = await registerNewUser(userName, userPassword);
+    if (userWasRegister) {
         res.json({
             redirectTo: '/login',
             message: "new user added, log in!"
         })
         return;
     }
-    res.json("New user did not add :<");
+} catch (err) {
+    res.json(err);
+}
 })
 
 app.get("/gallery/", async (req, res) => {
