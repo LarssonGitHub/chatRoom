@@ -24,6 +24,7 @@ function fetchGallery() {
     fetch('/gallery/')
         .then(response => response.json())
         .then(array => {
+            console.log(array);
             cleanContainer();
             loopGalleryArray(array);
         }).catch((error) => {

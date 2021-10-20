@@ -4,7 +4,7 @@ import {
 } from './functions.js'
 import {
     saveImgToDatabase
-} from "../models/userModel.js"
+} from "../models/galleryModel.js"
 
 function formatToStatusObj(type, target, data) {
     const statusTemplate = {}
@@ -35,7 +35,7 @@ function formatToChatObj(type, user, data) {
 }
 
 
-function validateTypeOfIncomingMessage(data) {
+function validateTypeOfIncomingMessage(data, wsId) {
     try {
     const parsedData = parseJson(data)
     const msgType = parsedData.type
@@ -46,7 +46,7 @@ function validateTypeOfIncomingMessage(data) {
             return parsedData;
         case "imageMsg":
             // TODO...! Make this an if else to save or not!
-            saveImgToDatabase(parsedData);
+            saveImgToDatabase(parsedData, wsId);
             return parsedData;
         default:
             throw "ERROR"

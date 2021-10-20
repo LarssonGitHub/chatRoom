@@ -34,24 +34,28 @@ import {
 import {
     clientSize,
     clientList
-} from "./utilities/statusMessages.js"
+} from "./utilities/statusMessages.js";
 import {
     resetDatabaseUsers,
-    getCollectionOfGallery,
     setIdAndStatusForWebsocket,
     removeIdAndStatusForWebsocket
-} from "./models/userModel.js"
+} from "./models/userModel.js";
+
+import {
+    getCollectionOfGallery,
+} from "./models/galleryModel.js"
+
 import {
     registerNewUser,
     loginUser
-} from "./controller/authentication.js"
+} from "./controller/authentication.js";
 import {
     userJoin,
-} from "./controller/websocketUsers.js"
+} from "./controller/websocketUsers.js";
 
 import {
     checkUserAccess
-} from "./middleware/accession.js"
+} from "./middleware/accession.js";
 
 // Safe measure if server crashes and restarts!
 resetDatabaseUsers();
@@ -116,11 +120,10 @@ wss.on('connection', async (ws, req) => {
         broadcast(await clientSize());
         broadcast(await clientList());
         broadcast(await botGoodbyeMessage(ws.id));
-        console.log("YOOOOOOOOOOOOOOOO");
     });
 
     ws.on("message", async (data) => {
-        let validatedData = await handleIncomingData(data);
+        let validatedData = await handleIncomingData(data, ws.id);
         if (validatedData === "ERROR, don't mess with my javascript client!") {
             broadcastToSingleClient(await botErrorMessage(ws.id, validatedData), ws.id);
         }
@@ -196,6 +199,7 @@ app.post("/login/", async (req, res) => {
                 redirectTo: '/',
                 message: "user exist and is validated, logging in!"
             })
+            return;
         }
         throw "Something went... Kind of wrong, not sure what but it did!"
     } catch (err) {
@@ -224,15 +228,23 @@ app.post("/register/", async (req, res) => {
             })
             return;
         }
+        throw "Something went wrong on our end when registering a new user";
     } catch (err) {
         res.json(err);
     }
 })
 
 app.get("/gallery/", async (req, res) => {
-    const collection = await getCollectionOfGallery();
-    // TODO put it into an object and error handle!
-    res.json(collection);
+    try {
+        const collectionExist = await getCollectionOfGallery();
+        if (collectionExist || collectionExist.length > 0) {
+            res.json(collectionExist);
+            return;
+        }
+        throw "Something went wrong on our end when fetching for gallery";
+    } catch (err) {
+        res.json(err);
+    }
 })
 
 server.listen(process.env.PORT || PORT, () => {
