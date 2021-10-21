@@ -62,6 +62,7 @@ async function clientList() {
 }
 async function clientSize() {
     const arrayOfUsers = await getUsersOnline();
+    console.log(arrayOfUsers);
     const ClientSizeMsg = formatToStatusObj("status", "clientInteger", arrayOfUsers.length);
     const validatedStatusMsg = validateTypeOfOutgoingMsg(ClientSizeMsg);
     return validatedStatusMsg;

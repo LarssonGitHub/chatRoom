@@ -2,10 +2,6 @@ import {
     Users,
 } from "./usersSchema.js"
 
-// import {
-//     checkIfUserAlreadyExist
-// } from "../controller/authentication.js"
-
 async function resetDatabaseStatus() {
     try {
         const updateUsers = await Users.updateMany({}, {
@@ -42,18 +38,6 @@ async function resetDatabaseUsers() {
         console.log("Something Went wrong when resetting database!");
     }
 }
-
-// Put this in controller...!
-// async function checkIfUserAlreadyExist(newUsername) {
-//     const users = await getAllUsers();
-//     const checkUsername = users.filter(user => user.userName === newUsername);
-//     console.log(checkUsername.length > 0);
-//     if (checkUsername) {
-//         return true
-//     }
-//     return false
-// }
-
 
 async function addNewUser(userName, userPassword) {
     try {
@@ -95,6 +79,7 @@ async function getUser(wsID) {
         return userObject;
     } catch (err) {
         console.log(err);
+        return Promise.reject(err);
     }
 }
 
@@ -116,7 +101,7 @@ async function setIdAndStatusForWebsocket({
     } catch (err) {
         console.log("use doesn't exist!");
         console.log(err);
-        return "failure"
+        return Promise.reject(err);
     }
 }
 
@@ -131,8 +116,8 @@ async function removeIdAndStatusForWebsocket(id) {
         }
         console.log("userStats changed");
     } catch (err) {
-        console.log("user doesn't exist!");
         console.log(err);
+        return Promise.reject(err);
     }
 }
 
@@ -148,6 +133,7 @@ async function getUsersOnline() {
     } catch (err) {
         console.log("user doesn't exist!");
         console.log(err);
+        return Promise.reject(err);
     }
 }
 
