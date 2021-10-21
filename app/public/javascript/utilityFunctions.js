@@ -49,7 +49,7 @@ function constructMsgObject(type, user, chatData, binaryCanvasValue) {
         msgTemplate.data = chatData;
     }
     if (binaryCanvasValue) {
-        msgTemplate.imageMsg = binaryCanvasValue;
+        msgTemplate.imgData = binaryCanvasValue;
     }
     return msgTemplate;
 }

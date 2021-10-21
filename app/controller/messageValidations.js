@@ -1,11 +1,23 @@
 import {
     parseJson,
     stringifyJson
-} from '../utilities/functions.js'
+} from '../utilities/functions.js';
 
 import {
     saveImgToDatabase
-} from "../models/galleryModel.js"
+} from "../models/galleryModel.js";
+
+import dayjs from 'dayjs';
+
+
+function validateMessage(message) {
+    const validatedMessage = validateTypeOfOutgoingMsg(message);
+    if (validatedMessage.err === "ERROR") {
+        const createNewErrorMessage = formatToChatObj("botMsg", "Mr Bot", `${validatedMessage.msg}`)
+        return validateTypeOfOutgoingMsg(createNewErrorMessage)
+    }
+    return validatedMessage;
+}
 
 function formatToStatusObj(type, target, data) {
     const statusTemplate = {}
@@ -21,16 +33,7 @@ function formatToStatusObj(type, target, data) {
     return statusTemplate;
 }
 
-function validateMessage(message) {
-    const validatedMessage = validateTypeOfOutgoingMsg(message);
-    if (validatedMessage.err === "ERROR") {
-        const createNewErrorMessage = formatToChatObj("botMsg", "Mr Bot", `${validatedMessage.msg}`) 
-        return validateTypeOfOutgoingMsg(createNewErrorMessage)
-    }
-    return validatedMessage;
- }
-
-function formatToChatObj(type, user, data) {
+function formatToChatObj(type, user, data, imgData) {
     const msgTemplate = {}
     if (type) {
         msgTemplate.type = type;
@@ -41,6 +44,10 @@ function formatToChatObj(type, user, data) {
     if (data) {
         msgTemplate.data = data;
     }
+    if (imgData) {
+        msgTemplate.imgData = imgData;
+    }
+    msgTemplate.time = dayjs().format("DD/MM HH:mm:ss");
     return msgTemplate;
 }
 

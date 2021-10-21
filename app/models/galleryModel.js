@@ -3,11 +3,11 @@ import {
 } from "./gallerySchema.js"
 
 // TODO fix the wsID problem
-async function saveImgToDatabase({imageMsg, user}, wsId) {
+async function saveImgToDatabase({imgData, user}, wsId) {
     try {
         // TODO this is dangerous, fix and do something else with base64!
         const galleryObj = new Gallery({
-            base64: imageMsg,
+            base64: imgData,
             user: user
         });
         let success = await galleryObj.save();

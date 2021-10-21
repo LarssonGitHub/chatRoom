@@ -38,11 +38,12 @@ function removeImgFromTypingContainer() {
 }
 
 // TODO find a better way to write this whole damn chat template..:!
-function manageAndAppendToChatContainer(type, user, data, img) {
+function manageAndAppendToChatContainer(type, user, data, time, img) {
     let getHTML = document.importNode(chatTemplate.content, true)
     getHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" ? "botChatContainer" : "clientChatContainer");
     getHTML.querySelector(".clientName").textContent = user || "ERROR";
     getHTML.querySelector(".clientMsg").textContent = data || "ERROR";
+    getHTML.querySelector(".clientTime").textContent = time || "ERROR";
     console.log(type, user, data, img);
     if (type === "imageMsg" && img) {
         // TODO find a better way to write this whole damn chat template..:!
@@ -54,34 +55,40 @@ function manageAndAppendToChatContainer(type, user, data, img) {
 }
 
 function displayClientChatMsg(chatObject) {
+    console.log(chatObject);
     const {
         type,
         user,
-        data
+        data,
+        time
     } = chatObject;
-    manageAndAppendToChatContainer(type, user, data)
+    manageAndAppendToChatContainer(type, user, data, time)
 }
 
 // TODO debate if bot and client needs their own types....?!?!
 function displayBotChatMsg(chatObject) {
+    console.log("the boooot", chatObject);
     const {
         type,
         user,
-        data
+        data,
+        time
     } = chatObject;
-    manageAndAppendToChatContainer(type, user, data)
+    manageAndAppendToChatContainer(type, user, data, time)
 }
 
 function displayImageMsg(chatObject) {
+    console.log("the iimmmmage", chatObject);
     console.log("this should work,", chatObject);
     // TODO add an alt tag..!
     const {
         type,
         user,
         data,
-        imageMsg
+        time,
+        imgData
     } = chatObject;
-    manageAndAppendToChatContainer(type, user, data, imageMsg)
+    manageAndAppendToChatContainer(type, user, data, time, imgData)
 }
 
 // TODO This should be sent to server.. By session or cookies and stuff....
