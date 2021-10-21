@@ -11,10 +11,10 @@ import bodyParser from 'body-parser';
 import {
     router
 } from './routes/routes.js';
+
 import {
     tempIdBecauseSessionHatesWebsockets,
 } from "./controller/routeController.js"
-
 
 import {
     botWelcomeMsg,
@@ -24,7 +24,7 @@ import {
     handleOutgoingDataToClient,
     clientSize,
     clientList
-} from './controller/messageTemplate.js';
+} from './controller/messageHandling.js';
 
 import {
     resetDatabaseUsers,
@@ -59,7 +59,8 @@ const wss = new WebSocketServer({
     server
 });
 
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(express.static("public"));
 app.use(router);
 app.set('view engine', 'ejs');
