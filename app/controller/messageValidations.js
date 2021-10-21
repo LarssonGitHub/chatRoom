@@ -21,6 +21,15 @@ function formatToStatusObj(type, target, data) {
     return statusTemplate;
 }
 
+function validateMessage(message) {
+    const validatedMessage = validateTypeOfOutgoingMsg(message);
+    if (validatedMessage.err === "ERROR") {
+        const createNewErrorMessage = formatToChatObj("botMsg", "Mr Bot", `${validatedMessage.msg}`) 
+        return validateTypeOfOutgoingMsg(createNewErrorMessage)
+    }
+    return validatedMessage;
+ }
+
 function formatToChatObj(type, user, data) {
     const msgTemplate = {}
     if (type) {
@@ -50,39 +59,39 @@ function validateTypeOfIncomingMsg(data, wsId) {
                 saveImgToDatabase(parsedData, wsId);
                 return parsedData;
             default:
-                throw "ERROR"
+                throw "ERROR type problem!";
         }
     } catch (err) {
-        console.log("hello from incoming...:", err);
-        return "ERROR, don't mess with my javascript client!"
+        console.log("hello from incoming...", err);
+        return {
+            err: "ERROR",
+            msg: "ERROR from your side, don't mess with the console!"
+        };
     }
 }
 
-
 function validateTypeOfOutgoingMsg(data) {
-    console.log(data);
-    const msgType = data.type
-    switch (msgType) {
-        // TODO Find better names
-        case "chatMsg":
-            console.log("it's a chat! Do something with it", data);
-            return stringifyJson(data);
-        case "botMsg":
-            console.log("it's a bot SERVER! Do something with it", data);
-            return stringifyJson(data);
-        case "imageMsg":
-            // DON'T SEND THIS BACK! base64 nonono! Parse it into a real image and save it to database which is then gotten and sent back to client..!
-            console.log("it's an image message! Do something with it", data);
-            return stringifyJson(data);
-        case "status":
-            console.log("it's a status SERVER! Do something with it", data);
-            return stringifyJson(data);
-        default:
-            // Remember to send back to client that their message and type wasn't approved.....
-            console.log("error... Something went horrible wrong here...!");
-            return {
-                err: "error....!"
-            }
+    try {
+        const stringifiedData = stringifyJson(data);
+        const msgType = data.type
+        switch (msgType) {
+            case "chatMsg":
+                return stringifiedData;
+            case "botMsg":
+                return stringifiedData;
+            case "imageMsg":
+                return stringifiedData;
+            case "status":
+                return stringifiedData;
+            default:
+                throw "ERROR type problem!";
+        }
+    } catch (err) {
+        console.log("hello from outgoing...", err);
+        return {
+            err: "ERROR",
+            msg: "Someone's message or a status update wasn't validated in our server! Sorry guys!"
+        };
     }
 }
 
@@ -90,5 +99,6 @@ export {
     validateTypeOfOutgoingMsg,
     validateTypeOfIncomingMsg,
     formatToChatObj,
-    formatToStatusObj
+    formatToStatusObj,
+    validateMessage
 }

@@ -83,11 +83,15 @@ wss.on('connection', async (ws, req) => {
 
     ws.on("message", async (data) => {
         let validatedData = await handleIncomingClientData(data, ws.id);
-        if (validatedData === "ERROR, don't mess with my javascript client!") {
-            broadcastToSingleClient(await botErrorMsg(ws.id, validatedData), ws.id);
+        if (validatedData.err === "ERROR") {
+            broadcastToSingleClient(await botErrorMsg(ws.id, validatedData.msg), ws.id);
             return;
         }
         let handledOutgoingData = await handleOutgoingDataToClient(validatedData, ws.id);
+        if (handledOutgoingData.err === "ERROR") {
+            broadcastToSingleClient(await botErrorMsg(ws.id, handledOutgoingData.msg), ws.id);
+            return;
+        }
         broadcast(handledOutgoingData);
     })
 });

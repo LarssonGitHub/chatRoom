@@ -2,7 +2,8 @@ import {
     validateTypeOfOutgoingMsg,
     validateTypeOfIncomingMsg,
     formatToChatObj,
-    formatToStatusObj
+    formatToStatusObj,
+    validateMessage
 } from './messageValidations.js';
 
 import {
@@ -18,23 +19,24 @@ async function getUserName(wsId) {
 // For the bot
 async function botWelcomeMsg(wsId) {
     const userObj = await getUserName(wsId);
-    const message = formatToChatObj("botMsg", "Mr Bot", `${userObj} has joined!`)
-    const validatedMsg = validateTypeOfOutgoingMsg(message);
-    return validatedMsg;
+    const constructedMessage = formatToChatObj("botMsg", "Mr Bot", `${userObj} has joined!`)
+    const message = validateMessage(constructedMessage)
+    return message;
 }
 
 async function botGoodbyeMsg(wsId) {
     const userObj = await getUserName(wsId);
-    const message = formatToChatObj("botMsg", "Mr Bot", `${userObj} has left the chat!`)
-    const validatedMsg = validateTypeOfOutgoingMsg(message);
-    return validatedMsg;
+    const constructedMessage = formatToChatObj("botMsg", "Mr Bot", `${userObj} has left the chat!`)
+    const message = validateMessage(constructedMessage)
+    return message;
+
 }
 
 async function botErrorMsg(wsId, errorReason) {
     const userObj = await getUserName(wsId);
-    const message = formatToChatObj("botMsg", "Mr Bot", `Your post wasn't approved ${userObj}! Reason: ${errorReason} (only you can see this!)`)
-    const validatedMsg = validateTypeOfOutgoingMsg(message);
-    return validatedMsg;
+    const constructedMessage = formatToChatObj("botMsg", "Mr Bot", `Your post wasn't approved ${userObj}! Reason: ${errorReason} (only you can see this!)`)
+    const message = validateMessage(constructedMessage)
+    return message;
 }
 
 // For the client
@@ -56,16 +58,16 @@ function mapUsernames(arrayOfUsers) {
 async function clientList() {
     const arrayOfUsers = await getUsersOnline();
     const arrayOfUsernames = mapUsernames(arrayOfUsers)
-    const ClientListMsg = formatToStatusObj("status", "clientArray", arrayOfUsernames);
-    const validatedStatusMsg = validateTypeOfOutgoingMsg(ClientListMsg);
-    return validatedStatusMsg;
+    const constructedMessage = formatToStatusObj("status", "clientArray", arrayOfUsernames);
+    const message = validateMessage(constructedMessage)
+    return message;
 }
 async function clientSize() {
     const arrayOfUsers = await getUsersOnline();
     console.log(arrayOfUsers);
-    const ClientSizeMsg = formatToStatusObj("status", "clientInteger", arrayOfUsers.length);
-    const validatedStatusMsg = validateTypeOfOutgoingMsg(ClientSizeMsg);
-    return validatedStatusMsg;
+    const constructedMessage = formatToStatusObj("status", "clientInteger", arrayOfUsers.length);
+    const message = validateMessage(constructedMessage)
+    return message;
 }
 
 export {
