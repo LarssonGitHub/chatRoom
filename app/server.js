@@ -6,7 +6,6 @@ import express from 'express';
 import http from 'http';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
 
 import {
     router
