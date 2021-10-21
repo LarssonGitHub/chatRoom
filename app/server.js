@@ -86,6 +86,7 @@ wss.on('connection', async (ws, req) => {
         let validatedData = await handleIncomingClientData(data, ws.id);
         if (validatedData === "ERROR, don't mess with my javascript client!") {
             broadcastToSingleClient(await botErrorMsg(ws.id, validatedData), ws.id);
+            return;
         }
         let handledOutgoingData = await handleOutgoingDataToClient(validatedData, ws.id);
         broadcast(handledOutgoingData);
