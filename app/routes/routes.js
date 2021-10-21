@@ -17,7 +17,8 @@ import {
     renderRegistrar,
     submitRegistrar,
     logout,
-    fetchGallery
+    fetchGallery,
+    pageNotfound
 } from "../controller/routeController.js"
 
 const router = express.Router();
@@ -43,19 +44,24 @@ router.use(session({
     },
 }));
 
-router.get("/", checkUserAccess, renderIndex)
+router.get("/", checkUserAccess, renderIndex);
 
-router.get('/logout', checkUserAccess, logout)
+router.get('/logout', checkUserAccess, logout);
 
-router.get("/login/", renderLogin)
+router.get("/login/", renderLogin);
 
-router.post("/login/", submitLogin)
+router.post("/login/", submitLogin);
 
-router.get("/register/", renderRegistrar)
+router.get("/register/", renderRegistrar);
 
-router.post("/register/", submitRegistrar)
+router.post("/register/", submitRegistrar);
 
-router.get("/gallery/", fetchGallery)
+router.get("/gallery/", fetchGallery);
+
+router.get('*', pageNotfound);
+router.post('*', pageNotfound);
+router.put('*', pageNotfound);
+router.delete('*', pageNotfound);
 
 export {
     router,

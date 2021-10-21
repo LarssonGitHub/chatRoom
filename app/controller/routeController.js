@@ -110,6 +110,10 @@ async function fetchGallery(req, res) {
     }
 }
 
+function pageNotfound(req, res) {
+    console.log("Don't try to go to a side that doesn't exist!");
+    res.redirect("/")
+}
 
 export {
     renderIndex,
@@ -119,5 +123,6 @@ export {
     submitRegistrar,
     logout,
     fetchGallery,
+    pageNotfound,
     tempIdBecauseSessionHatesWebsockets
 }
