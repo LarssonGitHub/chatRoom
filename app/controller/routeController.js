@@ -4,6 +4,10 @@ import {
 } from "../models/userModel.js";
 
 import {
+    errHasSensitiveInfo
+} from "./errorHandling.js"
+
+import {
     getCollectionOfGallery,
 } from "../models/galleryModel.js"
 
@@ -22,29 +26,29 @@ const {
 
 let tempIdBecauseSessionHatesWebsockets = 0;
 
-function renderIndex(req, res) {
+function renderIndex(req, res, next) {
     res.status(200).render('pages/index');
 }
 
-function renderLogin(req, res) {
-    res.render('pages/login');
+function renderLogin(req, res, next) {
+    res.status(200).render('pages/login');
 }
 
-function logout(req, res) {
+function logout(req, res, next) {
     removeIdAndStatusForWebsocket(req.session.userId);
     req.session.destroy((err) => {
         if (err) {
             console.log(err);
-            res.redirect('/')
+            res.status(404).redirect('/')
             return
         }
         res.clearCookie(SESSION_NAME);
         console.log('cookie destroyed');
-        res.redirect('/')
+        res.status(200).redirect('/')
     });
 }
 
-async function submitLogin(req, res) {
+async function submitLogin(req, res, next) {
     try {
         const {
             userName,
@@ -59,7 +63,7 @@ async function submitLogin(req, res) {
             req.session.userHasAccess = true;
             req.session.userId = UserStatsSuccess._id;
             tempIdBecauseSessionHatesWebsockets = UserStatsSuccess.tempWebsocketId;
-            res.json({
+            res.status(200).json({
                 redirectTo: '/',
                 message: "user exist and is validated, logging in!"
             })
@@ -67,17 +71,18 @@ async function submitLogin(req, res) {
         }
         throw "Something went... Kind of wrong, not sure what but it did!"
     } catch (err) {
-        res.json({
-            err: err,
+        const errMessage = errHasSensitiveInfo(err);
+        res.status(404).json({
+            err: errMessage,
         })
     }
 }
 
-function renderRegistrar(req, res) {
+function renderRegistrar(req, res, next) {
     res.render('pages/register');
 }
 
-async function submitRegistrar(req, res) {
+async function submitRegistrar(req, res, next) {
     try {
         const {
             userName,
@@ -85,7 +90,7 @@ async function submitRegistrar(req, res) {
         } = req.body;
         const userWasRegister = await registerNewUser(userName, userPassword);
         if (userWasRegister) {
-            res.json({
+            res.status(200).json({
                 redirectTo: '/login',
                 message: "new user added, log in!"
             })
@@ -93,11 +98,14 @@ async function submitRegistrar(req, res) {
         }
         throw "Something went wrong on our end when registering a new user";
     } catch (err) {
-        res.json(err);
+        const errMessage = errHasSensitiveInfo(err);
+        res.status(404).json({
+            err: errMessage,
+        })
     }
 }
 
-async function fetchGallery(req, res) {
+async function fetchGallery(req, res, next) {
     try {
         const collectionExist = await getCollectionOfGallery();
         if (collectionExist || collectionExist.length > 0) {
@@ -106,13 +114,16 @@ async function fetchGallery(req, res) {
         }
         throw "Something went wrong on our end when fetching for gallery";
     } catch (err) {
-        res.json(err);
+        const errMessage = errHasSensitiveInfo(err);
+        res.status(404).json({
+            err: errMessage,
+        })
     }
 }
 
-function pageNotfound(req, res) {
+function pageNotfound(req, res, next) {
     console.log("Don't try to go to a side that doesn't exist!");
-    res.redirect("/")
+    res.status(200).redirect("/")
 }
 
 export {
