@@ -89,7 +89,7 @@ async function checkForUser(userName, userPassword) {
     }
 }
 
-async function getUserName(wsID) {
+async function getUser(wsID) {
     try {
         const userObject = await Users.findById(wsID);
         return userObject;
@@ -120,9 +120,9 @@ async function setIdAndStatusForWebsocket({
     }
 }
 
-async function removeIdAndStatusForWebsocket(wsId) {
+async function removeIdAndStatusForWebsocket(id) {
     try {
-        const updateUser = await Users.findByIdAndUpdate(wsId, {
+        const updateUser = await Users.findByIdAndUpdate(id, {
             userStatus: "offline",
             tempWebsocketId: false
         })
@@ -156,7 +156,7 @@ export {
     getAllUsers,
     addNewUser,
     checkForUser,
-    getUserName,
+    getUser,
     setIdAndStatusForWebsocket,
     removeIdAndStatusForWebsocket,
     getUsersOnline

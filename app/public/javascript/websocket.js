@@ -1,14 +1,14 @@
 const websocket = new WebSocket("ws://localhost:8999");
 
-function displayErrorMessage() {
+function displayErrorMsg() {
     console.log("error....!");
 }
 
-function sortTargetOfStatusMessage(msh) {
+function sortTargetOfStatusMsg(msh) {
     // Use for later
 }
 
-function sortTypeOfReceivedMessage(msg) {
+function sortTypeOfReceivedMsg(msg) {
     console.log(msg);
     switch (msg.type) {
         // TODO Find better names
@@ -33,12 +33,12 @@ function sortTypeOfReceivedMessage(msg) {
                     displayListOfClientsNamesOnline(msg);
                     break;
                 default:
-                    displayErrorMessage()
+                    displayErrorMsg()
                     break;
             }
             break;
         default:
-            displayErrorMessage()
+            displayErrorMsg()
             break;
     }
 }
@@ -50,7 +50,7 @@ function sendMsgToWebsocket(data) {
 
 websocket.addEventListener("message", (event) => {
     const parsedData = parseJson(event.data);
-    sortTypeOfReceivedMessage(parsedData)
+    sortTypeOfReceivedMsg(parsedData)
 })
 
 websocket.addEventListener('close', (event) => {

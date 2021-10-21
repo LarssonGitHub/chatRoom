@@ -1,7 +1,8 @@
 import {
     parseJson,
     stringifyJson
-} from './functions.js'
+} from '../utilities/functions.js'
+
 import {
     saveImgToDatabase
 } from "../models/galleryModel.js"
@@ -35,22 +36,22 @@ function formatToChatObj(type, user, data) {
 }
 
 
-function validateTypeOfIncomingMessage(data, wsId) {
+function validateTypeOfIncomingMsg(data, wsId) {
     try {
-    const parsedData = parseJson(data)
-    const msgType = parsedData.type
-    switch (msgType) {
-        case "chatMsg":
-            return parsedData;
-        case "botMsg":
-            return parsedData;
-        case "imageMsg":
-            // TODO...! Make this an if else to save or not!
-            saveImgToDatabase(parsedData, wsId);
-            return parsedData;
-        default:
-            throw "ERROR"
-    }
+        const parsedData = parseJson(data)
+        const msgType = parsedData.type
+        switch (msgType) {
+            case "chatMsg":
+                return parsedData;
+            case "botMsg":
+                return parsedData;
+            case "imageMsg":
+                // TODO...! Make this an if else to save or not!
+                saveImgToDatabase(parsedData, wsId);
+                return parsedData;
+            default:
+                throw "ERROR"
+        }
     } catch (err) {
         console.log("hello from incoming...:", err);
         return "ERROR, don't mess with my javascript client!"
@@ -58,7 +59,7 @@ function validateTypeOfIncomingMessage(data, wsId) {
 }
 
 
-function validateTypeOfOutgoingMessage(data) {
+function validateTypeOfOutgoingMsg(data) {
     console.log(data);
     const msgType = data.type
     switch (msgType) {
@@ -86,8 +87,8 @@ function validateTypeOfOutgoingMessage(data) {
 }
 
 export {
-    validateTypeOfOutgoingMessage,
-    validateTypeOfIncomingMessage,
+    validateTypeOfOutgoingMsg,
+    validateTypeOfIncomingMsg,
     formatToChatObj,
     formatToStatusObj
 }

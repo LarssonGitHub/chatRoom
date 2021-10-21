@@ -1,5 +1,6 @@
 import {
     setIdAndStatusForWebsocket,
+    removeIdAndStatusForWebsocket
 } from "../models/userModel.js";
 
 import {
@@ -30,6 +31,7 @@ function renderLogin(req, res) {
 }
 
 function logout(req, res) {
+    removeIdAndStatusForWebsocket(req.session.userId);
     req.session.destroy((err) => {
         if (err) {
             console.log(err);
@@ -55,6 +57,7 @@ async function submitLogin(req, res) {
                 throw "couldn't set new stats"
             }
             req.session.userHasAccess = true;
+            req.session.userId = UserStatsSuccess._id;
             tempIdBecauseSessionHatesWebsockets = UserStatsSuccess.tempWebsocketId;
             res.json({
                 redirectTo: '/',
@@ -70,11 +73,11 @@ async function submitLogin(req, res) {
     }
 }
 
-function renderRegistrar(req, res){
+function renderRegistrar(req, res) {
     res.render('pages/register');
 }
 
-async function submitRegistrar (req, res) {
+async function submitRegistrar(req, res) {
     try {
         const {
             userName,

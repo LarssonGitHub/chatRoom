@@ -2,42 +2,32 @@
 import WebSocket, {
     WebSocketServer
 } from 'ws';
-
 import express from 'express';
 import http from 'http';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 
-import {router} from './routes/routes.js';
+import {
+    router
+} from './routes/routes.js';
 import {
     tempIdBecauseSessionHatesWebsockets,
 } from "./controller/routeController.js"
 
-import {
-    validateTypeOfOutgoingMessage,
-    validateTypeOfIncomingMessage,
-    formatToChatObj,
-    formatToStatusObj
-} from './utilities/messages.js';
 
 import {
-    botWelcomeMessage,
-    botGoodbyeMessage,
-    botErrorMessage
-} from './utilities/botmessages.js';
-import {
-    handleIncomingData,
-    handleOutgoingData
-} from './utilities/clientMessages.js';
-
-import {
+    botWelcomeMsg,
+    botGoodbyeMsg,
+    botErrorMsg,
+    handleIncomingClientData,
+    handleOutgoingDataToClient,
     clientSize,
     clientList
-} from "./utilities/statusMessages.js";
+} from './controller/messageTemplate.js';
+
 import {
     resetDatabaseUsers,
-    setIdAndStatusForWebsocket,
     removeIdAndStatusForWebsocket
 } from "./models/userModel.js";
 
@@ -52,10 +42,6 @@ dotenv.config();
 const {
     PORT,
     connectionStream,
-    SESSION_LIFETIME,
-    NODE_ENV,
-    SESSION_NAME,
-    SESSION_SECRET,
 } = process.env;
 
 mongoose.connect(connectionStream, {
@@ -83,7 +69,7 @@ app.set('view engine', 'ejs');
 wss.on('connection', async (ws, req) => {
     ws.id = tempIdBecauseSessionHatesWebsockets;
     console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
-    broadcast(await botWelcomeMessage(ws.id));
+    broadcast(await botWelcomeMsg(ws.id));
     broadcast(await clientSize());
     broadcast(await clientList());
 
@@ -92,15 +78,15 @@ wss.on('connection', async (ws, req) => {
         removeIdAndStatusForWebsocket(ws.id);
         broadcast(await clientSize());
         broadcast(await clientList());
-        broadcast(await botGoodbyeMessage(ws.id));
+        broadcast(await botGoodbyeMsg(ws.id));
     });
 
     ws.on("message", async (data) => {
-        let validatedData = await handleIncomingData(data, ws.id);
+        let validatedData = await handleIncomingClientData(data, ws.id);
         if (validatedData === "ERROR, don't mess with my javascript client!") {
-            broadcastToSingleClient(await botErrorMessage(ws.id, validatedData), ws.id);
+            broadcastToSingleClient(await botErrorMsg(ws.id, validatedData), ws.id);
         }
-        let handledOutgoingData = await handleOutgoingData(validatedData, ws.id);
+        let handledOutgoingData = await handleOutgoingDataToClient(validatedData, ws.id);
         broadcast(handledOutgoingData);
     })
 });
