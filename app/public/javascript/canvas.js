@@ -1,5 +1,3 @@
-"use strict";
-
 const CanvasContainer = document.getElementById("CanvasContainer")
 const canvas = document.getElementById('myCanvas');
 const canvasColorPicker = document.getElementById('canvasColorPicker');
@@ -9,11 +7,9 @@ const canvasErase = document.getElementById('canvasErase');
 const canvasDownload = document.getElementById('canvasDownload');
 const canvasUpload = document.getElementById("canvasUpload");
 const cleanCanvas = document.getElementById("cleanCanvas");
+const toggleCanvas = document.getElementById("toggleCanvas")
 
-// TODO Remove this button and event and create something else
-document.getElementById("toggleCanvas").addEventListener("click", (e) => {
-    CanvasContainer.classList.toggle("hidden")
-});
+let binaryCanvasValue = null;
 
 let canvasValues = {
     color: canvasColorPicker.value,
@@ -28,8 +24,6 @@ let canvasOffsetForClient = {
     offsetX: null,
     offsetY: null
 }
-
-let binaryCanvasValue = null;
 
 function resetBinaryCanvasValue() {
     binaryCanvasValue = "";
@@ -66,16 +60,17 @@ function setCanvasValues(e) {
     }
 }
 
-// Set height... TODO... Borrow Henry...
-// const heightRatio = 1.5;
-// canvas.height = canvas.width * heightRatio;
+// TODO make this shit responsive.....!
+// canvas.height = 600;
+// canvas.width = 400;
+
 const ctx = canvas.getContext('2d');
 let isPainting = false;
 
 function cleanAllCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-// TODO use classes instead?
+
 function setCanvasOffSet() {
     const getBounding = canvas.getBoundingClientRect();
     canvasOffsetForClient.offsetX = getBounding.left;
@@ -96,8 +91,6 @@ const paint = (e) => {
     ctx.lineCap = canvasValues.figure;
     ctx.lineTo(e.clientX - canvasOffsetForClient.offsetX, e.clientY - canvasOffsetForClient.offsetY);
     ctx.stroke();
-    // TODO.. Maybe needed later?
-    // ctx.moveTo(e.clientX, e.clientY);
     setCanvasValues(e)
 }
 
@@ -135,7 +128,9 @@ canvasFigure.addEventListener('change', setCanvasValues);
 canvasErase.addEventListener('click', setCanvasValues);
 canvasDownload.addEventListener('click', downloadCanvasImg);
 canvasUpload.addEventListener("click", uploadCanvasImg);
-cleanCanvas.addEventListener("click",  cleanAllCanvas);
+cleanCanvas.addEventListener("click", cleanAllCanvas);
+toggleCanvas.addEventListener("click", () => hideElement(CanvasContainer));
+
 
 // TODO There has to be a better than to do this.... I want to set offSet whenever I  do something related to canvas...
 window.addEventListener("click", setCanvasOffSet, false)
