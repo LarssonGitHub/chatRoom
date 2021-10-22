@@ -42,10 +42,13 @@ function manageAndAppendToChatContainer(type, user, data, time, img) {
     }
     // TODO: Adding a class.... Does we need two types?!?! As stated bellow
     chatContainer.append(getTemplateHTML);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    chatScrolling()
 }
 
-
+// TODO...! Fix so it only scrolls down when the user is at the bottom.
+function chatScrolling() {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
 
 
 function displayNumberOfClientsOnline({
