@@ -7,12 +7,15 @@ function submitLoginForm(e) {
     fetch('/login', options)
         .then(resp => resp.json())
         .then(data => {
-            console.log(data);
             if (data.redirectTo) {
                 location.assign(data.redirectTo)
               }
+            if (data.err) {
+                throw data.err;
+            }
         }).catch(err => {
-            console.log(err);
+            console.log("hello from err!", err);
+            manageErrorandAppendToPopupBox(err)
         });
 }
 

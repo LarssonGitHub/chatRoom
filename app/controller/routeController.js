@@ -117,7 +117,7 @@ async function fetchGallery(req, res, next) {
     try {
         const collectionExist = await getCollectionOfGallery();
         if (collectionExist || collectionExist.length > 0) {
-            res.json(collectionExist);
+            res.json({message: collectionExist});
             return;
         }
         throw "Something went wrong on our end when fetching for gallery";

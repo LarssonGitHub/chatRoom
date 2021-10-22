@@ -23,12 +23,17 @@ function loopGalleryArray(galleryArray) {
 function fetchGallery() {
     fetch('/gallery/')
         .then(response => response.json())
-        .then(array => {
-            console.log(array);
-            cleanContainer();
-            loopGalleryArray(array);
-        }).catch((error) => {
-            console.error('Error:', error);
+        .then(data => {
+            if (data.message) {
+                cleanContainer();
+                loopGalleryArray(data.message);
+              }
+            if (data.err) {
+                throw data.err;
+            }
+        }).catch((err) => {
+            console.error("hello from gallery!", err);
+            manageErrorandAppendToPopupBox(err)
         });
 }
 
