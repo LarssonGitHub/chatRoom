@@ -1,3 +1,7 @@
+function hideElement(element) {
+    element.classList.toggle("hidden")
+}
+
 function parseJson(data) {
     return JSON.parse(data)
 }
@@ -34,6 +38,8 @@ function constructMsgObject(type, user, chatData, binaryCanvasValue) {
     }
     if (binaryCanvasValue) {
         msgTemplate.imgData = binaryCanvasValue;
+        removeImgFromTypingContainer()
+        cleanAllCanvas();
     }
     return msgTemplate;
 }

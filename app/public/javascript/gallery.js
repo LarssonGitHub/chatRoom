@@ -3,10 +3,10 @@ const fetchGalleryBtn = document.getElementById("fetchGalleryBtn");
 const galleryTemplate = document.getElementById("galleryTemplate");
 
 function manageAndAppendToGalleryContainer(base64, user) {
-    let getHTML = document.importNode(galleryTemplate.content, true)
-    getHTML.querySelector(".galleryImg").src = base64
-    getHTML.querySelector(".galleryUsername").textContent = user || "ERROR";
-    galleryContainer.append(getHTML);
+    let getTemplateHTML = document.importNode(galleryTemplate.content, true)
+    getTemplateHTML.querySelector(".galleryImg").src = base64
+    getTemplateHTML.querySelector(".galleryUsername").textContent = user || "ERROR";
+    galleryContainer.append(getTemplateHTML);
 }
 
 function cleanContainer() {

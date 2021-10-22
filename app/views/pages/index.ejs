@@ -51,6 +51,11 @@
             background-color: lightgreen;
         }
 
+        .clientMsg {
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+
         #msgImgInputRemove {
             text-align: end;
             color: red;
@@ -69,7 +74,7 @@
     <%- include('../partials/chat.ejs') %>
 
     <h1>A chat app</h1>
-   
+
     <hr>
 
     <%- include('../partials/canvas.ejs') %>
@@ -78,7 +83,7 @@
     <%- include('../partials/gallery.ejs') %>
 
     <%- include('../partials/templates.ejs') %>
- 
+
     <script src="javascript/utilityFunctions.js"></script>
     <script src="javascript/canvas.js"></script>
     <script src="javascript/chat.js"></script>

@@ -8,6 +8,7 @@ const canvasFigure = document.getElementById('canvasFigure');
 const canvasErase = document.getElementById('canvasErase');
 const canvasDownload = document.getElementById('canvasDownload');
 const canvasUpload = document.getElementById("canvasUpload");
+const cleanCanvas = document.getElementById("cleanCanvas");
 
 // TODO Remove this button and event and create something else
 document.getElementById("toggleCanvas").addEventListener("click", (e) => {
@@ -29,6 +30,10 @@ let canvasOffsetForClient = {
 }
 
 let binaryCanvasValue = null;
+
+function resetBinaryCanvasValue() {
+    binaryCanvasValue = "";
+}
 
 function setCanvasValues(e) {
     if (!e) {
@@ -64,8 +69,12 @@ function setCanvasValues(e) {
 // Set height... TODO... Borrow Henry...
 // const heightRatio = 1.5;
 // canvas.height = canvas.width * heightRatio;
+const ctx = canvas.getContext('2d');
+let isPainting = false;
 
-
+function cleanAllCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 // TODO use classes instead?
 function setCanvasOffSet() {
     const getBounding = canvas.getBoundingClientRect();
@@ -73,8 +82,6 @@ function setCanvasOffSet() {
     canvasOffsetForClient.offsetY = getBounding.top;
 }
 
-const ctx = canvas.getContext('2d');
-let isPainting = false;
 const startPainting = () => isPainting = true;
 
 const finishPainting = () => {
@@ -128,6 +135,7 @@ canvasFigure.addEventListener('change', setCanvasValues);
 canvasErase.addEventListener('click', setCanvasValues);
 canvasDownload.addEventListener('click', downloadCanvasImg);
 canvasUpload.addEventListener("click", uploadCanvasImg);
+cleanCanvas.addEventListener("click",  cleanAllCanvas);
 
 // TODO There has to be a better than to do this.... I want to set offSet whenever I  do something related to canvas...
 window.addEventListener("click", setCanvasOffSet, false)

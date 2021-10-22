@@ -18,10 +18,10 @@ function sortTargetOfStatusMsg(msg) {
 function sortTypeOfReceivedMsg(msg) {
     switch (msg.type) {
         case "chatMsg":
-            displayClientChatMsg(msg);
+            displayChatMsg(msg);
             break;
         case "botMsg":
-            displayBotChatMsg(msg);
+            displayChatMsg(msg);
             break;
         case "imageMsg":
             displayImageMsg(msg);

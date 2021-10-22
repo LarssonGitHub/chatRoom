@@ -1,73 +1,75 @@
 const clientsOnline = document.getElementById('clientsOnline');
 const chatContainer = document.getElementById('chatContainer');
 const chatTemplate = document.getElementById('chatTemplate');
+const clientsOnlineTemplate = document.getElementById("clientsOnlineTemplate")
 const typingContainer = document.getElementById("typingContainer");
 const chatTextarea = document.getElementById("chatTextarea");
 const imgImgContainer = document.getElementById("imgImgContainer");
-const msgImgInputRemove = document.getElementById("msgImgInputRemove")
+const msgImgInputRemove = document.getElementById("msgImgInputRemove");
 const ListOfClients = document.getElementById("ListOfClients");
+const msgImgInput = document.getElementById("msgImgInput");
 
-function displayListOfClientsNamesOnline({data}) {
-    ListOfClients.innerHTML = '';
-    data.forEach(client => {
-    const li = document.createElement('li');
-    li.innerText = client;
-    ListOfClients.appendChild(li);
-    });
+
+
+
+
+// TODO THIS MANGLE NEEDS TO BE CORRECTED! IT WORKS, BUT DAMN.
+// Caan't get this to work!
+function displayListOfClientsNamesOnline({
+    data
+}) {
+    let getTemplateHTML = document.importNode(clientsOnlineTemplate.content, true);
+    let templateChild = getTemplateHTML.querySelector(".usernamesOnline");
+    for (clientName of data) {
+        templateChild.textContent = clientName || "ERROR";
+        getTemplateHTML.append(templateChild);
+    }
+    ListOfClients.append(getTemplateHTML);
 }
 
-function displayNumberOfClientsOnline({data}) {
+// TODO find a better way to write this whole damn chat template..:!
+function manageAndAppendToChatContainer(type, user, data, time, img) {
+    let getTemplateHTML = document.importNode(chatTemplate.content, true)
+    getTemplateHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" ? "botChatContainer" : "clientChatContainer");
+    getTemplateHTML.querySelector(".clientName").textContent = user || "ERROR";
+    getTemplateHTML.querySelector(".clientMsg").textContent = data || "ERROR";
+    getTemplateHTML.querySelector(".clientTime").textContent = time || "ERROR";
+    console.log(type, user, data, img);
+    if (type === "imageMsg" && img) {
+        // TODO find a better way to write this whole damn chat template..:!
+        getTemplateHTML.querySelector(".clientImg").src = img;
+        getTemplateHTML.querySelector(".clientImg").classList.toggle("hidden")
+    }
+    // TODO: Adding a class.... Does we need two types?!?! As stated bellow
+    chatContainer.append(getTemplateHTML);
+}
+
+
+
+
+function displayNumberOfClientsOnline({
+    data
+}) {
     clientsOnline.textContent = data
 }
 
 function checkIfTypingImgShouldHidden() {
     if (!binaryCanvasValue) {
-        imgImgContainer.classList.toggle("hidden")
+        hideElement(imgImgContainer)
     }
-}
-
-function appendToTypingContainer(dataURL) {
-    // TODO make a separate function to hide and show shit.
-    const msgImgInput = document.getElementById("msgImgInput");
-    msgImgInput.src = dataURL
 }
 
 function removeImgFromTypingContainer() {
-    binaryCanvasValue = "";
+    resetBinaryCanvasValue()
+    msgImgInput.src = ""
     checkIfTypingImgShouldHidden()
 }
 
-// TODO find a better way to write this whole damn chat template..:!
-function manageAndAppendToChatContainer(type, user, data, time, img) {
-    let getHTML = document.importNode(chatTemplate.content, true)
-    getHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" ? "botChatContainer" : "clientChatContainer");
-    getHTML.querySelector(".clientName").textContent = user || "ERROR";
-    getHTML.querySelector(".clientMsg").textContent = data || "ERROR";
-    getHTML.querySelector(".clientTime").textContent = time || "ERROR";
-    console.log(type, user, data, img);
-    if (type === "imageMsg" && img) {
-        // TODO find a better way to write this whole damn chat template..:!
-        getHTML.querySelector(".clientImg").src = img;
-        getHTML.querySelector(".clientImg").classList.toggle("hidden")
-    }
-    // TODO: Adding a class.... Does we need two types?!?! As stated bellow
-    chatContainer.append(getHTML);
+function appendToTypingContainer(dataURL) {
+    msgImgInput.src = dataURL
 }
 
-function displayClientChatMsg(chatObject) {
-    console.log(chatObject);
-    const {
-        type,
-        user,
-        data,
-        time
-    } = chatObject;
-    manageAndAppendToChatContainer(type, user, data, time)
-}
-
-// TODO debate if bot and client needs their own types....?!?!
-function displayBotChatMsg(chatObject) {
-    console.log("the boooot", chatObject);
+function displayChatMsg(chatObject) {
     const {
         type,
         user,
@@ -78,9 +80,6 @@ function displayBotChatMsg(chatObject) {
 }
 
 function displayImageMsg(chatObject) {
-    console.log("the iimmmmage", chatObject);
-    console.log("this should work,", chatObject);
-    // TODO add an alt tag..!
     const {
         type,
         user,
@@ -91,24 +90,23 @@ function displayImageMsg(chatObject) {
     manageAndAppendToChatContainer(type, user, data, time, imgData)
 }
 
-// TODO This should be sent to server.. By session or cookies and stuff....
-let clientUserName = "tempNickname"
+function checkIfImgOrRegularChatObject(chatValue) {
+    if (binaryCanvasValue) {
+        return constructMsgObject("imageMsg", tempClientUserName, chatValue, binaryCanvasValue);
+    } else {
+        return constructMsgObject("chatMsg", tempClientUserName, chatValue);
+    }
+}
+
+// This var sets a temp nickname which is replaced by the user's database nickname once it's send to the websocket.
+let tempClientUserName = "tempNickname"
 
 function sendChatMsgToServer(e) {
     let chatValue = chatTextarea.value
     if ((e.code === "Enter" && !e.shiftKey) && chatValue.length > 0) {
-        // TODO Find another way to check what type of msg CLIENT makes the msg!!!!!!!!!!!
-        let constructedMsg
-        if (binaryCanvasValue) {
-            constructedMsg = constructMsgObject("imageMsg", clientUserName, chatValue, binaryCanvasValue);
-            chatTextarea.value = "";
-            binaryCanvasValue = "";
-            checkIfTypingImgShouldHidden();
-        } else {
-            constructedMsg = constructMsgObject("chatMsg", clientUserName, chatValue);
-        }
+        e.preventDefault()
+        let constructedMsg = checkIfImgOrRegularChatObject(chatValue);
         sendMsgToWebsocket(constructedMsg);
-        // TODO Fix so textarea doesn't start on a new line.. When clearing...
         chatTextarea.value = "";
     }
 }
