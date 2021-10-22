@@ -3,9 +3,7 @@ import {
     stringifyJson
 } from '../utilities/functions.js';
 
-import {
-    saveImgToDatabase
-} from "../models/galleryModel.js";
+import {prepareImageSaving} from "./imageHandling.js"
 
 import dayjs from 'dayjs';
 
@@ -52,9 +50,10 @@ function formatToChatObj(type, user, data, imgData) {
 }
 
 
-function validateTypeOfIncomingMsg(data, wsId) {
+async function validateTypeOfIncomingMsg(data, wsId) {
     try {
         const parsedData = parseJson(data)
+        console.log(parsedData);
         const msgType = parsedData.type
         switch (msgType) {
             case "chatMsg":
@@ -62,8 +61,10 @@ function validateTypeOfIncomingMsg(data, wsId) {
             case "botMsg":
                 return parsedData;
             case "imageMsg":
-                // TODO...! Make this an if else to save or not!
-                saveImgToDatabase(parsedData, wsId);
+                if (parsedData.save) {
+                   const saveBeforeBroadcast = await prepareImageSaving(parsedData, wsId);
+                   return saveBeforeBroadcast;
+                }
                 return parsedData;
             default:
                 throw "ERROR type problem!";
@@ -72,12 +73,12 @@ function validateTypeOfIncomingMsg(data, wsId) {
         console.log("hello from incoming...", err);
         return {
             err: "ERROR",
-            msg: "ERROR from your side, don't mess with the console!"
+            msg: err
         };
     }
 }
 
-function validateTypeOfOutgoingMsg(data) {
+async function validateTypeOfOutgoingMsg(data) {
     try {
         const stringifiedData = stringifyJson(data);
         const msgType = data.type

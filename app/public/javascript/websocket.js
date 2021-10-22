@@ -9,7 +9,7 @@ function sortTargetOfStatusMsg(msg) {
             displayListOfClientsNamesOnline(msg);
             break;
         default:
-            const errorMsg = "something went wrong when sorting a target message from websocket! (Only you can see this!)"
+            const errorMsg = "something went wrong when sorting a target message from websocket!"
             displayErrorMsg(errorMsg)
             break;
     }
@@ -30,7 +30,7 @@ function sortTypeOfReceivedMsg(msg) {
             sortTargetOfStatusMsg(msg)
             break
         default:
-            const errorMsg = "something went wrong when sorting a received message from websocket! (Only you can see this!)"
+            const errorMsg = "something went wrong when sorting a received message from websocket!"
             displayErrorMsg(errorMsg)
             break;
     }

@@ -25,7 +25,7 @@ function setFetchPostOptions(formEntries) {
     };
 }
 
-function constructMsgObject(type, user, chatData, binaryCanvasValue) {
+function constructMsgObject(type, user, chatData, binaryCanvasValue, saveToDatabase) {
     msgTemplate = {};
     if (type) {
         msgTemplate.type = type;
@@ -40,6 +40,9 @@ function constructMsgObject(type, user, chatData, binaryCanvasValue) {
         msgTemplate.imgData = binaryCanvasValue;
         removeImgFromTypingContainer()
         cleanAllCanvas();
+    }
+    if (saveToDatabase) {
+        msgTemplate.save = true;
     }
     return msgTemplate;
 }

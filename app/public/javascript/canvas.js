@@ -8,7 +8,9 @@ const canvasDownload = document.getElementById('canvasDownload');
 const canvasUpload = document.getElementById("canvasUpload");
 const cleanCanvas = document.getElementById("cleanCanvas");
 const toggleCanvas = document.getElementById("toggleCanvas")
+const saveToDatabaseBtn = document.getElementById("saveToDatabaseBtn");
 
+let saveToDatabase = null;
 let binaryCanvasValue = null;
 
 let canvasValues = {
@@ -114,6 +116,9 @@ function uploadCanvasImg() {
         checkIfTypingImgShouldHidden()
         binaryCanvasValue = canvas.toDataURL();
         // TODO validation on client side.....
+
+        console.log(saveToDatabaseBtn.checked);
+        saveToDatabase = saveToDatabaseBtn.checked;
         appendToTypingContainer(binaryCanvasValue);
     }
     return;

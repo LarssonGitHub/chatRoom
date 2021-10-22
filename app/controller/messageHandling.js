@@ -11,6 +11,10 @@ import {
     getUser
 } from "../models/userModel.js"
 
+import {
+    errHasSensitiveInfo
+} from "./errorHandling.js"
+
 async function getUserName(wsId) {
     const userObj = await getUser(wsId);
     return userObj.userName;
@@ -33,15 +37,16 @@ async function botGoodbyeMsg(wsId) {
 }
 
 async function botErrorMsg(wsId, errorReason) {
+    const removeSensitiveErrors = errHasSensitiveInfo(errorReason)
     const userObj = await getUserName(wsId);
-    const constructedMessage = formatToChatObj("botMsg", "Mr Bot", `Your post wasn't approved ${userObj}! Reason: ${errorReason} (only you can see this!)`)
+    const constructedMessage = formatToChatObj("botMsg", "Mr Bot", `Your post wasn't approved ${userObj}! Reason: ${removeSensitiveErrors} (only you can see this!)`)
     const message = validateMessage(constructedMessage)
     return message;
 }
 
 // For the client
-function handleIncomingClientData(incomingData) {
-    return validateTypeOfIncomingMsg(incomingData);
+function handleIncomingClientData(incomingData, wsId) {
+    return validateTypeOfIncomingMsg(incomingData, wsId);
 }
 
 async function handleOutgoingDataToClient(validatedData, wsId) {

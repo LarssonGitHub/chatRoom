@@ -85,14 +85,14 @@ function displayImageMsg(chatObject) {
         user,
         data,
         time,
-        imgData
+        imgData,
     } = chatObject;
     manageAndAppendToChatContainer(type, user, data, time, imgData)
 }
 
 function checkIfImgOrRegularChatObject(chatValue) {
     if (binaryCanvasValue) {
-        return constructMsgObject("imageMsg", tempClientUserName, chatValue, binaryCanvasValue);
+        return constructMsgObject("imageMsg", tempClientUserName, chatValue, binaryCanvasValue, saveToDatabase);
     } else {
         return constructMsgObject("chatMsg", tempClientUserName, chatValue);
     }

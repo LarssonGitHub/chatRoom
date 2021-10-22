@@ -2,22 +2,23 @@ import {
     Gallery,
 } from "./gallerySchema.js"
 
-// TODO fix the wsID problem
-async function saveImgToDatabase({imgData, user}, wsId) {
+async function saveImgToDatabase(dataObj, userName) {
     try {
-        // TODO this is dangerous, fix and do something else with base64!
+        const {
+            imgData
+        } = dataObj
         const galleryObj = new Gallery({
             base64: imgData,
-            user: user
+            user: userName
         });
         let success = await galleryObj.save();
-
         if (success) {
-            console.log("img saved!");
+            return true;
         }
+        throw "Not sure what went wrong, but your image couldn't be saved!"
     } catch (err) {
-        console.log("image didn't save!");
-        console.log(err);
+        console.log("image didn't save!", err);
+        return Promise.reject("Not sure what went wrong, but your image couldn't be saved!");
     }
 }
 
