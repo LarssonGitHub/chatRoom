@@ -1,21 +1,9 @@
 function parseJson(data) {
-    try {
-        return JSON.parse(data)
-    } catch (err) {
-        // TODO: error handling.. Send back the err
-        console.log("Something went wrong..", err);
-        return
-    }
+    return JSON.parse(data)
 }
 
 function stringifyJson(data) {
-    try {
-        return JSON.stringify(data)
-    } catch (err) {
-        // TODO: error handling.. Send back the err
-        console.log("Something went wrong..", err);
-        return
-    }
+    return JSON.stringify(data)
 }
 
 function ObjectifyEntriesAndStringify(data) {
@@ -48,4 +36,9 @@ function constructMsgObject(type, user, chatData, binaryCanvasValue) {
         msgTemplate.imgData = binaryCanvasValue;
     }
     return msgTemplate;
+}
+
+function displayErrorMsg(errorMsg) {
+    // TODO put this as an error... Do something with it..!
+    console.log(errorMsg);
 }

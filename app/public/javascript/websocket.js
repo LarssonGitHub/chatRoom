@@ -1,10 +1,5 @@
 const websocket = new WebSocket("ws://localhost:8999");
 
-function displayErrorMsg(errorMsg) {
-    // TODO put this as an error... Do something with it..!
-    console.log(errorMsg);
-}
-
 function sortTargetOfStatusMsg(msg) {
     switch (msg.target) {
         case "clientInteger":
