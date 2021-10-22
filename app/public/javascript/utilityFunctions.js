@@ -20,7 +20,7 @@ function stringifyJson(data) {
 
 function ObjectifyEntriesAndStringify(data) {
     const formData = new FormData(data);
-    return JSON.stringify(Object.fromEntries(formData))
+    return stringifyJson(Object.fromEntries(formData))
 }
 
 function setFetchPostOptions(formEntries) {
@@ -34,11 +34,7 @@ function setFetchPostOptions(formEntries) {
 }
 
 function constructMsgObject(type, user, chatData, binaryCanvasValue) {
-    // console.log(type, user, chatData, binaryCanvasValue);
-    // Validate here..... Try catch? .....
-    msgTemplate = {}
-
-    // TODO Make into a switch?
+    msgTemplate = {};
     if (type) {
         msgTemplate.type = type;
     }

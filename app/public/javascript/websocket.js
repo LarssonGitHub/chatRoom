@@ -1,44 +1,42 @@
 const websocket = new WebSocket("ws://localhost:8999");
 
-function displayErrorMsg() {
-    console.log("error....!");
+function displayErrorMsg(errorMsg) {
+    // TODO put this as an error... Do something with it..!
+    console.log(errorMsg);
 }
 
-function sortTargetOfStatusMsg(msh) {
-    // Use for later
+function sortTargetOfStatusMsg(msg) {
+    switch (msg.target) {
+        case "clientInteger":
+            displayNumberOfClientsOnline(msg);
+            break;
+        case "clientArray":
+            displayListOfClientsNamesOnline(msg);
+            break;
+        default:
+            const errorMsg = "something went wrong when sorting a target message from websocket! (Only you can see this!)"
+            displayErrorMsg(errorMsg)
+            break;
+    }
 }
 
 function sortTypeOfReceivedMsg(msg) {
-    console.log(msg);
     switch (msg.type) {
-        // TODO Find better names
         case "chatMsg":
-            console.log("it's a chat! Do something with it", msg);
             displayClientChatMsg(msg);
             break;
         case "botMsg":
-            console.log("it's a botMsg! Do something with it", msg);
             displayBotChatMsg(msg);
             break;
         case "imageMsg":
-            console.log("it's an image! Do something with it", msg);
             displayImageMsg(msg);
             break;
         case "status":
-            switch (msg.target) {
-                case "clientInteger":
-                    displayNumberOfClientsOnline(msg);
-                    break;
-                case "clientArray":
-                    displayListOfClientsNamesOnline(msg);
-                    break;
-                default:
-                    displayErrorMsg()
-                    break;
-            }
-            break;
+            sortTargetOfStatusMsg(msg)
+            break
         default:
-            displayErrorMsg()
+            const errorMsg = "something went wrong when sorting a received message from websocket! (Only you can see this!)"
+            displayErrorMsg(errorMsg)
             break;
     }
 }
