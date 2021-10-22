@@ -42,6 +42,7 @@ function manageAndAppendToChatContainer(type, user, data, time, img) {
     }
     // TODO: Adding a class.... Does we need two types?!?! As stated bellow
     chatContainer.append(getTemplateHTML);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 
