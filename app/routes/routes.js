@@ -56,7 +56,7 @@ router.get("/register/", renderRegistrar);
 
 router.post("/register/", submitRegistrar);
 
-router.get("/gallery/", fetchGallery);
+router.get("/gallery/", checkUserAccess, fetchGallery);
 
 router.get('*', pageNotfound);
 router.post('*', pageNotfound);
