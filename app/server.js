@@ -74,8 +74,7 @@ wss.on('connection', async (ws, req) => {
     broadcast(await clientList());
 
     ws.on("close", async () => {
-        // TODO put this in removeid in an await?????!
-        removeIdAndStatusForWebsocket(ws.id);
+        await removeIdAndStatusForWebsocket(ws.id);
         broadcast(await clientSize());
         broadcast(await clientList());
         broadcast(await botGoodbyeMsg(ws.id));

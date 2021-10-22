@@ -26,8 +26,21 @@ const {
 
 let tempIdBecauseSessionHatesWebsockets = 0;
 
-function renderIndex(req, res, next) {
-    res.status(200).render('pages/index');
+async function renderIndex(req, res, next) {
+    try {
+        const UserStatsSuccess = await setIdAndStatusForWebsocket(req.session.user);
+        if (!UserStatsSuccess) {
+            throw "couldn't set new stats"
+        }
+        req.session.userId = UserStatsSuccess._id;
+        tempIdBecauseSessionHatesWebsockets = UserStatsSuccess.tempWebsocketId;
+        res.status(200).render('pages/index');
+    } catch (err) {
+        const errMessage = errHasSensitiveInfo(err);
+        res.status(404).json({
+            err: errMessage,
+        })
+    }
 }
 
 function renderLogin(req, res, next) {
@@ -56,13 +69,8 @@ async function submitLogin(req, res, next) {
         } = req.body;
         const userIsValidated = await loginUser(userName, userPassword);
         if (userIsValidated) {
-            const UserStatsSuccess = await setIdAndStatusForWebsocket(userIsValidated);
-            if (!UserStatsSuccess) {
-                throw "couldn't set new stats"
-            }
             req.session.userHasAccess = true;
-            req.session.userId = UserStatsSuccess._id;
-            tempIdBecauseSessionHatesWebsockets = UserStatsSuccess.tempWebsocketId;
+            req.session.user = userIsValidated;
             res.status(200).json({
                 redirectTo: '/',
                 message: "user exist and is validated, logging in!"

@@ -97,6 +97,7 @@ async function setIdAndStatusForWebsocket({
         if (!updateUser) {
             throw "Something went wrong";
         }
+        console.log("userStats put to online!");
         return updateUser;
     } catch (err) {
         console.log("use doesn't exist!");
@@ -110,11 +111,14 @@ async function removeIdAndStatusForWebsocket(id) {
         const updateUser = await Users.findByIdAndUpdate(id, {
             userStatus: "offline",
             tempWebsocketId: false
+        }, {
+            new: true
         })
         if (!updateUser) {
             throw "Something went wrong";
         }
-        console.log("userStats changed");
+        console.log("in the model", updateUser);
+        return updateUser;
     } catch (err) {
         console.log(err);
         return Promise.reject(err);
@@ -129,6 +133,7 @@ async function getUsersOnline() {
         if (!arrayOfUsersOnline) {
             throw "Something went wrong";
         }
+        console.log("right now this are online", arrayOfUsersOnline);
         return arrayOfUsersOnline;
     } catch (err) {
         console.log("user doesn't exist!");
