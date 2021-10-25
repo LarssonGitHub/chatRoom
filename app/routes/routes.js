@@ -18,7 +18,8 @@ import {
     submitRegistrar,
     logout,
     fetchGallery,
-    pageNotfound
+    pageNotfound,
+    fetchChatHistory
 } from "../controller/routeController.js"
 
 const router = express.Router();
@@ -57,6 +58,8 @@ router.get("/register/", renderRegistrar);
 router.post("/register/", submitRegistrar);
 
 router.get("/gallery/", checkUserAccess, fetchGallery);
+
+router.get("/chatHistory/", checkUserAccess, fetchChatHistory);
 
 router.get('*', pageNotfound);
 router.post('*', pageNotfound);

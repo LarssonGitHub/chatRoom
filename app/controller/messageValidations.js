@@ -3,7 +3,8 @@ import {
     stringifyJson
 } from '../utilities/functions.js';
 
-import {prepareImageSaving} from "./imageHandling.js"
+import {
+    prepareChatSaving} from "./savingHandling.js"
 
 import dayjs from 'dayjs';
 
@@ -31,7 +32,7 @@ function formatToStatusObj(type, target, data) {
     return statusTemplate;
 }
 
-function formatToChatObj(type, user, data, imgData) {
+function formatToChatObj(type, user, data, imgData, save) {
     const msgTemplate = {}
     if (type) {
         msgTemplate.type = type;
@@ -45,6 +46,9 @@ function formatToChatObj(type, user, data, imgData) {
     if (imgData) {
         msgTemplate.imgData = imgData;
     }
+    if (save) {
+        msgTemplate.save = save;
+    }
     msgTemplate.time = dayjs().format("DD/MM HH:mm:ss");
     return msgTemplate;
 }
@@ -53,7 +57,6 @@ function formatToChatObj(type, user, data, imgData) {
 async function validateTypeOfIncomingMsg(data, wsId) {
     try {
         const parsedData = parseJson(data)
-        console.log(parsedData);
         const msgType = parsedData.type
         switch (msgType) {
             case "chatMsg":
@@ -61,10 +64,6 @@ async function validateTypeOfIncomingMsg(data, wsId) {
             case "botMsg":
                 return parsedData;
             case "imageMsg":
-                if (parsedData.save) {
-                   const saveBeforeBroadcast = await prepareImageSaving(parsedData, wsId);
-                   return saveBeforeBroadcast;
-                }
                 return parsedData;
             default:
                 throw "ERROR type problem!";
@@ -78,19 +77,21 @@ async function validateTypeOfIncomingMsg(data, wsId) {
     }
 }
 
-async function validateTypeOfOutgoingMsg(data) {
+async function validateTypeOfOutgoingMsg(dataObj) {
     try {
-        const stringifiedData = stringifyJson(data);
-        const msgType = data.type
+        const msgType = dataObj.type
         switch (msgType) {
             case "chatMsg":
-                return stringifiedData;
+                const savedChatClientObj = await prepareChatSaving(dataObj);
+                return stringifyJson(savedChatClientObj);
             case "botMsg":
-                return stringifiedData;
+                const savedChatBotObj = await prepareChatSaving(dataObj);
+                return stringifyJson(savedChatBotObj);
             case "imageMsg":
-                return stringifiedData;
+                const savedChatImageObj = await prepareChatSaving(dataObj);
+                return stringifyJson(savedChatImageObj);
             case "status":
-                return stringifiedData;
+                return stringifyJson(dataObj);
             default:
                 throw "ERROR type problem!";
         }

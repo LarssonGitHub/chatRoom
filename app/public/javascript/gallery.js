@@ -33,7 +33,7 @@ function fetchGallery() {
             }
         }).catch((err) => {
             console.error("hello from gallery!", err);
-            manageErrorandAppendToPopupBox(err)
+            manageErrorAndAppendToPopupBox(err)
         });
 }
 

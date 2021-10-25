@@ -8,6 +8,9 @@ const imgImgContainer = document.getElementById("imgImgContainer");
 const msgImgInputRemove = document.getElementById("msgImgInputRemove");
 const ListOfClients = document.getElementById("ListOfClients");
 const msgImgInput = document.getElementById("msgImgInput");
+const loadPreChatBtn = document.getElementById("loadPreChatBtn");
+
+let paginationIntegerForChat = 0;
 
 function displayListOfClientsNamesOnline({data}) {
     ListOfClients.textContent = "";
@@ -25,7 +28,6 @@ function manageChatTemplate({type, user, data, time, imgData}) {
     getTemplateHTML.querySelector(".clientName").textContent = user || "ERROR";
     getTemplateHTML.querySelector(".clientMsg").textContent = data || "ERROR";
     getTemplateHTML.querySelector(".clientTime").textContent = time || "ERROR";
-    console.log(type, user, data, imgData);
     if (type === "imageMsg" && imgData) {
         getTemplateHTML.querySelector(".clientImg").src = imgData;
         getTemplateHTML.querySelector(".clientImg").classList.toggle("hidden")
@@ -33,10 +35,17 @@ function manageChatTemplate({type, user, data, time, imgData}) {
     return getTemplateHTML;
 }
 
+function manageAndAppendToChatContainerTop(chatHistoryObjects) {
+    chatHistoryObjects.forEach(chatMessage => {
+    const chatDataSorted = manageChatTemplate(chatMessage);
+    chatContainer.prepend(chatDataSorted);
+    });
+}
 
 function manageAndAppendToChatContainerBottom(chatObject) {
     const chatDataSorted = manageChatTemplate(chatObject);
     chatContainer.append(chatDataSorted);
+    paginationIntegerForChat += 1;
     chatScrolling()
 }
 
@@ -73,7 +82,6 @@ function displayChatMsg(chatObject) {
 }
 
 function displayImageMsg(chatObject) {
-    console.log("it's an image!,",chatObject);
     manageAndAppendToChatContainerBottom(chatObject)
 }
 
@@ -98,5 +106,21 @@ function sendChatMsgToServer(e) {
     }
 }
 
+function fetchPreviousChat() {
+    fetch('/chatHistory')
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            paginationIntegerForChat += 10;
+          }
+        if (data.err) {
+            throw data.err;
+        }
+    }).catch((err) => {
+        manageErrorAndAppendToPopupBox(err)
+    });
+}
+
+loadPreChatBtn.addEventListener("click", fetchPreviousChat)
 typingContainer.addEventListener("keydown", sendChatMsgToServer);
 msgImgInputRemove.addEventListener("click", removeImgFromTypingContainer)

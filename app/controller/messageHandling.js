@@ -50,9 +50,9 @@ function handleIncomingClientData(incomingData, wsId) {
 }
 
 async function handleOutgoingDataToClient(validatedData, wsId) {
-    const {type, data, imgData} = validatedData;
+    const {type, data, imgData, save} = validatedData;
     const userObj = await getUserName(wsId);
-    const restructureChatObj = formatToChatObj(type, userObj, data, imgData)
+    const restructureChatObj = formatToChatObj(type, userObj, data, imgData, save)
     return validateTypeOfOutgoingMsg(restructureChatObj);
 }
 

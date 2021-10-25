@@ -7,9 +7,9 @@ import {
     errHasSensitiveInfo
 } from "./errorHandling.js"
 
-import {
-    getCollectionOfGallery,
-} from "../models/galleryModel.js"
+// import {
+//     getCollectionOfGallery,
+// } from "../models/galleryModel.js"
 
 import {
     registerNewUser,
@@ -134,6 +134,10 @@ function pageNotfound(req, res, next) {
     res.status(200).redirect("/")
 }
 
+function fetchChatHistory(req, res) {
+    console.log("hi mate");
+}
+
 export {
     renderIndex,
     renderLogin,
@@ -143,5 +147,6 @@ export {
     logout,
     fetchGallery,
     pageNotfound,
+    fetchChatHistory,
     tempIdBecauseSessionHatesWebsockets
 }

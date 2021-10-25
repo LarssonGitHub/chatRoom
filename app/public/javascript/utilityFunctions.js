@@ -1,4 +1,4 @@
-function manageErrorandAppendToPopupBox(err) {
+function manageErrorAndAppendToPopupBox(err) {
     // TODO create a better feedback system...! At least it handles errors, but put it in a popup box! Bootstrap?
     alert(err);
 }
