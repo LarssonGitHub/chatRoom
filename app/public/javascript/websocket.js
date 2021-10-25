@@ -10,7 +10,7 @@ function sortTargetOfStatusMsg(msg) {
             break;
         default:
             const errorMsg = "something went wrong when sorting a target message from websocket!"
-            displayErrorMsg(errorMsg)
+            displayEmanageErrorAndAppendToPopupBoxrrorMsg(errorMsg)
             break;
     }
 }
@@ -28,10 +28,13 @@ function sortTypeOfReceivedMsg(msg) {
             break;
         case "status":
             sortTargetOfStatusMsg(msg)
-            break
+            break;
+        case "errorMsg":
+            displayChatMsg(msg);
+            break;
         default:
             const errorMsg = "something went wrong when sorting a received message from websocket!"
-            displayErrorMsg(errorMsg)
+            manageErrorAndAppendToPopupBox(errorMsg)
             break;
     }
 }

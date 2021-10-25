@@ -59,7 +59,7 @@ router.post("/register/", submitRegistrar);
 
 router.get("/gallery/", checkUserAccess, fetchGallery);
 
-router.get("/chatHistory/", checkUserAccess, fetchChatHistory);
+router.get("/chatHistory/:startIndex", checkUserAccess, fetchChatHistory);
 
 router.get('*', pageNotfound);
 router.post('*', pageNotfound);

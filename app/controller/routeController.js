@@ -7,9 +7,10 @@ import {
     errHasSensitiveInfo
 } from "./errorHandling.js"
 
-// import {
-//     getCollectionOfGallery,
-// } from "../models/galleryModel.js"
+import {
+    getCollectionOfGallery,
+    getChatPagination
+} from "../models/chatModel.js"
 
 import {
     registerNewUser,
@@ -134,8 +135,23 @@ function pageNotfound(req, res, next) {
     res.status(200).redirect("/")
 }
 
-function fetchChatHistory(req, res) {
-    console.log("hi mate");
+async function fetchChatHistory(req, res) {
+    try {
+        const {
+            startIndex
+        } = req.params;
+        const chatPagination = await getChatPagination(startIndex);
+        if (chatPagination || chatPagination.length > 0) {
+            res.json({message: chatPagination});
+            return;
+        }
+        throw "Something went wrong on our end when fetching for chats";
+    } catch (err) {
+        const errMessage = errHasSensitiveInfo(err);
+        res.status(404).json({
+            err: errMessage,
+        })
+    }
 }
 
 export {

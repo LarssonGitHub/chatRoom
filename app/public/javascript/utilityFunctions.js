@@ -51,8 +51,3 @@ function constructMsgObject(type, user, chatData, binaryCanvasValue, saveToDatab
     }
     return msgTemplate;
 }
-
-function displayErrorMsg(errorMsg) {
-    // TODO put this as an error... Do something with it..!
-    console.log(errorMsg);
-}

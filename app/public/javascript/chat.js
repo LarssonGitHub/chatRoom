@@ -22,9 +22,8 @@ function displayListOfClientsNamesOnline({data}) {
 }
 
 function manageChatTemplate({type, user, data, time, imgData}) {
-    console.log(type, user, data, time, imgData);
     let getTemplateHTML = document.importNode(chatTemplate.content, true)
-    getTemplateHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" ? "botChatContainer" : "clientChatContainer");
+    getTemplateHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" || type ===  "errorMsg" ? "botChatContainer" : "clientChatContainer");
     getTemplateHTML.querySelector(".clientName").textContent = user || "ERROR";
     getTemplateHTML.querySelector(".clientMsg").textContent = data || "ERROR";
     getTemplateHTML.querySelector(".clientTime").textContent = time || "ERROR";
@@ -38,7 +37,8 @@ function manageChatTemplate({type, user, data, time, imgData}) {
 function manageAndAppendToChatContainerTop(chatHistoryObjects) {
     chatHistoryObjects.forEach(chatMessage => {
     const chatDataSorted = manageChatTemplate(chatMessage);
-    chatContainer.prepend(chatDataSorted);
+    chatContainer.insertBefore(chatDataSorted, chatContainer.childNodes[2]);
+    // chatContainer.prepend(chatDataSorted);
     });
 }
 
@@ -107,11 +107,13 @@ function sendChatMsgToServer(e) {
 }
 
 function fetchPreviousChat() {
-    fetch('/chatHistory')
+    
+fetch(`/chatHistory/${paginationIntegerForChat}`)
     .then(response => response.json())
     .then(data => {
         if (data.message) {
-            paginationIntegerForChat += 10;
+            paginationIntegerForChat += 15;
+            manageAndAppendToChatContainerTop(data.message);
           }
         if (data.err) {
             throw data.err;

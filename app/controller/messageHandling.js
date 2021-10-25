@@ -39,7 +39,7 @@ async function botGoodbyeMsg(wsId) {
 async function botErrorMsg(wsId, errorReason) {
     const removeSensitiveErrors = errHasSensitiveInfo(errorReason)
     const userObj = await getUserName(wsId);
-    const constructedMessage = formatToChatObj("botMsg", "Mr Bot", `Your post wasn't approved ${userObj}! Reason: ${removeSensitiveErrors} (only you can see this!)`)
+    const constructedMessage = formatToChatObj("errorMsg", "Mr Error", `Your post wasn't approved ${userObj}! Reason: ${removeSensitiveErrors} (only you can see this!)`)
     const message = validateMessage(constructedMessage)
     return message;
 }

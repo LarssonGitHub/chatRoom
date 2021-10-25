@@ -92,6 +92,9 @@ async function validateTypeOfOutgoingMsg(dataObj) {
                 return stringifyJson(savedChatImageObj);
             case "status":
                 return stringifyJson(dataObj);
+            case "errorMsg":
+                console.log("error");
+                return stringifyJson(dataObj);
             default:
                 throw "ERROR type problem!";
         }

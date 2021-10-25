@@ -25,6 +25,36 @@ async function saveChatToDatabase({
     }
 }
 
+async function getCollectionOfGallery() {
+    try {
+        // TODO FIC GALLERY!
+        const listOfImages = await Chat.find({imgData: "base64"});
+        console.log("greetings from collection...", listOfImages);
+        if (!listOfImages || listOfImages.length === 0) {
+            throw "There sadly isn't any pictures posted online yet D:";
+        }
+        return listOfImages;
+    } catch (err) {
+        console.log(err);
+        return Promise.reject(err);
+    }
+}
+
+async function getChatPagination(startIndex) {
+    try {
+        const chatResults = await Chat.find({}).sort({time: -1}).limit(15).skip(Number(startIndex));
+        if (!chatResults || chatResults.length === 0) {
+            throw "There sadly isn't any posts online yet D:";
+        }
+        return chatResults;
+    } catch (err) {
+        console.log(err);
+        return Promise.reject(err);
+    }
+}
+
 export {
-    saveChatToDatabase
+    saveChatToDatabase,
+    getCollectionOfGallery,
+    getChatPagination
 }
