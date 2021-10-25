@@ -21,9 +21,11 @@ function loopGalleryArray(galleryArray) {
 }
 
 function fetchGallery() {
+    fetchGalleryBtn.disabled = true;
     fetch('/gallery/')
         .then(response => response.json())
         .then(data => {
+            fetchGalleryBtn.disabled = false;
             if (data.message) {
                 cleanContainer();
                 loopGalleryArray(data.message);

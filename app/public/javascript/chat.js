@@ -112,10 +112,11 @@ function sendChatMsgToServer(e) {
 }
 
 function fetchPreviousChat() {
-    
+loadPreChatBtn.disabled = true;
 fetch(`/chatHistory/${paginationIntegerForChat}`)
     .then(response => response.json())
     .then(data => {
+        loadPreChatBtn.disabled = false;
         if (data.message) {
             paginationIntegerForChat += 15;
             manageAndAppendToChatContainerTop(data.message);
@@ -126,6 +127,7 @@ fetch(`/chatHistory/${paginationIntegerForChat}`)
     }).catch((err) => {
         manageErrorAndAppendToPopupBox(err)
     });
+   
 }
 
 loadPreChatBtn.addEventListener("click", fetchPreviousChat)
