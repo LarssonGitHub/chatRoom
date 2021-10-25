@@ -10,7 +10,7 @@ async function saveChatToDatabase({
             type: type, 
             user: user, 
             data: data, 
-            imgData: save ? imgData : "", 
+            imgData: save ? imgData : "Image not saved by the user!", 
             time: time
         });
         let success = await chatObj.save();
@@ -27,9 +27,7 @@ async function saveChatToDatabase({
 
 async function getCollectionOfGallery() {
     try {
-        // TODO FIC GALLERY!
-        const listOfImages = await Chat.find({imgData: "base64"});
-        console.log("greetings from collection...", listOfImages);
+        const listOfImages = await Chat.find({ imgData: { "$regex": "data:image/png"} });
         if (!listOfImages || listOfImages.length === 0) {
             throw "There sadly isn't any pictures posted online yet D:";
         }

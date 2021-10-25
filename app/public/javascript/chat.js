@@ -27,8 +27,13 @@ function manageChatTemplate({type, user, data, time, imgData}) {
     getTemplateHTML.querySelector(".clientName").textContent = user || "ERROR";
     getTemplateHTML.querySelector(".clientMsg").textContent = data || "ERROR";
     getTemplateHTML.querySelector(".clientTime").textContent = time || "ERROR";
-    if (type === "imageMsg" && imgData) {
+    if (type === "imageMsg" && imgData.includes("data:image/png;")) {
         getTemplateHTML.querySelector(".clientImg").src = imgData;
+        getTemplateHTML.querySelector(".clientImg").classList.toggle("hidden")
+    }
+    if (type === "imageMsg" && !imgData.includes("data:image/png;")) {
+        getTemplateHTML.querySelector(".clientImg").src = "#####";
+        getTemplateHTML.querySelector(".clientImg").alt = imgData;
         getTemplateHTML.querySelector(".clientImg").classList.toggle("hidden")
     }
     return getTemplateHTML;

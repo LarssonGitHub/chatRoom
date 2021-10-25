@@ -2,9 +2,9 @@ const galleryContainer = document.getElementById("galleryContainer");
 const fetchGalleryBtn = document.getElementById("fetchGalleryBtn");
 const galleryTemplate = document.getElementById("galleryTemplate");
 
-function manageAndAppendToGalleryContainer(base64, user) {
+function manageAndAppendToGalleryContainer(user, imgData) {
     let getTemplateHTML = document.importNode(galleryTemplate.content, true)
-    getTemplateHTML.querySelector(".galleryImg").src = base64
+    getTemplateHTML.querySelector(".galleryImg").src = imgData
     getTemplateHTML.querySelector(".galleryUsername").textContent = user || "ERROR";
     galleryContainer.append(getTemplateHTML);
 }
@@ -15,8 +15,8 @@ function cleanContainer() {
 
 function loopGalleryArray(galleryArray) {
     galleryArray.forEach(image => {
-        const {base64, user} = image
-        manageAndAppendToGalleryContainer(base64, user)
+        const {user, imgData} = image
+        manageAndAppendToGalleryContainer(user, imgData)
     });
 }
 
