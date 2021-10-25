@@ -29,11 +29,17 @@ let tempIdBecauseSessionHatesWebsockets = 0;
 
 async function renderIndex(req, res, next) {
     try {
+        // Temp fix in order for the page to not reload when using the html template tag
+        if(req.session.hasLoggedIn) {
+            res.status(200).render('pages/index');
+            return;
+        }
         const UserStatsSuccess = await setIdAndStatusForWebsocket(req.session.user);
         if (!UserStatsSuccess) {
             throw "couldn't set new stats"
         }
         req.session.userId = UserStatsSuccess._id;
+        req.session.hasLoggedIn = true;
         tempIdBecauseSessionHatesWebsockets = UserStatsSuccess.tempWebsocketId;
         res.status(200).render('pages/index');
     } catch (err) {
