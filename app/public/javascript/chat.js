@@ -9,39 +9,34 @@ const msgImgInputRemove = document.getElementById("msgImgInputRemove");
 const ListOfClients = document.getElementById("ListOfClients");
 const msgImgInput = document.getElementById("msgImgInput");
 
-
-
-
-
-// TODO THIS MANGLE NEEDS TO BE CORRECTED! IT WORKS, BUT DAMN.
-// Caan't get this to work!
-function displayListOfClientsNamesOnline({
-    data
-}) {
-    let getTemplateHTML = document.importNode(clientsOnlineTemplate.content, true);
-    let templateChild = getTemplateHTML.querySelector(".usernamesOnline");
-    for (clientName of data) {
-        templateChild.textContent = clientName || "ERROR";
-        getTemplateHTML.append(templateChild);
-    }
-    ListOfClients.append(getTemplateHTML);
+function displayListOfClientsNamesOnline({data}) {
+    ListOfClients.textContent = "";
+    data.forEach(userName => {
+        let getTemplateHTML = document.importNode(clientsOnlineTemplate.content, true)
+        getTemplateHTML.querySelector(".usernamesOnline").textContent = userName || "ERROR";
+        ListOfClients.append(getTemplateHTML);
+    })
 }
 
-// TODO find a better way to write this whole damn chat template..:!
-function manageAndAppendToChatContainer(type, user, data, time, img) {
+function manageChatTemplate({type, user, data, time, imgData}) {
+    console.log(type, user, data, time, imgData);
     let getTemplateHTML = document.importNode(chatTemplate.content, true)
     getTemplateHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" ? "botChatContainer" : "clientChatContainer");
     getTemplateHTML.querySelector(".clientName").textContent = user || "ERROR";
     getTemplateHTML.querySelector(".clientMsg").textContent = data || "ERROR";
     getTemplateHTML.querySelector(".clientTime").textContent = time || "ERROR";
-    console.log(type, user, data, img);
-    if (type === "imageMsg" && img) {
-        // TODO find a better way to write this whole damn chat template..:!
-        getTemplateHTML.querySelector(".clientImg").src = img;
+    console.log(type, user, data, imgData);
+    if (type === "imageMsg" && imgData) {
+        getTemplateHTML.querySelector(".clientImg").src = imgData;
         getTemplateHTML.querySelector(".clientImg").classList.toggle("hidden")
     }
-    // TODO: Adding a class.... Does we need two types?!?! As stated bellow
-    chatContainer.append(getTemplateHTML);
+    return getTemplateHTML;
+}
+
+
+function manageAndAppendToChatContainerBottom(chatObject) {
+    const chatDataSorted = manageChatTemplate(chatObject);
+    chatContainer.append(chatDataSorted);
     chatScrolling()
 }
 
@@ -74,24 +69,12 @@ function appendToTypingContainer(dataURL) {
 }
 
 function displayChatMsg(chatObject) {
-    const {
-        type,
-        user,
-        data,
-        time
-    } = chatObject;
-    manageAndAppendToChatContainer(type, user, data, time)
+    manageAndAppendToChatContainerBottom(chatObject)
 }
 
 function displayImageMsg(chatObject) {
-    const {
-        type,
-        user,
-        data,
-        time,
-        imgData,
-    } = chatObject;
-    manageAndAppendToChatContainer(type, user, data, time, imgData)
+    console.log("it's an image!,",chatObject);
+    manageAndAppendToChatContainerBottom(chatObject)
 }
 
 function checkIfImgOrRegularChatObject(chatValue) {

@@ -3,24 +3,6 @@ function manageErrorandAppendToPopupBox(err) {
     alert(err);
 }
 
-
-function manageAndAppendToChatContainer(type, user, data, time, img) {
-    let getTemplateHTML = document.importNode(chatTemplate.content, true)
-    getTemplateHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" ? "botChatContainer" : "clientChatContainer");
-    getTemplateHTML.querySelector(".clientName").textContent = user || "ERROR";
-    getTemplateHTML.querySelector(".clientMsg").textContent = data || "ERROR";
-    getTemplateHTML.querySelector(".clientTime").textContent = time || "ERROR";
-    console.log(type, user, data, img);
-    if (type === "imageMsg" && img) {
-        // TODO find a better way to write this whole damn chat template..:!
-        getTemplateHTML.querySelector(".clientImg").src = img;
-        getTemplateHTML.querySelector(".clientImg").classList.toggle("hidden")
-    }
-    // TODO: Adding a class.... Does we need two types?!?! As stated bellow
-    chatContainer.append(getTemplateHTML);
-}
-
-
 function hideElement(element) {
     element.classList.toggle("hidden")
 }
