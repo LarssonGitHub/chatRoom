@@ -7,7 +7,8 @@ import session, {
 import dotenv from 'dotenv';
 
 import {
-    checkUserAccess
+    checkUserAccess,
+    checkUserFetchAccess
 } from "../middleware/accession.js";
 
 import {
@@ -57,9 +58,9 @@ router.get("/register/", renderRegistrar);
 
 router.post("/register/", submitRegistrar);
 
-router.get("/gallery/", checkUserAccess, fetchGallery);
+router.get("/gallery/", checkUserFetchAccess, fetchGallery);
 
-router.get("/chatHistory/:startIndex", checkUserAccess, fetchChatHistory);
+router.get("/chatHistory/:startIndex", checkUserFetchAccess, fetchChatHistory);
 
 router.get('*', pageNotfound);
 router.post('*', pageNotfound);
