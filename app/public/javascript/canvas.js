@@ -63,9 +63,10 @@ function setCanvasValues(e) {
     }
 }
 
-// TODO make this shit responsive.....!
-// canvas.height = 600;
-// canvas.width = 400;
+function  rescaleCanvas() {
+canvas.height =  window.innerHeight / 1.6;
+canvas.width =  window.innerWidth / 1.1;
+}
 
 const ctx = canvas.getContext('2d');
 let isPainting = false;
@@ -126,6 +127,8 @@ function uploadCanvasImg() {
     return;
 }
 
+rescaleCanvas()
+
 canvas.addEventListener('mousedown', startPainting);
 canvas.addEventListener('mousemove', paint);
 canvas.addEventListener('mouseup', finishPainting);
@@ -146,7 +149,7 @@ closeCanvasContainerSection.addEventListener("click", () => {
 });
 
 // TODO There has to be a better than to do this.... I want to set offSet whenever I  do something related to canvas...
-window.addEventListener("click", setCanvasOffSet, false)
-window.addEventListener("resize", setCanvasOffSet, false)
-window.addEventListener("scroll", setCanvasOffSet, false)
-window.addEventListener("load", setCanvasOffSet, false)
+window.addEventListener("click", setCanvasOffSet, false);
+window.addEventListener("scroll", setCanvasOffSet, false);
+window.addEventListener("load", setCanvasOffSet, false);
+window.addEventListener("resize", rescaleCanvas, false);
