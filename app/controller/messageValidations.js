@@ -4,9 +4,10 @@ import {
 } from '../utilities/functions.js';
 
 import {
-    prepareChatSaving} from "./savingHandling.js"
+    prepareChatSaving
+} from "./savingHandling.js"
 
-import dayjs from 'dayjs';
+import moment from 'moment-timezone';
 
 
 function validateMessage(message) {
@@ -49,7 +50,7 @@ function formatToChatObj(type, user, data, imgData, save) {
     if (save) {
         msgTemplate.save = save;
     }
-    msgTemplate.time = dayjs().format("DD/MM HH:mm:ss");
+    msgTemplate.time = moment().tz("Europe/Stockholm").format("DD/MM HH:mm:ss");
     return msgTemplate;
 }
 
