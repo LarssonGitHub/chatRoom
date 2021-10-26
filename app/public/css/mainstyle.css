@@ -1,0 +1,55 @@
+#myCanvas {
+    object-fit: contain;
+    border: 1px solid #000000;
+    cursor: pointer;
+    background-color: white;
+}
+
+#CanvasContainer {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 10%);
+    z-index: 99999;
+    background-color: lightgrey;
+}
+
+
+.active {
+    background-color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+#chatContainer {
+    height: 300px;
+    overflow: scroll;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+.botChatContainer {
+    background-color: lightcoral;
+}
+
+.clientChatContainer {
+    background-color: lightgreen;
+}
+
+.clientMsg {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+#msgImgInputRemove {
+    text-align: end;
+    color: red;
+}
+
+#msgImgInputRemove:hover {
+    cursor: pointer;
+    color: black;
+}

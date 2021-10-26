@@ -1,5 +1,5 @@
 const galleryContainer = document.getElementById("galleryContainer");
-const fetchGalleryBtn = document.getElementById("fetchGalleryBtn");
+const imagesToggleBtn = document.getElementById("imagesToggleBtn");
 const galleryTemplate = document.getElementById("galleryTemplate");
 
 function manageAndAppendToGalleryContainer(user, imgData) {
@@ -21,11 +21,11 @@ function loopGalleryArray(galleryArray) {
 }
 
 function fetchGallery() {
-    fetchGalleryBtn.disabled = true;
+    imagesToggleBtn.disabled = true;
     fetch('/gallery/')
         .then(response => response.json())
         .then(data => {
-            fetchGalleryBtn.disabled = false;
+            imagesToggleBtn.disabled = false;
             if (data.message) {
                 cleanContainer();
                 loopGalleryArray(data.message);
@@ -39,4 +39,4 @@ function fetchGallery() {
         });
 }
 
-fetchGalleryBtn.addEventListener("click", fetchGallery)
+imagesToggleBtn.addEventListener("click", fetchGallery)
