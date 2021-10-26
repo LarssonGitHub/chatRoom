@@ -8,9 +8,10 @@ async function resetDatabaseStatus() {
             userStatus: "offline",
             tempWebsocketId: false
         })
-        if (!updateUsers) {
-            throw "No users exist";
-        }
+        // This destroys the server if no users are registered:
+        // if (!updateUsers) {
+        //     throw "No users exist";
+        // }
         return updateUsers;
     } catch (err) {
         return Promise.reject(err);
@@ -20,9 +21,10 @@ async function resetDatabaseStatus() {
 async function getAllUsers() {
     try {
         const arrayOfAllUsers = await Users.find({});
-        if (!arrayOfAllUsers || arrayOfAllUsers.length === 0) {
-            throw "No users exist";
-        }
+        // This destroys the server if no users are registered:
+        // if (!arrayOfAllUsers || arrayOfAllUsers.length === 0) {
+        //     throw "No users exist";
+        // }
         return arrayOfAllUsers;
     } catch (err) {
         return Promise.reject(err);
