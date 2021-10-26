@@ -1,27 +1,33 @@
-const galleryContainer = document.getElementById("galleryContainer");
+const galleryList = document.getElementById("galleryList");
 const imagesToggleBtn = document.getElementById("imagesToggleBtn");
 const galleryTemplate = document.getElementById("galleryTemplate");
+const gallerySection = document.getElementById("gallerySection");
+const closeGallerySection = document.getElementById("closeGallerySection");
 
-function manageAndAppendToGalleryContainer(user, imgData) {
+function manageAndAppendTogalleryList(user, imgData) {
     let getTemplateHTML = document.importNode(galleryTemplate.content, true)
     getTemplateHTML.querySelector(".galleryImg").src = imgData
     getTemplateHTML.querySelector(".galleryUsername").textContent = user || "ERROR";
-    galleryContainer.append(getTemplateHTML);
+    galleryList.append(getTemplateHTML);
 }
 
 function cleanContainer() {
-    galleryContainer.textContent = "";
+    galleryList.textContent = "";
 }
 
 function loopGalleryArray(galleryArray) {
     galleryArray.forEach(image => {
-        const {user, imgData} = image
-        manageAndAppendToGalleryContainer(user, imgData)
+        const {
+            user,
+            imgData
+        } = image
+        manageAndAppendTogalleryList(user, imgData)
     });
 }
 
 function fetchGallery() {
     imagesToggleBtn.disabled = true;
+    hideElement(gallerySection)
     fetch('/gallery/')
         .then(response => response.json())
         .then(data => {
@@ -29,7 +35,7 @@ function fetchGallery() {
             if (data.message) {
                 cleanContainer();
                 loopGalleryArray(data.message);
-              }
+            }
             if (data.err) {
                 throw data.err;
             }
@@ -40,3 +46,6 @@ function fetchGallery() {
 }
 
 imagesToggleBtn.addEventListener("click", fetchGallery)
+closeGallerySection.addEventListener("click", () => {
+    hideElement(gallerySection)
+})

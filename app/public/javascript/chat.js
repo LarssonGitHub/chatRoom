@@ -9,10 +9,15 @@ const msgImgInputRemove = document.getElementById("msgImgInputRemove");
 const ListOfClients = document.getElementById("ListOfClients");
 const msgImgInput = document.getElementById("msgImgInput");
 const loadPreChatBtn = document.getElementById("loadPreChatBtn");
+const usersOnlineSection = document.getElementById("usersOnlineSection");
+const closeUsersOnlineSection = document.getElementById("closeUsersOnlineSection");
+const usersOnlineToggleBtn = document.getElementById("usersOnlineToggleBtn");
 
 let paginationIntegerForChat = 0;
 
-function displayListOfClientsNamesOnline({data}) {
+function displayListOfClientsNamesOnline({
+    data
+}) {
     ListOfClients.textContent = "";
     data.forEach(userName => {
         let getTemplateHTML = document.importNode(clientsOnlineTemplate.content, true)
@@ -21,9 +26,15 @@ function displayListOfClientsNamesOnline({data}) {
     })
 }
 
-function manageChatTemplate({type, user, data, time, imgData}) {
+function manageChatTemplate({
+    type,
+    user,
+    data,
+    time,
+    imgData
+}) {
     let getTemplateHTML = document.importNode(chatTemplate.content, true)
-    getTemplateHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" || type ===  "errorMsg" ? "botChatContainer" : "clientChatContainer");
+    getTemplateHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" || type === "errorMsg" ? "botChatContainer" : "clientChatContainer");
     getTemplateHTML.querySelector(".clientName").textContent = user || "ERROR";
     getTemplateHTML.querySelector(".clientMsg").textContent = data || "ERROR";
     getTemplateHTML.querySelector(".clientTime").textContent = time || "ERROR";
@@ -41,9 +52,9 @@ function manageChatTemplate({type, user, data, time, imgData}) {
 
 function manageAndAppendToChatContainerTop(chatHistoryObjects) {
     chatHistoryObjects.forEach(chatMessage => {
-    const chatDataSorted = manageChatTemplate(chatMessage);
-    chatContainer.insertBefore(chatDataSorted, chatContainer.childNodes[2]);
-    // chatContainer.prepend(chatDataSorted);
+        const chatDataSorted = manageChatTemplate(chatMessage);
+        chatContainer.insertBefore(chatDataSorted, chatContainer.childNodes[2]);
+        // chatContainer.prepend(chatDataSorted);
     });
 }
 
@@ -112,24 +123,30 @@ function sendChatMsgToServer(e) {
 }
 
 function fetchPreviousChat() {
-loadPreChatBtn.disabled = true;
-fetch(`/chatHistory/${paginationIntegerForChat}`)
-    .then(response => response.json())
-    .then(data => {
-        loadPreChatBtn.disabled = false;
-        if (data.message) {
-            paginationIntegerForChat += 15;
-            manageAndAppendToChatContainerTop(data.message);
-          }
-        if (data.err) {
-            throw data.err;
-        }
-    }).catch((err) => {
-        manageErrorAndAppendToPopupBox(err)
-    });
-   
+    loadPreChatBtn.disabled = true;
+    fetch(`/chatHistory/${paginationIntegerForChat}`)
+        .then(response => response.json())
+        .then(data => {
+            loadPreChatBtn.disabled = false;
+            if (data.message) {
+                paginationIntegerForChat += 15;
+                manageAndAppendToChatContainerTop(data.message);
+            }
+            if (data.err) {
+                throw data.err;
+            }
+        }).catch((err) => {
+            manageErrorAndAppendToPopupBox(err)
+        });
+
 }
 
 loadPreChatBtn.addEventListener("click", fetchPreviousChat)
 typingContainer.addEventListener("keydown", sendChatMsgToServer);
 msgImgInputRemove.addEventListener("click", removeImgFromTypingContainer)
+usersOnlineToggleBtn.addEventListener("click", () => {
+    hideElement(usersOnlineSection)
+})
+closeUsersOnlineSection.addEventListener("click", () => {
+    hideElement(usersOnlineSection)
+})

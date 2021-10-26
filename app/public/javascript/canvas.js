@@ -7,8 +7,9 @@ const canvasErase = document.getElementById('canvasErase');
 const canvasDownload = document.getElementById('canvasDownload');
 const canvasUpload = document.getElementById("canvasUpload");
 const cleanCanvas = document.getElementById("cleanCanvas");
-const toggleCanvas = document.getElementById("toggleCanvas")
 const saveToDatabaseBtn = document.getElementById("saveToDatabaseBtn");
+const paintToggleBtn = document.getElementById("paintToggleBtn");
+const closeCanvasContainerSection = document.getElementById("closeCanvasContainerSection");
 
 let saveToDatabase = null;
 let binaryCanvasValue = null;
@@ -134,8 +135,8 @@ canvasErase.addEventListener('click', setCanvasValues);
 canvasDownload.addEventListener('click', downloadCanvasImg);
 canvasUpload.addEventListener("click", uploadCanvasImg);
 cleanCanvas.addEventListener("click", cleanAllCanvas);
-toggleCanvas.addEventListener("click", () => hideElement(CanvasContainer));
-
+paintToggleBtn.addEventListener("click", () => hideElement(CanvasContainer));
+closeCanvasContainerSection.addEventListener("click", () => hideElement(CanvasContainer));
 
 // TODO There has to be a better than to do this.... I want to set offSet whenever I  do something related to canvas...
 window.addEventListener("click", setCanvasOffSet, false)
