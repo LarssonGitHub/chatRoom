@@ -22,7 +22,7 @@ body {
 }
 
 #toolbar {
-    font-size: 40px;
+    font-size: 30px;
 }
 
 .hidden {
@@ -72,8 +72,9 @@ body {
 }
 
 #content-wrap {
-    padding-bottom: 2.5rem;    /* Footer height */
-  }
+    padding-bottom: 2.5rem;
+    /* Footer height */
+}
 
 #msgImgInputRemove {
     text-align: end;
@@ -81,6 +82,7 @@ body {
 
 .chatTemplateContainer {
     margin: 0.2rem 0;
+    padding: 0 1rem;
 }
 
 .off-canvas {
@@ -100,6 +102,25 @@ body {
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.chatHeading {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0.5rem 0;
+}
+
+.chatContent {
+    margin: 0;
+}
+
+.chatContent img {
+    width: 100%;
+    max-width: 400px;
 }
 
 .closeSectionMark {
@@ -126,5 +147,5 @@ img {
 }
 
 #galleryList img {
-width: 100%;
+    width: 100%;
 }

@@ -1,9 +1,13 @@
  <template id="chatTemplate">
      <section class="chatTemplateContainer">
-         <b class="clientName"></b>
-         <p class="clientMsg"></p>
-         <span class="clientTime"></span>
-         <img class="clientImg hidden">
+         <div class="chatHeading">
+             <b class="clientName"></b>
+             <span class="clientTime"></span>
+         </div>
+         <div class="chatContent">
+             <img class="clientImg hidden">
+             <p class="clientMsg"></p>
+         </div>
      </section>
  </template>
 
@@ -11,7 +15,7 @@
      <div>
          <img class="galleryImg" width="200">
          <p>Submitted by: <b><span class="galleryUsername"></span></b></p>
-     <div>
+         <div>
  </template>
 
  <template id="clientsOnlineTemplate">
