@@ -14,14 +14,18 @@
 
 <body>
 
-    <%- include('../partials/header.ejs') %>
-    
-    <%- include('../partials/gallery.ejs') %>
+    <!-- This makes sure the footer is separated from the main page -->
+    <div id="content-wrap">
 
-    <%- include('../partials/chat.ejs') %>
+        <%- include('../partials/header.ejs') %>
 
-    <%- include('../partials/canvas.ejs') %>
+        <%- include('../partials/gallery.ejs') %>
 
+        <%- include('../partials/chat.ejs') %>
+
+        <%- include('../partials/canvas.ejs') %>
+
+    </div>
 
     <%- include('../partials/toolbar.ejs') %>
 

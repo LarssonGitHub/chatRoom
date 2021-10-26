@@ -112,6 +112,7 @@ function downloadCanvasImg() {
 
 // TODO... Remember to NOT save this and post it as toDataURL.. Save it to server
 function uploadCanvasImg() {
+    activeElement(paintToggleBtn)
     if (confirm("Do you want to upload this pic?")) {
         CanvasContainer.classList.toggle("hidden");
         checkIfTypingImgShouldHidden()

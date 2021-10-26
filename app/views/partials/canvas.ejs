@@ -1,6 +1,8 @@
-<section id="CanvasContainer" class="hidden tempFixed">
-    <div id="closeCanvasContainerSection">X</div>
-    <h2>Draw window</h2>
+<section id="CanvasContainer" class="hidden tempFixed off-canvas">
+    <div class="closeSection">
+        <h2>Draw! Draw!</h2>
+        <span id="closeCanvasContainerSection" class="closeSectionMark">X</span>
+    </div>
     <canvas id="myCanvas"></canvas>
     <div id="canvasToolBar">
         <input type="color" name="canvasColorPicker" id="canvasColorPicker">
@@ -15,7 +17,7 @@
         <button id="canvasUpload">Upload!</button>
         <button id="cleanCanvas">Start over!</button>
         <label for="accept">
-            <input type="checkbox" id="saveToDatabaseBtn" name="saveToDatabaseBtn"> Save image to database! 
-         </label>
+            <input type="checkbox" id="saveToDatabaseBtn" name="saveToDatabaseBtn"> Save image to database!
+        </label>
     </div>
 </section>
