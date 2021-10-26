@@ -149,3 +149,26 @@ img {
 #galleryList img {
     width: 100%;
 }
+
+#canvasToolBar {
+    background-color: darkgray;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+#canvasLowerBar, #canvasUpperBar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.5rem;
+}
+
+#canvasLowerBar {
+    font-size: 30px;
+}

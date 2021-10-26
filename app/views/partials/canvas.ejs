@@ -3,22 +3,27 @@
         <h2>Draw! Draw!</h2>
         <span id="closeCanvasContainerSection" class="closeSectionMark">X</span>
     </div>
-    <p>Please, do note that if you resize your window, any drawing made will be reset!</p>
+    <p>Please, do note that if you resize, your picture will reset</p>
+    <label for="accept">
+        <input type="checkbox" id="saveToDatabaseBtn" name="saveToDatabaseBtn"> Save image to database!
+    </label>
     <canvas id="myCanvas"></canvas>
+
     <div id="canvasToolBar">
-        <input type="color" name="canvasColorPicker" id="canvasColorPicker">
-        <input type="range" min="1" max="30" value="5" name="canvasStrokeSize" id="canvasStrokeSize">
-        <select name="canvasFigure" id="canvasFigure">
-            <option value="square" selected>Square</option>
-            <option value="round">Circle</option>
-            <option value="butt">Brush</option>
-        </select>
-        <button id="canvasErase">Erase!</button>
-        <button id="canvasDownload">Download!</button>
-        <button id="canvasUpload">Upload!</button>
-        <button id="cleanCanvas">Start over!</button>
-        <label for="accept">
-            <input type="checkbox" id="saveToDatabaseBtn" name="saveToDatabaseBtn"> Save image to database!
-        </label>
+        <div id="canvasUpperBar">
+            <input type="color" name="canvasColorPicker" id="canvasColorPicker">
+            <input type="range" min="1" max="30" value="5" name="canvasStrokeSize" id="canvasStrokeSize">
+            <select name="canvasFigure" id="canvasFigure">
+                <option value="square" selected>Square</option>
+                <option value="round">Circle</option>
+                <option value="butt">Brush</option>
+            </select>
+        </div>
+        <div id="canvasLowerBar">
+            <i id="canvasErase" class="fa fa-eraser" aria-hidden="true"></i>
+            <i id="canvasDownload" class="fa fa-download" aria-hidden="true"></i>
+            <i id="canvasUpload" class="fa fa-upload" aria-hidden="true"></i>
+            <i id="cleanCanvas" class="fa fa-trash" aria-hidden="true"></i>
+        </div>
     </div>
 </section>

@@ -63,9 +63,9 @@ function setCanvasValues(e) {
     }
 }
 
-function  rescaleCanvas() {
-canvas.height =  window.innerHeight / 1.6;
-canvas.width =  window.innerWidth / 1.1;
+function rescaleCanvas() {
+    canvas.height = window.innerHeight / 1.7;
+    canvas.width = window.innerWidth / 1.1;
 }
 
 const ctx = canvas.getContext('2d');
@@ -135,7 +135,10 @@ canvas.addEventListener('mouseup', finishPainting);
 canvasStrokeSize.addEventListener('mouseup', setCanvasValues);
 canvasColorPicker.addEventListener('change', setCanvasValues);
 canvasFigure.addEventListener('change', setCanvasValues);
-canvasErase.addEventListener('click', setCanvasValues);
+canvasErase.addEventListener('click', (e) => {
+    setCanvasValues(e);
+    activeElement(canvasErase);
+});
 canvasDownload.addEventListener('click', downloadCanvasImg);
 canvasUpload.addEventListener("click", uploadCanvasImg);
 cleanCanvas.addEventListener("click", cleanAllCanvas);
@@ -152,4 +155,7 @@ closeCanvasContainerSection.addEventListener("click", () => {
 window.addEventListener("click", setCanvasOffSet, false);
 window.addEventListener("scroll", setCanvasOffSet, false);
 window.addEventListener("load", setCanvasOffSet, false);
-window.addEventListener("resize", rescaleCanvas, false);
+window.addEventListener("resize", () => {
+    setCanvasOffSet()
+    rescaleCanvas()
+}, false);
