@@ -5,8 +5,9 @@
     background-color: white;
 }
 
-#CanvasContainer {
+.tempFixed {
     position: fixed;
+    width: 100%;
     top: 10%;
     left: 50%;
     transform: translate(-50%, 10%);
@@ -14,9 +15,18 @@
     background-color: lightgrey;
 }
 
+.tempGallery {
+    height: 400px;
+    overflow: scroll;
+}
 
-.active {
+
+.activeBtn {
     background-color: red;
+}
+
+#toolbar {
+    font-size: 40px;
 }
 
 .hidden {
@@ -53,3 +63,4 @@
     cursor: pointer;
     color: black;
 }
+

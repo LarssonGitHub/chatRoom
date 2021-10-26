@@ -146,7 +146,9 @@ typingContainer.addEventListener("keydown", sendChatMsgToServer);
 msgImgInputRemove.addEventListener("click", removeImgFromTypingContainer)
 usersOnlineToggleBtn.addEventListener("click", () => {
     hideElement(usersOnlineSection)
+    activeElement(usersOnlineToggleBtn);
 })
 closeUsersOnlineSection.addEventListener("click", () => {
     hideElement(usersOnlineSection)
+    activeElement(usersOnlineToggleBtn);
 })

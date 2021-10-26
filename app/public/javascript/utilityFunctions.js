@@ -4,7 +4,11 @@ function manageErrorAndAppendToPopupBox(err) {
 }
 
 function hideElement(element) {
-    element.classList.toggle("hidden")
+    element.classList.toggle("hidden");
+}
+
+function activeElement(element) {
+    element.classList.toggle("activeBtn");
 }
 
 function parseJson(data) {

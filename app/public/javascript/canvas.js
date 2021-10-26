@@ -135,8 +135,14 @@ canvasErase.addEventListener('click', setCanvasValues);
 canvasDownload.addEventListener('click', downloadCanvasImg);
 canvasUpload.addEventListener("click", uploadCanvasImg);
 cleanCanvas.addEventListener("click", cleanAllCanvas);
-paintToggleBtn.addEventListener("click", () => hideElement(CanvasContainer));
-closeCanvasContainerSection.addEventListener("click", () => hideElement(CanvasContainer));
+paintToggleBtn.addEventListener("click", () => {
+    hideElement(CanvasContainer);
+    activeElement(paintToggleBtn);
+});
+closeCanvasContainerSection.addEventListener("click", () => {
+    hideElement(CanvasContainer);
+    activeElement(paintToggleBtn);
+});
 
 // TODO There has to be a better than to do this.... I want to set offSet whenever I  do something related to canvas...
 window.addEventListener("click", setCanvasOffSet, false)
