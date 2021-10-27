@@ -8,8 +8,9 @@ import dotenv from 'dotenv';
 
 import {
     checkUserAccess,
-    checkUserFetchAccess
+    denyUserRoute
 } from "../middleware/accession.js";
+
 
 import {
     renderIndex,
@@ -19,7 +20,6 @@ import {
     submitRegistrar,
     logout,
     fetchGallery,
-    pageNotfound,
     fetchChatHistory
 } from "../controller/routeController.js"
 
@@ -46,26 +46,21 @@ router.use(session({
     },
 }));
 
-router.get("/", checkUserAccess, renderIndex);
+router.get("/", checkUserAccess, denyUserRoute, renderIndex);
 
 router.get('/logout', checkUserAccess, logout);
 
-router.get("/login/", renderLogin);
+router.get("/login/", denyUserRoute, renderLogin);
 
-router.post("/login/", submitLogin);
+router.post("/login/", denyUserRoute, submitLogin);
 
-router.get("/register/", renderRegistrar);
+router.get("/register/", denyUserRoute, renderRegistrar);
 
-router.post("/register/", submitRegistrar);
+router.post("/register/", denyUserRoute, submitRegistrar);
 
-router.get("/gallery/", checkUserFetchAccess, fetchGallery);
+router.get("/gallery/", fetchGallery);
 
-router.get("/chatHistory/:startIndex", checkUserFetchAccess, fetchChatHistory);
-
-router.get('*', pageNotfound);
-router.post('*', pageNotfound);
-router.put('*', pageNotfound);
-router.delete('*', pageNotfound);
+router.get("/chatHistory/:startIndex", fetchChatHistory);
 
 export {
     router,

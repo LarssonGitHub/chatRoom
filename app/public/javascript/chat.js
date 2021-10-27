@@ -1,3 +1,8 @@
+window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    e.returnValue = '';
+});
+
 const clientsOnline = document.getElementById('clientsOnline');
 const chatContainer = document.getElementById('chatContainer');
 const chatTemplate = document.getElementById('chatTemplate');

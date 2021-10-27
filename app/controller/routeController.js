@@ -28,13 +28,10 @@ const {
 let tempIdBecauseSessionHatesWebsockets = 0;
 
 async function renderIndex(req, res, next) {
+    req.session.userHasLoggedIn = true;
     try {
-        // Temp fix in order for the page to not reload when using the html template tag
-        if(req.session.hasLoggedIn) {
-            res.status(200).render('pages/index');
-            return;
-        }
         const UserStatsSuccess = await setIdAndStatusForWebsocket(req.session.user);
+        console.log("sucsess",UserStatsSuccess);
         if (!UserStatsSuccess) {
             throw "couldn't set new stats"
         }
@@ -136,10 +133,15 @@ async function fetchGallery(req, res, next) {
     }
 }
 
-function pageNotfound(req, res, next) {
-    console.log("Don't try to go to a side that doesn't exist!");
-    res.status(200).redirect("/")
-}
+// Unused routes, created a conflict which reset the middleware, aka userHasLoggedIn
+// function pageNotfound(req, res, next) {
+//     console.log("Don't try to go to a side that doesn't exist!");
+//     res.status(200).redirect("/")
+// }
+// router.get('*', pageNotfound);
+// router.post('*', pageNotfound);
+// router.put('*', pageNotfound);
+// router.delete('*', pageNotfound);
 
 async function fetchChatHistory(req, res) {
     try {
@@ -168,7 +170,6 @@ export {
     submitRegistrar,
     logout,
     fetchGallery,
-    pageNotfound,
     fetchChatHistory,
     tempIdBecauseSessionHatesWebsockets
 }
