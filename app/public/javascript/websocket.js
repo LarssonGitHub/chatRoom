@@ -46,6 +46,10 @@ function sendMsgToWebsocket(data) {
 
 websocket.addEventListener("message", (event) => {
     const parsedData = parseJson(event.data);
+    
+    // easter egg check!
+    // easterEggIsActivated(parsedData.data)
+
     sortTypeOfReceivedMsg(parsedData)
 })
 
