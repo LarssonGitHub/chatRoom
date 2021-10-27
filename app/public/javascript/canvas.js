@@ -129,9 +129,23 @@ function uploadCanvasImg() {
 
 rescaleCanvas()
 
+// Enables touch control! 
+function touchstart(event) { startPainting(event.touches[0]) }
+function touchmove(event) { paint(event.touches[0]); event.preventDefault(); }
+function touchend(event) { finishPainting(event.changedTouches[0]) }
+
+canvas.addEventListener('touchstart', touchstart, false);
+canvas.addEventListener('touchmove', touchmove, false);
+canvas.addEventListener('touchend', touchend, false);        
+
 canvas.addEventListener('mousedown', startPainting);
 canvas.addEventListener('mousemove', paint);
 canvas.addEventListener('mouseup', finishPainting);
+
+// Enables touch control! 
+function touchChooseStroke(event) { setCanvasValues(event.changedTouches[0]) }
+canvasStrokeSize.addEventListener('touchend', touchChooseStroke, false);   
+
 canvasStrokeSize.addEventListener('mouseup', setCanvasValues);
 canvasColorPicker.addEventListener('change', setCanvasValues);
 canvasFigure.addEventListener('change', setCanvasValues);

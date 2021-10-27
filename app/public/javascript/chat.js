@@ -70,7 +70,6 @@ function chatScrolling() {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-
 function displayNumberOfClientsOnline({
     data
 }) {
@@ -114,7 +113,7 @@ let tempClientUserName = "tempNickname"
 
 function sendChatMsgToServer(e) {
     let chatValue = chatTextarea.value
-    if ((e.code === "Enter" && !e.shiftKey) && chatValue.length > 0) {
+    if ((e.which === 13 && !e.shiftKey) && chatValue.length > 0) {
         e.preventDefault()
         let constructedMsg = checkIfImgOrRegularChatObject(chatValue);
         sendMsgToWebsocket(constructedMsg);
