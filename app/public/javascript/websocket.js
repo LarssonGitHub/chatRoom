@@ -1,5 +1,9 @@
 const websocket = new WebSocket("ws://localhost:8999");
 
+// To make it work with heroku.
+// var HOST = location.origin.replace(/^http/, 'ws')
+// const websocket = new WebSocket(HOST);
+
 function sortTargetOfStatusMsg(msg) {
     switch (msg.target) {
         case "clientInteger":
