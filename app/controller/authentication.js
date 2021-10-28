@@ -4,6 +4,8 @@ import {
     getAllUsers
 } from "../models/userModel.js";
 
+// This array is needed to make sure websocket id is set correctly.
+let usersInTempMemory = [];
 
 async function checkIfUserAlreadyExist(newUsername) {
     const users = await getAllUsers();
@@ -48,4 +50,5 @@ async function loginUser(userName, userPassword) {
 export {
     registerNewUser,
     loginUser,
+    usersInTempMemory
 }

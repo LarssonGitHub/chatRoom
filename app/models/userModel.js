@@ -2,6 +2,11 @@ import {
     Users,
 } from "./usersSchema.js"
 
+import {
+    usersInTempMemory
+} from "../controller/authentication.js"
+
+
 async function resetDatabaseStatus() {
     try {
         const updateUsers = await Users.updateMany({}, {
@@ -77,53 +82,60 @@ async function checkForUser(userName, userPassword) {
 
 async function getUser(wsID) {
     try {
-        const userObject = await Users.findById(wsID);
+        const userObject = await Users.find({tempWebsocketId: wsID});
+        if (userObject.length === 0) {
+            throw "couldn't find user..";
+        }
         return userObject;
     } catch (err) {
-        console.log(err);
         return Promise.reject(err);
     }
 }
 
-async function setIdAndStatusForWebsocket({
-    _id
-}) {
+async function setIdAndStatusForWebsocket(wsID) {
     try {
-        const updateUser = await Users.findByIdAndUpdate(_id, {
+        const userIdFromArray = usersInTempMemory[0];
+        usersInTempMemory.shift();
+        const updateUser = await Users.findByIdAndUpdate(userIdFromArray, {
             userStatus: "online",
-            tempWebsocketId: _id
+            tempWebsocketId: wsID,
         }, {
             new: true
         });
-
         if (!updateUser) {
             throw "Something went wrong";
         }
-        console.log("userStats put to online!");
         return updateUser;
     } catch (err) {
         console.log("use doesn't exist!");
         console.log(err);
-        return Promise.reject(err);
+        return "err"
     }
 }
 
-async function removeIdAndStatusForWebsocket(id) {
+async function removeIdAndStatusForWebsocket(wsId) {
     try {
-        const updateUser = await Users.findByIdAndUpdate(id, {
+        const currentUserObject = await getUser(wsId);
+
+        if (!currentUserObject.length === 0|| !currentUserObject[0]._id) {
+            throw "something went wrong when searching for user id!";
+        }
+
+        const updateUser = await  Users.findByIdAndUpdate(currentUserObject[0]._id, {
             userStatus: "offline",
             tempWebsocketId: false
         }, {
             new: true
         })
+
         if (!updateUser) {
             throw "Something went wrong";
         }
-        console.log("in the model", updateUser);
+
         return updateUser;
     } catch (err) {
         console.log(err);
-        return Promise.reject(err);
+        return false
     }
 }
 
@@ -135,7 +147,6 @@ async function getUsersOnline() {
         if (!arrayOfUsersOnline) {
             throw "Something went wrong";
         }
-        console.log("right now this are online", arrayOfUsersOnline);
         return arrayOfUsersOnline;
     } catch (err) {
         console.log("user doesn't exist!");

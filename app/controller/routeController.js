@@ -1,5 +1,4 @@
 import {
-    setIdAndStatusForWebsocket,
     removeIdAndStatusForWebsocket
 } from "../models/userModel.js";
 
@@ -14,7 +13,8 @@ import {
 
 import {
     registerNewUser,
-    loginUser
+    loginUser,
+    usersInTempMemory
 } from "../controller/authentication.js";
 
 import dotenv from 'dotenv';
@@ -25,19 +25,9 @@ const {
     SESSION_NAME,
 } = process.env;
 
-let tempIdBecauseSessionHatesWebsockets = 0;
-
 async function renderIndex(req, res, next) {
-    req.session.userHasLoggedIn = true;
     try {
-        const UserStatsSuccess = await setIdAndStatusForWebsocket(req.session.user);
-        console.log("sucsess",UserStatsSuccess);
-        if (!UserStatsSuccess) {
-            throw "couldn't set new stats"
-        }
-        req.session.userId = UserStatsSuccess._id;
-        req.session.hasLoggedIn = true;
-        tempIdBecauseSessionHatesWebsockets = UserStatsSuccess.tempWebsocketId;
+        req.session.userHasLoggedIn = true;
         res.status(200).render('pages/index');
     } catch (err) {
         const errMessage = errHasSensitiveInfo(err);
@@ -52,7 +42,6 @@ function renderLogin(req, res, next) {
 }
 
 function logout(req, res, next) {
-    removeIdAndStatusForWebsocket(req.session.userId);
     req.session.destroy((err) => {
         if (err) {
             console.log(err);
@@ -73,6 +62,7 @@ async function submitLogin(req, res, next) {
         } = req.body;
         const userIsValidated = await loginUser(userName, userPassword);
         if (userIsValidated) {
+            usersInTempMemory.push(userIsValidated._id)
             req.session.userHasAccess = true;
             req.session.user = userIsValidated;
             res.status(200).json({
@@ -171,5 +161,4 @@ export {
     logout,
     fetchGallery,
     fetchChatHistory,
-    tempIdBecauseSessionHatesWebsockets
 }

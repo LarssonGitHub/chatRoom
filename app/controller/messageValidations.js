@@ -10,8 +10,8 @@ import {
 import moment from 'moment-timezone';
 
 
-function validateMessage(message) {
-    const validatedMessage = validateTypeOfOutgoingMsg(message);
+async function validateMessage(message) {
+    const validatedMessage = await validateTypeOfOutgoingMsg(message);
     if (validatedMessage.err === "ERROR") {
         const createNewErrorMessage = formatToChatObj("botMsg", "Mr Bot", `${validatedMessage.msg}`)
         return validateTypeOfOutgoingMsg(createNewErrorMessage)
@@ -94,12 +94,12 @@ async function validateTypeOfOutgoingMsg(dataObj) {
             case "status":
                 return stringifyJson(dataObj);
             case "errorMsg":
-                console.log("error");
                 return stringifyJson(dataObj);
             default:
                 throw "ERROR type problem!";
         }
     } catch (err) {
+        console.log("NAAAADA");
         console.log("hello from outgoing...", err);
         return {
             err: "ERROR",
