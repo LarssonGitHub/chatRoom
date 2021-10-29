@@ -140,6 +140,7 @@ function fetchPreviousChat() {
                 throw data.err;
             }
         }).catch((err) => {
+            console.log(err, "31");
             manageErrorAndAppendToPopupBox(err)
         });
 

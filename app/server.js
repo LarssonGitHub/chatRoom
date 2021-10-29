@@ -16,14 +16,17 @@ import {
 
 import {
     botWelcomeMsg,
-    botGoodbyeMsg,
     botErrorPrivateMsg,
-    handleIncomingClientData,
     handleOutgoingDataToClient,
     botErrorPublicMsg,
     clientSize,
-    clientList
+    clientList,
+    botGoodbyeMsg
 } from './controller/messageHandling.js';
+
+import {
+    validateTypeOfIncomingMsg
+} from "./controller/messageValidations.js"
 
 import {
     resetDatabaseUsers,
@@ -51,6 +54,7 @@ mongoose.connect(connectionStream, {
     console.log('Connection to DB chat Successfully!');
 }).catch(err => {
     console.log('Connection to DB Failed', err);
+    console.log(err, "38");
     process.exit()
 })
 
@@ -68,76 +72,72 @@ app.set('view engine', 'ejs');
 
 wss.on('connection', async (ws, req) => {
     try {
-
         console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
         ws.id = uuidv4();
         console.log("new user set as online!", await setIdAndStatusForWebsocket(ws.id));
         broadcast(await botWelcomeMsg(ws.id))
         broadcast(await clientSize())
         broadcast(await clientList(ws.id))
-
-        ws.on("close", async () => {
-            try {
-                console.log("old user set as offline!", await removeIdAndStatusForWebsocket(ws.id));
-                broadcast(await clientSize())
-                broadcast(await clientList(ws.id))
-            } catch (err) {
-                broadcast(await botErrorPublicMsg(err));
-            }
-        });
-
-        ws.on("message", async (data) => {
-            
-            let validatedData = await handleIncomingClientData(data, ws.id);
-            console.log(data);
-            if (validatedData.err === "ERROR") {
-                broadcastToSingleClient(await botErrorPrivateMsg(ws.id, validatedData.msg), ws.id);
-                return;
-            }
-            let handledOutgoingData = await handleOutgoingDataToClient(validatedData, ws.id);
-            if (handledOutgoingData.err === "ERROR") {
-                broadcastToSingleClient(await botErrorPrivateMsg(ws.id, handledOutgoingData.msg), ws.id);
-                return;
-            }
-            broadcast(handledOutgoingData);
-
-        })
-
     } catch (err) {
-        if (err === "updateUserErr") {
-            ws.terminate("User has been terminated", 500);
-            return;
+        if (err === "userDidntUpdate") {
+        ws.terminate("User has been terminated because there is a major error, and as to not break the server, user is removed", 500);
         }
         broadcast(await botErrorPublicMsg(err));
     }
+    ws.on("close", async () => {
+        try {
+            broadcast(await botGoodbyeMsg(ws.id))
+            console.log("old user set as offline!", await removeIdAndStatusForWebsocket(ws.id));
+            broadcast(await clientSize())
+            broadcast(await clientList(ws.id))
+        } catch (err) {
+            console.log(err, "1");
+            broadcast(await botErrorPublicMsg(err));
+        }
+    });
+    ws.on("message", async (incomingData) => {
+        try {
+            console.log(incomingData, "incoming data");
+            const validatedData = await validateTypeOfIncomingMsg(incomingData);
+            broadcast(await handleOutgoingDataToClient(validatedData, ws.id));
+        } catch (err) {
+            console.log(err, "2");
+            try {
+                broadcastToSingleClient(await botErrorPrivateMsg(ws.id, err), ws.id);
+            } catch (err) {
+                console.log(err, "37");;
+                ws.terminate("User has been terminated for reasons related to his postings, because a massive error has occurred", 500);
+            }
+        }
+    })
 });
 
- function broadcastButExclude(data, someClient) {
-        wss.clients.forEach(function each(client) {
-            if (client.readyState === WebSocket.OPEN) {
-                if (client !== someClient) {
-                    client.send(data);
-                }
+function broadcastButExclude(data, someClient) {
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+            if (client !== someClient) {
+                client.send(data);
             }
-        });
+        }
+    });
 }
 
 function broadcastToSingleClient(data, specificUserId) {
-        wss.clients.forEach(function each(client) {
-            if (client.readyState === WebSocket.OPEN) {
-                if (client.id === specificUserId) {
-                    client.send(data);
-                }
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+            if (client.id === specificUserId) {
+                client.send(data);
             }
-        });
+        }
+    });
 }
 
 function broadcast(data) {
-        wss.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(data)
-            }
-        })
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(data)
+        }
+    })
 }
 
 server.listen(process.env.PORT || PORT, () => {

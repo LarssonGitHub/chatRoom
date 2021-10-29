@@ -14,7 +14,7 @@ function submitRegisterForm(e) {
                 throw data.err;
             }
         }).catch(err => {
-            console.log("hello from err!", err);
+            console.log(err, "34");
             manageErrorAndAppendToPopupBox(err)
         });
 }

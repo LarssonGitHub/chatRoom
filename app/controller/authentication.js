@@ -28,7 +28,7 @@ async function registerNewUser(userName, userPassword) {
         }
         return true;
     } catch (err) {
-        console.log(err);
+        console.log(err, "36");
         return Promise.reject(err);
     }
 }
@@ -41,7 +41,7 @@ async function loginUser(userName, userPassword) {
         }
         throw "something went wrong on our end when checking for users"
     } catch (err) {
-        console.log(err);
+        console.log(err, "35");
         return Promise.reject(err);
     }
 

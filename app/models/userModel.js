@@ -19,6 +19,7 @@ async function resetDatabaseStatus() {
         // }
         return updateUsers;
     } catch (err) {
+        console.log(err, "22");
         return Promise.reject(err);
     }
 }
@@ -32,6 +33,7 @@ async function getAllUsers() {
         // }
         return arrayOfAllUsers;
     } catch (err) {
+        console.log(err, "23");
         return Promise.reject(err);
     }
 }
@@ -41,7 +43,7 @@ async function resetDatabaseUsers() {
         await resetDatabaseStatus()
         console.log("All users stats reset!");
     } catch (err) {
-        console.log(err);
+        console.log(err, "24");
         console.log("Something Went wrong when resetting database!");
     }
 }
@@ -60,6 +62,7 @@ async function addNewUser(userName, userPassword) {
         }
         throw "Something went wrong when saving user"
     } catch (err) {
+        console.log(err, "25");
         return Promise.reject(err);
     }
 }
@@ -75,7 +78,7 @@ async function checkForUser(userName, userPassword) {
         }
         return userExist;
     } catch (err) {
-        console.log(err);
+        console.log(err, "26");
         return Promise.reject(err);
     }
 }
@@ -90,6 +93,7 @@ async function getUser(wsID) {
         }
         return userObject;
     } catch (err) {
+        console.log(err, "27");
         return Promise.reject(err);
     }
 }
@@ -118,8 +122,8 @@ async function setIdAndStatusForWebsocket(wsID) {
         }
         return updateUser;
     } catch (err) {
-        console.log(err);
-        return Promise.reject("updateUserErr");
+        console.log(err, "28");
+        return Promise.reject("userDidntUpdate");
     }
 }
 
@@ -144,7 +148,7 @@ async function removeIdAndStatusForWebsocket(wsId) {
 
         return updateUser;
     } catch (err) {
-        console.log(err);
+        console.log(err, "29");
         return Promise.reject("One user wasn't correctly logged out so the list of users online may not bee accurate. However, the app should still work, so chat away!");
     }
 }
@@ -159,8 +163,7 @@ async function getUsersOnline() {
         }
         return arrayOfUsersOnline;
     } catch (err) {
-        console.log("user doesn't exist!");
-        console.log(err);
+        console.log(err, "30");
         return Promise.reject(err);
     }
 }

@@ -30,6 +30,7 @@ async function renderIndex(req, res, next) {
         req.session.userHasLoggedIn = true;
         res.status(200).render('pages/index');
     } catch (err) {
+        console.log(err, "14");
         const errMessage = errHasSensitiveInfo(err);
         res.status(404).json({
             err: errMessage,
@@ -44,7 +45,7 @@ function renderLogin(req, res, next) {
 function logout(req, res, next) {
     req.session.destroy((err) => {
         if (err) {
-            console.log(err);
+            console.log(err, "from route controller");
             res.status(404).redirect('/')
             return
         }
@@ -73,6 +74,7 @@ async function submitLogin(req, res, next) {
         }
         throw "Something went... Kind of wrong, not sure what but it did!"
     } catch (err) {
+        console.log(err, "15");
         const errMessage = errHasSensitiveInfo(err);
         res.status(404).json({
             err: errMessage,
@@ -100,6 +102,7 @@ async function submitRegistrar(req, res, next) {
         }
         throw "Something went wrong on our end when registering a new user";
     } catch (err) {
+        console.log(err, "16");
         const errMessage = errHasSensitiveInfo(err);
         res.status(404).json({
             err: errMessage,
@@ -116,6 +119,7 @@ async function fetchGallery(req, res, next) {
         }
         throw "Something went wrong on our end when fetching for gallery";
     } catch (err) {
+        console.log(err, "17");
         const errMessage = errHasSensitiveInfo(err);
         res.status(404).json({
             err: errMessage,
@@ -145,6 +149,7 @@ async function fetchChatHistory(req, res) {
         }
         throw "Something went wrong on our end when fetching for chats";
     } catch (err) {
+        console.log(err, "18");
         const errMessage = errHasSensitiveInfo(err);
         res.status(404).json({
             err: errMessage,

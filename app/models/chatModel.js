@@ -20,7 +20,7 @@ async function saveChatToDatabase({
         }
         throw "Not sure what went wrong, but your post couldn't be saved, this is on our end!!"
     } catch (err) {
-        console.log("post didn't save!", err);
+        console.log(err, "19");
         return Promise.reject("Not sure what went wrong, but your post couldn't be saved!");
     }
 }
@@ -33,7 +33,7 @@ async function getCollectionOfGallery() {
         }
         return listOfImages;
     } catch (err) {
-        console.log(err);
+        console.log(err, "20");
         return Promise.reject(err);
     }
 }
@@ -46,7 +46,7 @@ async function getChatPagination(startIndex) {
         }
         return chatResults;
     } catch (err) {
-        console.log(err);
+        console.log(err, "21");
         return Promise.reject(err);
     }
 }

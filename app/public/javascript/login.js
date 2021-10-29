@@ -14,7 +14,7 @@ function submitLoginForm(e) {
                 throw data.err;
             }
         }).catch(err => {
-            console.log("hello from err!", err);
+            console.log(err, "33");
             manageErrorAndAppendToPopupBox(err)
         });
 }

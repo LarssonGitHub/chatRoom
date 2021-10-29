@@ -9,16 +9,6 @@ import {
 
 import moment from 'moment-timezone';
 
-
-async function validateMessage(message) {
-    const validatedMessage = await validateTypeOfOutgoingMsg(message);
-    if (validatedMessage.err === "ERROR") {
-        const createNewErrorMessage = formatToChatObj("botMsg", "Mr Bot", `${validatedMessage.msg}`)
-        return validateTypeOfOutgoingMsg(createNewErrorMessage)
-    }
-    return validatedMessage;
-}
-
 function formatToStatusObj(type, target, data) {
     const statusTemplate = {}
     if (type) {
@@ -55,7 +45,7 @@ function formatToChatObj(type, user, data, imgData, save) {
 }
 
 
-async function validateTypeOfIncomingMsg(data, wsId) {
+async function validateTypeOfIncomingMsg(data) {
     try {
         const parsedData = parseJson(data)
         const msgType = parsedData.type
@@ -70,11 +60,8 @@ async function validateTypeOfIncomingMsg(data, wsId) {
                 throw "ERROR type problem!";
         }
     } catch (err) {
-        console.log("hello from incoming...", err);
-        return {
-            err: "ERROR",
-            msg: err
-        };
+        console.log(err, "12");
+        return Promise.reject(err);
     }
 }
 
@@ -99,12 +86,8 @@ async function validateTypeOfOutgoingMsg(dataObj) {
                 throw "ERROR type problem!";
         }
     } catch (err) {
-        console.log("NAAAADA");
-        console.log("hello from outgoing...", err);
-        return {
-            err: "ERROR",
-            msg: "Someone's message or a status update wasn't validated in our server! Sorry guys!"
-        };
+        console.log(err, "13");
+        return Promise.reject(err);
     }
 }
 
@@ -113,5 +96,4 @@ export {
     validateTypeOfIncomingMsg,
     formatToChatObj,
     formatToStatusObj,
-    validateMessage
 }
