@@ -33,7 +33,7 @@ async function botWelcomeMsg(wsId) {
         return message;
     } catch (err) {
         console.log(err);
-        return "err";
+        return Promise.reject(err);
     }
 }
 
@@ -44,8 +44,7 @@ async function botGoodbyeMsg(wsId) {
         const message = await validateMessage(constructedMessage)
         return message;
     } catch (err) {
-        console.log(err);
-        return "err";
+        return Promise.reject(err);
     }
 }
 
@@ -57,13 +56,14 @@ async function botErrorPrivateMsg(wsId, errorReason) {
         const message = await validateMessage(constructedMessage)
         return message;
     } catch (err) {
-        return "err";
+        return Promise.reject(err);
     }
 }
 
-async function botErrorPublicMsg(reason) {
+async function botErrorPublicMsg(errorReason) {
     try {
-        const constructedMessage = formatToChatObj("errorMsg", "Mr Error", `We got an error folks! Reason: ${reason}`)
+        const removeSensitiveErrors = errHasSensitiveInfo(errorReason)
+        const constructedMessage = formatToChatObj("errorMsg", "Mr Error", `We got an error folks! Reason: ${removeSensitiveErrors}`)
         const message = await validateMessage(constructedMessage)
         return message;
     } catch (err) {
@@ -89,8 +89,7 @@ async function handleOutgoingDataToClient(validatedData, wsId) {
         const restructureChatObj = formatToChatObj(type, userObj, data, imgData, save)
         return validateTypeOfOutgoingMsg(restructureChatObj);
     } catch (err) {
-        console.log(err);
-        return "err";
+        return Promise.reject(err);
     }
 
 }
@@ -109,7 +108,7 @@ async function clientList() {
         return message;
     } catch (err) {
         console.log(err);
-        return "err";
+        return Promise.reject(err);
     }
 }
 
@@ -121,7 +120,7 @@ async function clientSize() {
         return message;
     } catch (err) {
         console.log(err);
-        return "err";
+        return Promise.reject(err);
     }
 }
 

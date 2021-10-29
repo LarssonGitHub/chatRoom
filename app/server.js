@@ -67,107 +67,77 @@ app.use(router);
 app.set('view engine', 'ejs');
 
 wss.on('connection', async (ws, req) => {
-    console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
-    ws.id = uuidv4();
+    try {
 
-    const userWasGivenId = await setIdAndStatusForWebsocket(ws.id);
-    if (userWasGivenId === "err") {
-        ws.terminate("Sorry, something went wrong when you connection, try logging in", 500);
-        return;
+        console.log(`Client connected from IP ${ws._socket.remoteAddress}`);
+        ws.id = uuidv4();
+        console.log("new user set as online!", await setIdAndStatusForWebsocket(ws.id));
+        broadcast(await botWelcomeMsg(ws.id))
+        broadcast(await clientSize())
+        broadcast(await clientList(ws.id))
+
+        ws.on("close", async () => {
+            try {
+                console.log("old user set as offline!", await removeIdAndStatusForWebsocket(ws.id));
+                broadcast(await clientSize())
+                broadcast(await clientList(ws.id))
+            } catch (err) {
+                broadcast(await botErrorPublicMsg(err));
+            }
+        });
+
+        ws.on("message", async (data) => {
+            
+            let validatedData = await handleIncomingClientData(data, ws.id);
+            console.log(data);
+            if (validatedData.err === "ERROR") {
+                broadcastToSingleClient(await botErrorPrivateMsg(ws.id, validatedData.msg), ws.id);
+                return;
+            }
+            let handledOutgoingData = await handleOutgoingDataToClient(validatedData, ws.id);
+            if (handledOutgoingData.err === "ERROR") {
+                broadcastToSingleClient(await botErrorPrivateMsg(ws.id, handledOutgoingData.msg), ws.id);
+                return;
+            }
+            broadcast(handledOutgoingData);
+
+        })
+
+    } catch (err) {
+        if (err === "updateUserErr") {
+            ws.terminate("User has been terminated", 500);
+            return;
+        }
+        broadcast(await botErrorPublicMsg(err));
     }
-
-    const greetNewUser = await botWelcomeMsg(ws.id);
-    if (greetNewUser === "err") {
-        broadcast(await botErrorPublicMsg("Couldn't greet new user!"));
-        return;
-    }
-    broadcast(greetNewUser)
-
-    const gotClientSize = await clientSize();
-    if (gotClientSize === "err") {
-        broadcast(await botErrorPublicMsg("Couldn't update clients size!"));
-        return;
-    }
-    broadcast(gotClientSize)
-
-    const gotClientList = await clientList(ws.id);
-    if (gotClientList === "err") {
-        broadcast(await botErrorPublicMsg("Couldn't update list of users online"));
-        return;
-    }
-    broadcast(gotClientList)
-
-    ws.on("close", async () => {
-        const sayGoodbyeToUser = await botGoodbyeMsg(ws.id);
-        if (sayGoodbyeToUser === "err") {
-            broadcast(await botErrorPublicMsg("Couldn't say goodbye to someone leaving us!"));
-            return;
-        }
-        broadcast(sayGoodbyeToUser);
-
-        const userWasRemoved = await removeIdAndStatusForWebsocket(ws.id);
-        if (userWasRemoved === "err") {
-            ws.terminate("Sorry, something went wrong when you tried to leave, not like you will see this anyway.", 500);
-            return;
-        }
-
-        const gotClientSize = await clientSize();
-        if (gotClientSize === "err") {
-            broadcast(await botErrorPublicMsg("Couldn't update clients!"));
-            return;
-        }
-        broadcast(gotClientSize)
-
-        const gotClientList = await clientList(ws.id);
-        if (gotClientList === "err") {
-            broadcast(await botErrorPublicMsg("Couldn't update list of users online"));
-            return;
-        }
-        broadcast(gotClientList)
-    });
-
-    ws.on("message", async (data) => {
-        let validatedData = await handleIncomingClientData(data, ws.id);
-        console.log(data);
-        if (validatedData.err === "ERROR") {
-            broadcastToSingleClient(await botErrorPrivateMsg(ws.id, validatedData.msg), ws.id);
-            return;
-        }
-        let handledOutgoingData = await handleOutgoingDataToClient(validatedData, ws.id);
-        if (handledOutgoingData.err === "ERROR") {
-            broadcastToSingleClient(await botErrorPrivateMsg(ws.id, handledOutgoingData.msg), ws.id);
-            return;
-        }
-        broadcast(handledOutgoingData);
-    })
 });
 
-function broadcastButExclude(data, someClient) {
-    wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-            if (client !== someClient) {
-                client.send(data);
+ function broadcastButExclude(data, someClient) {
+        wss.clients.forEach(function each(client) {
+            if (client.readyState === WebSocket.OPEN) {
+                if (client !== someClient) {
+                    client.send(data);
+                }
             }
-        }
-    });
+        });
 }
 
 function broadcastToSingleClient(data, specificUserId) {
-    wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-            if (client.id === specificUserId) {
-                client.send(data);
+        wss.clients.forEach(function each(client) {
+            if (client.readyState === WebSocket.OPEN) {
+                if (client.id === specificUserId) {
+                    client.send(data);
+                }
             }
-        }
-    });
+        });
 }
 
 function broadcast(data) {
-    wss.clients.forEach(client => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(data)
-        }
-    })
+        wss.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(data)
+            }
+        })
 }
 
 server.listen(process.env.PORT || PORT, () => {

@@ -82,7 +82,9 @@ async function checkForUser(userName, userPassword) {
 
 async function getUser(wsID) {
     try {
-        const userObject = await Users.find({tempWebsocketId: wsID});
+        const userObject = await Users.find({
+            tempWebsocketId: wsID
+        });
         if (userObject.length === 0) {
             throw "couldn't find user..";
         }
@@ -117,7 +119,7 @@ async function setIdAndStatusForWebsocket(wsID) {
         return updateUser;
     } catch (err) {
         console.log(err);
-        return "err"
+        return Promise.reject("updateUserErr");
     }
 }
 
@@ -125,11 +127,11 @@ async function removeIdAndStatusForWebsocket(wsId) {
     try {
         const currentUserObject = await getUser(wsId);
 
-        if (!currentUserObject.length === 0|| !currentUserObject[0]._id) {
+        if (!currentUserObject.length === 0 || !currentUserObject[0]._id) {
             throw "something went wrong when searching for user id!";
         }
 
-        const updateUser = await  Users.findByIdAndUpdate(currentUserObject[0]._id, {
+        const updateUser = await Users.findByIdAndUpdate(currentUserObject[0]._id, {
             userStatus: "offline",
             tempWebsocketId: false
         }, {
@@ -137,13 +139,13 @@ async function removeIdAndStatusForWebsocket(wsId) {
         })
 
         if (!updateUser) {
-            throw "Something went wrong";
+            throw "update user is undefined or null";
         }
 
         return updateUser;
     } catch (err) {
         console.log(err);
-        return false
+        return Promise.reject("One user wasn't correctly logged out so the list of users online may not bee accurate. However, the app should still work, so chat away!");
     }
 }
 
@@ -153,7 +155,7 @@ async function getUsersOnline() {
             userStatus: "online"
         });
         if (!arrayOfUsersOnline) {
-            throw "Something went wrong";
+            throw "couldn't get users online";
         }
         return arrayOfUsersOnline;
     } catch (err) {

@@ -4,7 +4,7 @@ function errHasSensitiveInfo(err) {
     if (typeof err === 'string' || err instanceof String) {
         return err
     }
-    return "Something went horrible wrong with the validation, server, or database. Try again!"
+    return "The error had sensitive information in it. But something went wrong, sorry you guys!"
 }
 
 export {
