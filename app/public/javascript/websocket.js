@@ -59,4 +59,6 @@ websocket.addEventListener("message", (event) => {
 
 websocket.addEventListener('close', (event) => {
     console.log('Server down...', event);
+    manageErrorAndAppendToPopupBox("Sorry, the server shut down, either from timeout or something going wrong with your validation, redirecting to login.");
+    location.assign("/login");
 });

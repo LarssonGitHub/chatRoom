@@ -39,7 +39,7 @@ async function getAllUsers() {
 async function resetDatabaseUsers() {
     try {
         await resetDatabaseStatus()
-        console.log("All users rested!");
+        console.log("All users stats reset!");
     } catch (err) {
         console.log(err);
         console.log("Something Went wrong when resetting database!");
@@ -96,6 +96,15 @@ async function setIdAndStatusForWebsocket(wsID) {
     try {
         const userIdFromArray = usersInTempMemory[0];
         usersInTempMemory.shift();
+
+        // better way?
+        // for(let i = 0; i < usersInTempMemory.length; i++) {
+        //     if(usersInTempMemory[i] == userIdFromArray) {
+        //         usersInTempMemory.splice(i, 1);
+        //         break;
+        //     }
+        // }
+
         const updateUser = await Users.findByIdAndUpdate(userIdFromArray, {
             userStatus: "online",
             tempWebsocketId: wsID,
@@ -107,7 +116,6 @@ async function setIdAndStatusForWebsocket(wsID) {
         }
         return updateUser;
     } catch (err) {
-        console.log("use doesn't exist!");
         console.log(err);
         return "err"
     }
