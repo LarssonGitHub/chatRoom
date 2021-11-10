@@ -2,6 +2,27 @@
     --active-color: red;
 }
 
+#errorContainer {
+    /* position: fixed; */
+    max-width: 400px;
+    width: 100%;
+}
+
+#errorContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    color: #D8000C;
+	background-color: #FFBABA;
+    padding: 0.2rem 0.5rem;
+    gap: 0.5rem;
+}
+
+#errorText {
+    margin: 0;
+}
+
 body {
     position: relative;
     min-height: 100vh;
@@ -138,14 +159,14 @@ body {
 }
 
 .closeSectionMark {
-    font-size: 30px;
+    font-size: 2rem;
     font-weight: bolder;
     color: red;
     cursor: pointer;
 }
 
 .closeSectionMark:hover {
-    color: black;
+    color: white;
 }
 
 img {
@@ -218,3 +239,4 @@ i {
     font-weight: bold;
     display: block;
 }
+

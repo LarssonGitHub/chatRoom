@@ -1,7 +1,6 @@
-function manageErrorAndAppendToPopupBox(err) {
-    // TODO create a better feedback system...! At least it handles errors, but put it in a popup box! Bootstrap?
-    alert(err);
-}
+const errorContainer = document.getElementById("errorContainer");
+const errorText = document.getElementById("errorText");
+const closeErrorContainer = document.getElementById("closeErrorContainer");
 
 function hideElement(element) {
     element.classList.toggle("hidden");
@@ -9,6 +8,16 @@ function hideElement(element) {
 
 function activeElement(element) {
     element.classList.toggle("activeBtn");
+}
+
+function manageErrorAndAppendToPopupBox(err) {
+    errorText.textContent = err;
+    errorContainer.classList.toggle("hidden")
+}
+
+function closeErrorPopupBox() {
+    errorText.textContent = "";
+    errorContainer.classList.toggle("hidden")
 }
 
 function parseJson(data) {
@@ -55,3 +64,5 @@ function constructMsgObject(type, user, chatData, binaryCanvasValue, saveToDatab
     }
     return msgTemplate;
 }
+
+closeErrorContainer.addEventListener("click", closeErrorPopupBox)
