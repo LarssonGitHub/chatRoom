@@ -2,6 +2,20 @@
     --active-color: red;
 }
 
+/* Why bootstrap? */
+p {
+    margin-top: 16px;
+}
+
+h1 {
+    text-align: center;
+}
+.fromContainer {
+    width: 100%;
+    max-width: 600px;
+    padding: 1rem 2rem;
+}
+
 #errorContainer {
     /* position: fixed; */
     max-width: 400px;
