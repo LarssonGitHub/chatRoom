@@ -17,6 +17,7 @@ const loadPreChatBtn = document.getElementById("loadPreChatBtn");
 const usersOnlineSection = document.getElementById("usersOnlineSection");
 const closeUsersOnlineSection = document.getElementById("closeUsersOnlineSection");
 const usersOnlineToggleBtn = document.getElementById("usersOnlineToggleBtn");
+const sendToWebserverBtn = document.getElementById("sendToWebserverBtn");
 
 let paginationIntegerForChat = 0;
 
@@ -41,7 +42,7 @@ function manageChatTemplate({
     let getTemplateHTML = document.importNode(chatTemplate.content, true)
     getTemplateHTML.querySelector(".chatTemplateContainer").classList.add(type === "botMsg" || type === "errorMsg" ? "botChatContainer" : "clientChatContainer");
     getTemplateHTML.querySelector(".clientName").textContent = user || "ERROR";
-    getTemplateHTML.querySelector(".clientMsg").textContent = data || "ERROR";
+    getTemplateHTML.querySelector(".clientMsg").textContent = data || getTemplateHTML.querySelector(".clientMsg").classList.toggle("hidden")
     getTemplateHTML.querySelector(".clientTime").textContent = time || "ERROR";
     if (type === "imageMsg" && imgData.includes("data:image/png;")) {
         getTemplateHTML.querySelector(".clientImg").src = imgData;
@@ -116,15 +117,29 @@ function checkIfImgOrRegularChatObject(chatValue) {
 // This var sets a temp nickname which is replaced by the user's database nickname once it's send to the websocket.
 let tempClientUserName = "tempNickname"
 
-function sendChatMsgToServer(e) {
-    let chatValue = chatTextarea.value
-    if ((e.which === 13 && !e.shiftKey) && chatValue.length > 0) {
+function validateKeydownForSendingMsg(e) {
+    let chatValue = chatTextarea.value;
+    if ((e.which === 13 && !e.shiftKey && chatValue.length > 0) || (e.which === 13 && !e.shiftKey && binaryCanvasValue)) {
         e.preventDefault()
-        let constructedMsg = checkIfImgOrRegularChatObject(chatValue);
-        sendMsgToWebsocket(constructedMsg);
-        chatTextarea.value = "";
+        sendChatMsgToServer(chatValue)
     }
+    return;
 }
+
+function validateClickForSendingMsg() {
+    let chatValue = chatTextarea.value;
+    if (chatValue.length > 0 || binaryCanvasValue) {
+        sendChatMsgToServer(chatValue)
+    }
+    return;
+}
+
+function sendChatMsgToServer(chatValue) {
+    let constructedMsg = checkIfImgOrRegularChatObject(chatValue);
+    sendMsgToWebsocket(constructedMsg);
+    chatTextarea.value = '';
+}
+
 
 function fetchPreviousChat() {
     loadPreChatBtn.disabled = true;
@@ -147,7 +162,8 @@ function fetchPreviousChat() {
 }
 
 loadPreChatBtn.addEventListener("click", fetchPreviousChat)
-typingContainer.addEventListener("keydown", sendChatMsgToServer);
+typingContainer.addEventListener("keydown", validateKeydownForSendingMsg);
+sendToWebserverBtn.addEventListener("click", validateClickForSendingMsg);
 msgImgInputRemove.addEventListener("click", removeImgFromTypingContainer)
 usersOnlineToggleBtn.addEventListener("click", () => {
     hideElement(usersOnlineSection)

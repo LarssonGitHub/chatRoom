@@ -45,6 +45,7 @@ body {
 .clientMsg {
     white-space: pre-wrap;
     overflow-wrap: break-word;
+    margin: 0.5rem 0;
 }
 
 #chatContainer {
@@ -63,9 +64,18 @@ body {
     margin: 0.5rem 1rem 0.5rem 1rem;
 }
 
+#textAreaContainer {
+    display: flex;
+    flex-direction: row;
+}
+
 #chatTextarea {
     width: 100%;
-    margin-top: 0.5rem;
+}
+
+#sendToWebserverBtn {
+    margin-left: 0.2rem;
+    padding: 0.5rem;
 }
 
 #toolbar {
@@ -86,7 +96,7 @@ body {
 
 .chatTemplateContainer {
     margin: 0.2rem 0;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
 }
 
 .off-canvas {
