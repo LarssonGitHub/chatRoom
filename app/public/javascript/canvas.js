@@ -2,7 +2,7 @@ const CanvasContainer = document.getElementById("CanvasContainer")
 const canvas = document.getElementById('myCanvas');
 const canvasColorPicker = document.getElementById('canvasColorPicker');
 const canvasStrokeSize = document.getElementById('canvasStrokeSize');
-const canvasFigure = document.getElementById('canvasFigure');
+const canvasBrush = document.getElementById('canvasBrush');
 const canvasErase = document.getElementById('canvasErase');
 const canvasDownload = document.getElementById('canvasDownload');
 const canvasUpload = document.getElementById("canvasUpload");
@@ -17,7 +17,7 @@ let binaryCanvasValue = null;
 let canvasValues = {
     color: canvasColorPicker.value,
     stroke: canvasStrokeSize.value,
-    figure: canvasFigure.value,
+    figure: "round",
     isErasing: false,
     x: 0,
     y: 0
@@ -45,22 +45,29 @@ function setCanvasValues(e) {
         case "canvasStrokeSize":
             canvasValues.stroke = targetValue;
             break;
-        case "canvasFigure":
+        case "squareBrush":
             canvasValues.figure = targetValue;
             break;
-        case "canvasErase":
-            canvasErase.classList.toggle("active")
-            if (!canvasValues.isErasing) {
-                canvasValues.isErasing = true;
-                return;
-            }
-            canvasValues.isErasing = false;
+        case "circleBrush":
+            canvasValues.figure = targetValue;
+            break;
+        case "flatBrush":
+            canvasValues.figure = targetValue;
             break;
         default:
             canvasValues.x = e.clientX
             canvasValues.y = e.clientY
             break;
     }
+}
+
+function eraseCanvasValues() {
+    canvasErase.classList.toggle("active")
+    if (!canvasValues.isErasing) {
+        canvasValues.isErasing = true;
+        return;
+    }
+    canvasValues.isErasing = false;
 }
 
 function rescaleCanvas() {
@@ -101,7 +108,6 @@ const paint = (e) => {
 // Fix this confirm....
 function downloadCanvasImg() {
     if (confirm("do you want to download this pic?")) {
-        // console.log(canvas.toDataURL());
         const link = document.createElement('a');
         link.download = 'download.png';
         link.href = canvas.toDataURL();
@@ -119,8 +125,6 @@ function uploadCanvasImg() {
         checkIfTypingImgShouldHidden()
         binaryCanvasValue = canvas.toDataURL();
         // TODO validation on client side.....
-
-        console.log(saveToDatabaseBtn.checked);
         saveToDatabase = saveToDatabaseBtn.checked;
         appendToTypingContainer(binaryCanvasValue);
     }
@@ -130,27 +134,40 @@ function uploadCanvasImg() {
 rescaleCanvas()
 
 // Enables touch control! 
-function touchstart(event) { startPainting(event.touches[0]) }
-function touchmove(event) { paint(event.touches[0]); event.preventDefault(); }
-function touchend(event) { finishPainting(event.changedTouches[0]) }
+function touchstart(event) {
+    startPainting(event.touches[0])
+}
+
+function touchmove(event) {
+    paint(event.touches[0]);
+    event.preventDefault();
+}
+
+function touchend(event) {
+    finishPainting(event.changedTouches[0])
+}
 
 canvas.addEventListener('touchstart', touchstart, false);
 canvas.addEventListener('touchmove', touchmove, false);
-canvas.addEventListener('touchend', touchend, false);        
+canvas.addEventListener('touchend', touchend, false);
 
 canvas.addEventListener('mousedown', startPainting);
 canvas.addEventListener('mousemove', paint);
 canvas.addEventListener('mouseup', finishPainting);
 
 // Enables touch control! 
-function touchChooseStroke(event) { setCanvasValues(event.changedTouches[0]) }
-canvasStrokeSize.addEventListener('touchend', touchChooseStroke, false);   
+function touchChooseStroke(event) {
+    setCanvasValues(event.changedTouches[0])
+}
+canvasStrokeSize.addEventListener('touchend', touchChooseStroke, false);
 
 canvasStrokeSize.addEventListener('mouseup', setCanvasValues);
 canvasColorPicker.addEventListener('change', setCanvasValues);
-canvasFigure.addEventListener('change', setCanvasValues);
-canvasErase.addEventListener('click', (e) => {
-    setCanvasValues(e);
+
+canvasBrush.addEventListener('change', setCanvasValues);
+
+canvasErase.addEventListener('click', () => {
+    eraseCanvasValues();
     activeElement(canvasErase);
 });
 canvasDownload.addEventListener('click', downloadCanvasImg);
@@ -173,3 +190,4 @@ window.addEventListener("resize", () => {
     setCanvasOffSet()
     rescaleCanvas()
 }, false);
+

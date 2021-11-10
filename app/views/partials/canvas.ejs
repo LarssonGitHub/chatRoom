@@ -11,19 +11,46 @@
 
     <div id="canvasToolBar">
         <div id="canvasUpperBar">
-            <input type="color" name="canvasColorPicker" id="canvasColorPicker">
-            <input type="range" min="1" max="30" value="5" name="canvasStrokeSize" id="canvasStrokeSize">
-            <select name="canvasFigure" id="canvasFigure">
-                <option value="square" selected>Square</option>
-                <option value="round">Circle</option>
-                <option value="butt">Brush</option>
-            </select>
+            <div>
+                <span class="canvasUpperBarText">Color</span>
+                <input type="color" name="canvasColorPicker" id="canvasColorPicker">
+            </div>
+            <div>
+                <span class="canvasUpperBarText">Stroke Size</span>
+                <input type="range" min="1" max="30" value="5" name="canvasStrokeSize" id="canvasStrokeSize">
+            </div>
+            <div>
+                <span class="canvasUpperBarText">Brush Type</span>
+                <div id="canvasBrush">
+                    <label for="circleBrush"><input type="radio" name="canvasBrush" value="round" id="circleBrush" checked>
+                        <i class="fa fa-circle" aria-hidden="true"></i>
+                    </label>
+                    <label for="squareBrush"><input type="radio" name="canvasBrush" value="square" id="squareBrush">
+                        <i class="fa fa-square" aria-hidden="true"></i>
+                    </label>
+                    <label for="flatBrush"><input type="radio" name="canvasBrush" value="butt" id="flatBrush">
+                        <i class="fa fa-window-minimize" aria-hidden="true"></i>
+                    </label>
+                </div>
+            </div>
         </div>
         <div id="canvasLowerBar">
-            <i id="canvasErase" class="fa fa-eraser" aria-hidden="true"></i>
-            <i id="canvasDownload" class="fa fa-download" aria-hidden="true"></i>
-            <i id="canvasUpload" class="fa fa-upload" aria-hidden="true"></i>
-            <i id="cleanCanvas" class="fa fa-trash" aria-hidden="true"></i>
+            <div id="canvasErase">
+                <span class="canvasUpperBarText">Eraser</span>
+                <i class="fa fa-eraser" aria-hidden="true"></i>
+            </div>
+            <div  id="canvasDownload">
+                <span class="canvasUpperBarText">Download</span>
+                <i class="fa fa-download" aria-hidden="true"></i>
+            </div>
+            <div id="canvasUpload">
+                <span class="canvasUpperBarText">Upload</span>
+                <i class="fa fa-upload" aria-hidden="true"></i>
+            </div>
+            <div id="cleanCanvas">
+                <span class="canvasUpperBarText">Restart</span>
+                <i class="fa fa-trash" aria-hidden="true"></i>
+            </div>
         </div>
     </div>
 </section>

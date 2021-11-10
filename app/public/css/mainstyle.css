@@ -1,3 +1,7 @@
+:root {
+    --active-color: red;
+}
+
 body {
     position: relative;
     min-height: 100vh;
@@ -18,11 +22,11 @@ body {
 
 
 .activeBtn {
-    background-color: red;
+    color: var(--active-color);
 }
 
 #toolbar {
-    font-size: 30px;
+    font-size: 2rem;
 }
 
 .hidden {
@@ -65,7 +69,7 @@ body {
 }
 
 #toolbar {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     padding: 1rem 0.5rem;
@@ -156,19 +160,51 @@ img {
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    gap: 1.3rem;
     flex-wrap: wrap;
 }
 
 #canvasLowerBar, #canvasUpperBar {
+    text-align: center;
+    font-size: 1.5rem;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.3rem;
     padding: 0.5rem;
 }
 
-#canvasLowerBar {
-    font-size: 30px;
+i {
+    cursor: pointer;
+}
+#canvasBrush {
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+}
+
+#canvasBrush label {
+    margin: 0;
+}
+#canvasBrush  [type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+#canvasBrush [type=radio]:checked + i {
+    color: var(--active-color);
+  }
+
+.canvasUpperBarText {
+    font-size: 0.7rem;
+    font-weight: bold;
+    display: block;
 }
