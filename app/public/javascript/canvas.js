@@ -11,7 +11,7 @@ const saveToDatabaseBtn = document.getElementById("saveToDatabaseBtn");
 const paintToggleBtn = document.getElementById("paintToggleBtn");
 const closeCanvasContainerSection = document.getElementById("closeCanvasContainerSection");
 
-let saveToDatabase = null;
+let saveToDatabase = true;
 let binaryCanvasValue = null;
 
 let canvasValues = {
@@ -107,27 +107,30 @@ const paint = (e) => {
 
 // Fix this confirm....
 function downloadCanvasImg() {
-    if (confirm("do you want to download this pic?")) {
         const link = document.createElement('a');
         link.download = 'download.png';
         link.href = canvas.toDataURL();
         link.click();
         link.delete;
-    }
-    return;
 }
 
-// TODO... Remember to NOT save this and post it as toDataURL.. Save it to server
+function setSaveToDatabaseOption() {
+    console.log("current", saveToDatabase);
+    if(saveToDatabase) {
+        saveToDatabase = false;
+        console.log("setting false", saveToDatabase);
+        return;
+    } 
+    saveToDatabase = true;
+    console.log("setting true", saveToDatabase);
+}
+
 function uploadCanvasImg() {
     activeElement(paintToggleBtn)
-    if (confirm("Do you want to upload this pic?")) {
         CanvasContainer.classList.toggle("hidden");
         checkIfTypingImgShouldHidden()
         binaryCanvasValue = canvas.toDataURL();
-        // TODO validation on client side.....
-        saveToDatabase = saveToDatabaseBtn.checked;
         appendToTypingContainer(binaryCanvasValue);
-    }
     return;
 }
 
@@ -177,6 +180,10 @@ paintToggleBtn.addEventListener("click", () => {
     hideElement(CanvasContainer);
     activeElement(paintToggleBtn);
 });
+saveToDatabaseBtn.addEventListener("click", () => {
+    setSaveToDatabaseOption();
+    activeElement(saveToDatabaseBtn);
+})
 closeCanvasContainerSection.addEventListener("click", () => {
     hideElement(CanvasContainer);
     activeElement(paintToggleBtn);

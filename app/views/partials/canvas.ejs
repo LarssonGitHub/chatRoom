@@ -4,9 +4,7 @@
         <i id="closeCanvasContainerSection" class="fa fa-window-close closeSectionMark" aria-hidden="true"></i>
     </div>
     <p>Please, do note that if you resize, your picture will reset</p>
-    <label for="accept">
-        <input type="checkbox" id="saveToDatabaseBtn" name="saveToDatabaseBtn"> Save image to database!
-    </label>
+
     <canvas id="myCanvas"></canvas>
 
     <!-- https://fontawesome.com/v4.7/icon/circle -->
@@ -23,7 +21,8 @@
             <div>
                 <span class="canvasUpperBarText">Brush Type</span>
                 <div id="canvasBrush">
-                    <label for="circleBrush"><input type="radio" name="canvasBrush" value="round" id="circleBrush" checked>
+                    <label for="circleBrush"><input type="radio" name="canvasBrush" value="round" id="circleBrush"
+                            checked>
                         <i class="fa fa-circle" aria-hidden="true"></i>
                     </label>
                     <label for="squareBrush"><input type="radio" name="canvasBrush" value="square" id="squareBrush">
@@ -40,7 +39,7 @@
                 <span class="canvasUpperBarText">Eraser</span>
                 <i class="fa fa-eraser" aria-hidden="true"></i>
             </div>
-            <div  id="canvasDownload">
+            <div id="canvasDownload">
                 <span class="canvasUpperBarText">Download</span>
                 <i class="fa fa-download" aria-hidden="true"></i>
             </div>
@@ -48,6 +47,12 @@
                 <span class="canvasUpperBarText">Upload</span>
                 <i class="fa fa-upload" aria-hidden="true"></i>
             </div>
+
+            <div id="saveToDatabaseBtn" class="activeBtn">
+                <span class="canvasUpperBarText">Save Forever?</span>
+                    <i class="fa fa-check-square" aria-hidden="true"></i>
+            </div>
+
             <div id="cleanCanvas">
                 <span class="canvasUpperBarText">Restart</span>
                 <i class="fa fa-trash" aria-hidden="true"></i>

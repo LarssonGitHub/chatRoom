@@ -10,6 +10,7 @@ p {
 h1 {
     text-align: center;
 }
+
 .fromContainer {
     width: 100%;
     max-width: 600px;
@@ -28,7 +29,7 @@ h1 {
     align-items: center;
     justify-content: space-around;
     color: #D8000C;
-	background-color: #FFBABA;
+    background-color: #FFBABA;
     padding: 0.2rem 0.5rem;
     gap: 0.5rem;
 }
@@ -209,7 +210,8 @@ img {
     flex-wrap: wrap;
 }
 
-#canvasLowerBar, #canvasUpperBar {
+#canvasLowerBar,
+#canvasUpperBar {
     text-align: center;
     font-size: 1.5rem;
     display: flex;
@@ -224,6 +226,7 @@ img {
 i {
     cursor: pointer;
 }
+
 #canvasBrush {
     font-size: 1.5rem;
     display: flex;
@@ -237,16 +240,17 @@ i {
 #canvasBrush label {
     margin: 0;
 }
-#canvasBrush  [type=radio] {
+
+#canvasBrush [type=radio] {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-#canvasBrush [type=radio]:checked + i {
+#canvasBrush [type=radio]:checked+i {
     color: var(--active-color);
-  }
+}
 
 .canvasUpperBarText {
     font-size: 0.7rem;
@@ -254,3 +258,17 @@ i {
     display: block;
 }
 
+#saveToDatabaseCeckboxContiner [type=checkbox] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+#saveToDatabaseCeckboxContiner [type=checkbox]:checked+i {
+    color: var(--active-color);
+}
+
+#saveToDatabaseCeckboxContiner label {
+    margin: 0;
+}
