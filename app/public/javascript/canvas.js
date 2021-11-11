@@ -127,7 +127,7 @@ function setSaveToDatabaseOption() {
 
 function uploadCanvasImg() {
     activeElement(paintToggleBtn)
-        CanvasContainer.classList.toggle("hidden");
+    displayOfCanvas(CanvasContainer)
         checkIfTypingImgShouldHidden()
         binaryCanvasValue = canvas.toDataURL();
         appendToTypingContainer(binaryCanvasValue);
@@ -177,7 +177,7 @@ canvasDownload.addEventListener('click', downloadCanvasImg);
 canvasUpload.addEventListener("click", uploadCanvasImg);
 cleanCanvas.addEventListener("click", cleanAllCanvas);
 paintToggleBtn.addEventListener("click", () => {
-    hideElement(CanvasContainer);
+    displayOfCanvas(CanvasContainer);
     activeElement(paintToggleBtn);
 });
 saveToDatabaseBtn.addEventListener("click", () => {
@@ -185,7 +185,7 @@ saveToDatabaseBtn.addEventListener("click", () => {
     activeElement(saveToDatabaseBtn);
 })
 closeCanvasContainerSection.addEventListener("click", () => {
-    hideElement(CanvasContainer);
+    displayOfCanvas(CanvasContainer);
     activeElement(paintToggleBtn);
 });
 

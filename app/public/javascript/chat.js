@@ -166,10 +166,10 @@ typingContainer.addEventListener("keydown", validateKeydownForSendingMsg);
 sendToWebserverBtn.addEventListener("click", validateClickForSendingMsg);
 msgImgInputRemove.addEventListener("click", removeImgFromTypingContainer)
 usersOnlineToggleBtn.addEventListener("click", () => {
-    hideElement(usersOnlineSection)
+    displayOfCanvas(usersOnlineSection);
     activeElement(usersOnlineToggleBtn);
 })
 closeUsersOnlineSection.addEventListener("click", () => {
-    hideElement(usersOnlineSection)
+    displayOfCanvas(usersOnlineSection);
     activeElement(usersOnlineToggleBtn);
 })

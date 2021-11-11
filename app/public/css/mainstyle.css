@@ -69,7 +69,6 @@ body {
     display: none;
 }
 
-
 .botChatContainer {
     background-color: darkgray;
 }
@@ -136,18 +135,31 @@ body {
 }
 
 .off-canvas {
-    height: 100vh;
-    width: 100%;
-    z-index: 99999;
+    height: 100%;
+    width: 0;
     position: fixed;
-    overflow: scroll;
+    z-index: 999999999;
     top: 0;
-    padding: 0.5rem 1rem;
+    right: 0;
     background-color: lightgrey;
+    overflow-x: hidden;
+    transition: 0.5s;
 }
 
+
+.displayOfCanvas {
+    width: 100% !important;
+}
+
+.closeSectionContainer {
+    position: sticky;
+    top: 0;
+    right: 0;
+    padding: 0.5rem 1rem;
+    background-color: darkgray;
+    margin-bottom: 1rem;
+}
 .closeSection {
-    margin-bottom: 0.5rem;
     display: flex;
     justify-content: space-between;
     flex-direction: row;

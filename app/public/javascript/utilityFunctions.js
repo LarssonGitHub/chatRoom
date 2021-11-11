@@ -6,6 +6,10 @@ function hideElement(element) {
     element.classList.toggle("hidden");
 }
 
+function displayOfCanvas(element) {
+    element.classList.toggle("displayOfCanvas");
+}
+
 function activeElement(element) {
     element.classList.toggle("activeBtn");
 }

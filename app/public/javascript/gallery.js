@@ -27,7 +27,7 @@ function loopGalleryArray(galleryArray) {
 
 function fetchGallery() {
     imagesToggleBtn.disabled = true;
-    hideElement(gallerySection)
+    displayOfCanvas(gallerySection);
     activeElement(imagesToggleBtn)
     fetch('/gallery/')
         .then(response => response.json())
@@ -48,6 +48,6 @@ function fetchGallery() {
 
 imagesToggleBtn.addEventListener("click", fetchGallery)
 closeGallerySection.addEventListener("click", () => {
-    hideElement(gallerySection);
+    displayOfCanvas(gallerySection);
     activeElement(imagesToggleBtn);
 })
