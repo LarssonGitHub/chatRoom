@@ -70,9 +70,22 @@ function eraseCanvasValues() {
     canvasValues.isErasing = false;
 }
 
+function getTotalHeightOfElements() {
+    const offCanvasHeader = document.getElementById("CanvasHeaderId");
+    const offCanvasFooter = document.getElementById("canvasToolBar");
+    const HeaderRect = offCanvasHeader.getBoundingClientRect();
+    const ToolBarRect = offCanvasFooter.getBoundingClientRect();
+    const marginBottom = getComputedStyle(offCanvasHeader).marginBottom;
+    const marginTop = getComputedStyle(offCanvasFooter).marginTop;
+    // console.log(HeaderRect.height, ToolBarRect.height, parseInt(marginBottom), parseInt(marginTop));
+    return HeaderRect.height + ToolBarRect.height + parseInt(marginBottom) + parseInt(marginTop);
+}
+
 function rescaleCanvas() {
-    canvas.height = window.innerHeight / 1.7;
-    canvas.width = window.innerWidth / 1.1;
+    const totalElementsHeight = getTotalHeightOfElements()
+    console.log(totalElementsHeight);
+    canvas.height = window.innerHeight - totalElementsHeight;
+    canvas.width = window.innerWidth - 2;
 }
 
 const ctx = canvas.getContext('2d');
@@ -88,7 +101,10 @@ function setCanvasOffSet() {
     canvasOffsetForClient.offsetY = getBounding.top;
 }
 
-const startPainting = () => isPainting = true;
+function startPainting() {
+    setCanvasOffSet();
+    isPainting = true;
+} 
 
 const finishPainting = () => {
     isPainting = false;
@@ -134,8 +150,6 @@ function uploadCanvasImg() {
     return;
 }
 
-rescaleCanvas()
-
 // Enables touch control! 
 function touchstart(event) {
     startPainting(event.touches[0])
@@ -179,6 +193,7 @@ cleanCanvas.addEventListener("click", cleanAllCanvas);
 paintToggleBtn.addEventListener("click", () => {
     displayOfCanvas(CanvasContainer);
     activeElement(paintToggleBtn);
+    rescaleCanvas()
 });
 saveToDatabaseBtn.addEventListener("click", () => {
     setSaveToDatabaseOption();
@@ -189,10 +204,6 @@ closeCanvasContainerSection.addEventListener("click", () => {
     activeElement(paintToggleBtn);
 });
 
-// TODO There has to be a better than to do this.... I want to set offSet whenever I  do something related to canvas...
-window.addEventListener("click", setCanvasOffSet, false);
-window.addEventListener("scroll", setCanvasOffSet, false);
-window.addEventListener("load", setCanvasOffSet, false);
 window.addEventListener("resize", () => {
     setCanvasOffSet()
     rescaleCanvas()

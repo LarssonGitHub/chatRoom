@@ -1,16 +1,14 @@
 <section id="CanvasContainer" class=" tempFixed off-canvas">
-    <div class="closeSectionContainer">
+    <header id="CanvasHeaderId" class="offCanvasHeader">
         <div class="closeSection">
             <h2>Draw! Draw!</h2>
             <i id="closeCanvasContainerSection" class="fa fa-window-close closeSectionMark" aria-hidden="true"></i>
+            <small class="smallHeaderText">If you resize, your art will be deleted</small>
         </div>
-    </div>
-    <p>Please, do note that if you resize, your picture will reset</p>
 
+    </header>
     <canvas id="myCanvas"></canvas>
-
-    <!-- https://fontawesome.com/v4.7/icon/circle -->
-    <div id="canvasToolBar">
+    <footer id="canvasToolBar" class="offCanvasFooter">
         <div id="canvasUpperBar">
             <div>
                 <span class="canvasUpperBarText">Color</span>
@@ -60,5 +58,9 @@
                 <i class="fa fa-trash" aria-hidden="true"></i>
             </div>
         </div>
-    </div>
-</section>
+        </div>
+    </footer>
+
+
+
+        <!-- https://fontawesome.com/v4.7/icon/circle -->
