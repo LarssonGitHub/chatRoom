@@ -70,6 +70,21 @@ function eraseCanvasValues() {
     canvasValues.isErasing = false;
 }
 
+// Sets the width for off-canvas for CanvasContainer first time user loads the page. Reason: css and the effects clashes with the calculation of  rescaleCanvas()
+
+// let firstTimeLoadingPage = true;
+// let userResizedWindow = true
+// function initWidth() {
+//     if (firstTimeLoadingPage & userResizedWindow) {
+//         firstTimeLoadingPage = false;
+//         userResizedWindow = false
+//         setTimeout(() => {
+//             rescaleCanvas()
+//         }, 500);
+//     }
+//     return
+// }
+
 function getTotalHeightOfElements() {
     const offCanvasHeader = document.getElementById("CanvasHeaderId");
     const offCanvasFooter = document.getElementById("canvasToolBar");
@@ -193,7 +208,7 @@ cleanCanvas.addEventListener("click", cleanAllCanvas);
 paintToggleBtn.addEventListener("click", () => {
     displayOfCanvas(CanvasContainer);
     activeElement(paintToggleBtn);
-    rescaleCanvas()
+    initWidth()
 });
 saveToDatabaseBtn.addEventListener("click", () => {
     setSaveToDatabaseOption();
@@ -208,4 +223,9 @@ window.addEventListener("resize", () => {
     setCanvasOffSet()
     rescaleCanvas()
 }, false);
+
+// Sets the width for off-canvas for CanvasContainer first time user loads the page. Reason: css and the effects clashes with the calculation of  rescaleCanvas()
+document.addEventListener('DOMContentLoaded', function() {
+    rescaleCanvas()
+ }, false);
 
