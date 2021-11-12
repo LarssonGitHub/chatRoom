@@ -151,13 +151,21 @@ body {
     top: 0;
     right: 0;
     background-color: lightgrey;
-    overflow-x: hidden;
+    overflow-y: hidden; 
     transition: 0.5s;
 }
 
 
 .displayOfCanvas {
     height: 100% !important;
+}
+
+#gallerySection {
+    overflow-y: auto; 
+}
+
+#gallerySection::-webkit-scrollbar {
+    display: none;
 }
 
 .smallHeaderText {
