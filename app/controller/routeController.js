@@ -143,6 +143,7 @@ async function fetchChatHistory(req, res) {
             startIndex
         } = req.params;
         const chatPagination = await getChatPagination(startIndex);
+        console.log("chat pagination", chatPagination);
         if (chatPagination || chatPagination.length > 0) {
             res.json({message: chatPagination});
             return;

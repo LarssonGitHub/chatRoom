@@ -41,6 +41,8 @@ function formatToChatObj(type, user, data, imgData, save) {
         msgTemplate.save = save;
     }
     msgTemplate.time = moment().tz("Europe/Stockholm").format("DD/MM HH:mm:ss");
+    msgTemplate.postDate = moment().toISOString();
+    console.log(msgTemplate);
     return msgTemplate;
 }
 

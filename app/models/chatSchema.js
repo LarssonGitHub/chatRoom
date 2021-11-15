@@ -23,6 +23,10 @@ const chatSchema = new Schema({
         type: String,
         required: true
     },
+    postDate: {
+        type: String,
+        required: true
+    },
 });
 
 const Chat = mongoose.model('chat', chatSchema);

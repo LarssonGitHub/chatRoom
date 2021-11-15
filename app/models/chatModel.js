@@ -3,7 +3,7 @@ import {
 } from "./chatSchema.js"
 
 async function saveChatToDatabase({
-    type, user, data, imgData, time, save
+    type, user, data, imgData, time, save, postDate
 }) {
     try {
         const chatObj = new Chat({
@@ -11,7 +11,8 @@ async function saveChatToDatabase({
             user: user, 
             data: data, 
             imgData: save ? imgData : "Image not saved by the user!", 
-            time: time
+            time: time,
+            postDate: postDate
         });
         let success = await chatObj.save();
         if (success) {
@@ -40,7 +41,7 @@ async function getCollectionOfGallery() {
 
 async function getChatPagination(startIndex) {
     try {
-        const chatResults = await Chat.find({}).sort({time: -1}).limit(15).skip(Number(startIndex));
+        const chatResults = await Chat.find({}).sort({postDate: -1}).limit(15).skip(Number(startIndex));
         if (!chatResults || chatResults.length === 0) {
             throw "There sadly isn't any posts online yet D:";
         }
