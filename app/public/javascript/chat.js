@@ -33,13 +33,7 @@ function editTitle() {
 }
 
 function playSound() {
-    //   var audio = new Audio('discord-notification.mp3');
-    // audio.play();
-    // document.getElementById('mySound').play();
-    // var audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
-
-
-    var audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
+    var audio = new Audio('/../assets/notfication.mp3');
     audio.play();
 
     // Implement if audio plays...
