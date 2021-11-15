@@ -2,9 +2,25 @@ const errorContainer = document.getElementById("errorContainer");
 const errorText = document.getElementById("errorText");
 const closeErrorContainer = document.getElementById("closeErrorContainer");
 
+// Lets the script know if user is looking at screen or not, as well as a fallback for off-canvas.
+let clientLookingAtBrowserWindow = true;
+let offCanvasIsActive = false;
+
 function hideElement(element) {
     element.classList.toggle("hidden");
 }
+
+// Unused function...
+// function disableElement(element) {
+//     console.log(element);
+//     const elementIsDisabled = element.disabled;
+//     console.log(elementIsDisabled);
+//     if (elementIsDisabled) {
+//         element.disabled = false;
+//         return;
+//     }
+//     element.disabled = true;;
+// }
 
 function displayOfCanvas(element) {
     element.classList.toggle("displayOfCanvas");

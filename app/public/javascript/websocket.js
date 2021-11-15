@@ -55,7 +55,9 @@ websocket.addEventListener("message", (event) => {
     
     // easter egg check!
     // easterEggIsActivated(parsedData.data)
-
+    if (!clientLookingAtBrowserWindow) {
+    notifyNewMessage()
+    }
     sortTypeOfReceivedMsg(parsedData)
 })
 

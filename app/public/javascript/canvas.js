@@ -206,15 +206,20 @@ canvasDownload.addEventListener('click', downloadCanvasImg);
 canvasUpload.addEventListener("click", uploadCanvasImg);
 cleanCanvas.addEventListener("click", cleanAllCanvas);
 paintToggleBtn.addEventListener("click", () => {
+    clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = false : clientLookingAtBrowserWindow = true;
+    offCanvasIsActive ? offCanvasIsActive = false : offCanvasIsActive = true;
     displayOfCanvas(CanvasContainer);
     activeElement(paintToggleBtn);
-    initWidth()
 });
 saveToDatabaseBtn.addEventListener("click", () => {
     setSaveToDatabaseOption();
     activeElement(saveToDatabaseBtn);
 })
 closeCanvasContainerSection.addEventListener("click", () => {
+    // clientLookingAtBrowserWindow = true;
+    !clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = true : clientLookingAtBrowserWindow = false;
+    !offCanvasIsActive ? offCanvasIsActive = true : offCanvasIsActive = false
+    resetNewMessageNotifications();
     displayOfCanvas(CanvasContainer);
     activeElement(paintToggleBtn);
 });

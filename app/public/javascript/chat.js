@@ -21,6 +21,54 @@ const sendToWebserverBtn = document.getElementById("sendToWebserverBtn");
 
 let paginationIntegerForChat = 0;
 
+let receivedMessageCount = 0;
+
+function resetTitle() {
+    document.title = "Draw n' Chat";
+}
+
+function editTitle() {
+    ++receivedMessageCount
+    document.title = `Draw n' Chat (${receivedMessageCount})`;
+}
+
+function playSound() {
+    //   var audio = new Audio('discord-notification.mp3');
+    // audio.play();
+    // document.getElementById('mySound').play();
+    // var audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
+
+
+    var audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
+    audio.play();
+
+    // Implement if audio plays...
+    // audio.pause();
+    // audio.currentTime = 0;
+}
+
+//  Not implemented yet
+function updateFavicon(incomingNewMsg) {
+    if (incomingNewMsg) {
+
+        console.log("favicon with dot added! Or it should");
+        return;
+    }
+    console.log("favicon without dot added!");
+}
+
+function notifyNewMessage() {
+    editTitle()
+    playSound()
+    updateFavicon(true)
+}
+
+function resetNewMessageNotifications() {
+    resetTitle();
+    receivedMessageCount = 0;
+    updateFavicon(false);
+}
+
 function displayListOfClientsNamesOnline({
     data
 }) {
@@ -166,10 +214,28 @@ typingContainer.addEventListener("keydown", validateKeydownForSendingMsg);
 sendToWebserverBtn.addEventListener("click", validateClickForSendingMsg);
 msgImgInputRemove.addEventListener("click", removeImgFromTypingContainer)
 usersOnlineToggleBtn.addEventListener("click", () => {
+    clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = false : clientLookingAtBrowserWindow = true;
+    offCanvasIsActive ? offCanvasIsActive = false : offCanvasIsActive = true
     displayOfCanvas(usersOnlineSection);
     activeElement(usersOnlineToggleBtn);
 })
 closeUsersOnlineSection.addEventListener("click", () => {
+    // clientLookingAtBrowserWindow = true;
+    !clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = true : clientLookingAtBrowserWindow = false;
+    !offCanvasIsActive ? offCanvasIsActive = true : offCanvasIsActive = false
+    resetNewMessageNotifications();
     displayOfCanvas(usersOnlineSection);
     activeElement(usersOnlineToggleBtn);
-})
+});
+
+document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === 'visible') {
+        if (offCanvasIsActive) {
+            return;
+        }
+        clientLookingAtBrowserWindow = true;
+        resetNewMessageNotifications();
+        return
+    }
+    clientLookingAtBrowserWindow = false
+});

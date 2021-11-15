@@ -26,6 +26,8 @@ function loopGalleryArray(galleryArray) {
 }
 
 function fetchGallery() {
+    clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = false : clientLookingAtBrowserWindow = true;
+    offCanvasIsActive ? offCanvasIsActive = false : offCanvasIsActive = true
     imagesToggleBtn.disabled = true;
     displayOfCanvas(gallerySection);
     activeElement(imagesToggleBtn)
@@ -48,6 +50,10 @@ function fetchGallery() {
 
 imagesToggleBtn.addEventListener("click", fetchGallery)
 closeGallerySection.addEventListener("click", () => {
+    // clientLookingAtBrowserWindow = true;
+    !clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = true : clientLookingAtBrowserWindow = false;
+    !offCanvasIsActive ? offCanvasIsActive = true : offCanvasIsActive = false;
+    resetNewMessageNotifications();
     displayOfCanvas(gallerySection);
     activeElement(imagesToggleBtn);
 })
