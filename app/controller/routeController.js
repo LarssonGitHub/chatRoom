@@ -28,6 +28,7 @@ const {
 async function renderIndex(req, res, next) {
     try {
         req.session.userHasLoggedIn = true;
+        usersInTempMemory.push(req.session.user._id)
         res.status(200).render('pages/index');
     } catch (err) {
         console.log(err, "14");
@@ -63,7 +64,6 @@ async function submitLogin(req, res, next) {
         } = req.body;
         const userIsValidated = await loginUser(userName, userPassword);
         if (userIsValidated) {
-            usersInTempMemory.push(userIsValidated._id)
             req.session.userHasAccess = true;
             req.session.user = userIsValidated;
             res.status(200).json({

@@ -46,7 +46,7 @@ router.use(session({
     },
 }));
 
-router.get("/", checkUserAccess, denyUserRoute, renderIndex);
+router.get("/", checkUserAccess, renderIndex);
 
 router.get('/logout', checkUserAccess, logout);
 
@@ -58,9 +58,9 @@ router.get("/register/", denyUserRoute, renderRegistrar);
 
 router.post("/register/", denyUserRoute, submitRegistrar);
 
-router.get("/gallery/", fetchGallery);
+router.get("/gallery/", checkUserAccess, fetchGallery);
 
-router.get("/chatHistory/:startIndex", fetchChatHistory);
+router.get("/chatHistory/:startIndex", checkUserAccess, fetchChatHistory);
 
 export {
     router,

@@ -131,6 +131,7 @@ const paint = (e) => {
     ctx.lineWidth = canvasValues.stroke;
     ctx.strokeStyle = !canvasValues.isErasing ? canvasValues.color : "white";
     ctx.lineCap = canvasValues.figure;
+    ctx.lineJoin = canvasValues.figure;
     ctx.lineTo(e.clientX - canvasOffsetForClient.offsetX, e.clientY - canvasOffsetForClient.offsetY);
     ctx.stroke();
     setCanvasValues(e)
@@ -203,7 +204,13 @@ canvasErase.addEventListener('click', () => {
     activeElement(canvasErase);
 });
 canvasDownload.addEventListener('click', downloadCanvasImg);
-canvasUpload.addEventListener("click", uploadCanvasImg);
+canvasUpload.addEventListener("click", () => {
+    console.log("lol");
+    !clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = true : clientLookingAtBrowserWindow = false;
+    !offCanvasIsActive ? offCanvasIsActive = true : offCanvasIsActive = false
+    resetNewMessageNotifications();
+    uploadCanvasImg()
+});
 cleanCanvas.addEventListener("click", cleanAllCanvas);
 paintToggleBtn.addEventListener("click", () => {
     clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = false : clientLookingAtBrowserWindow = true;

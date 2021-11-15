@@ -7,10 +7,11 @@ function checkUserAccess(req, res, next) {
 }
 
 function denyUserRoute(req, res, next) {
+    console.log("user is... ", req.session.userHasLoggedIn);
     if (req.session.userHasLoggedIn) {
-        return res.redirect('/logout');
+        return res.redirect('/');
     }
-    return next();
+    next();
 }
 
 export {

@@ -50,7 +50,6 @@ function fetchGallery() {
 
 imagesToggleBtn.addEventListener("click", fetchGallery)
 closeGallerySection.addEventListener("click", () => {
-    // clientLookingAtBrowserWindow = true;
     !clientLookingAtBrowserWindow ? clientLookingAtBrowserWindow = true : clientLookingAtBrowserWindow = false;
     !offCanvasIsActive ? offCanvasIsActive = true : offCanvasIsActive = false;
     resetNewMessageNotifications();
